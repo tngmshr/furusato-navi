@@ -322,6 +322,14 @@ const SCREENS = {
       <h1 tabindex="-1">7つのステップで、<br>寄付から手続きまで</h1>
       <p class="lead">画面の案内どおりに進むだけです。いまどこにいるかは、画面の上にいつも表示されます。</p>
       <ol class="flow">${flowItems(false)}</ol>
+      <div class="box box-warn">
+        <p class="box-h">はじめる前に用意してください</p>
+        <ul>
+          <li><b>メモ帳と筆記用具</b>、または<b>スマホのメモアプリ</b></li>
+          <li>あれば<b>源泉徴収票</b>（上限額をより正確に出せます）</li>
+        </ul>
+        <p class="small" style="margin:6px 0 0">上限額や寄付した自治体などを書き留めます。このアプリは金額や自治体名を保存しないためです。</p>
+      </div>
       <div class="box box-next">
         <p class="box-h">かかる時間の目安</p>
         <ul>
@@ -336,9 +344,10 @@ const SCREENS = {
   },
 
   s1: {
-    stage:1,
-    main: () => ({ label:'わかった、次へ →', go:'s2' }),
+    stage:1, sub:'1 / 2',
+    main: () => ({ label:'なぜお得なの？ →', go:'s1b' }),
     html: () => `
+      <p class="kicker">ふるさと納税を知る　1 / 2</p>
       <h1 tabindex="-1">ふるさと納税って？</h1>
       <p class="lead">むずかしい説明は省きます。大事なのはこの4つだけです。</p>
       <ol class="num-list">
@@ -359,6 +368,40 @@ const SCREENS = {
       <p class="small">※1月〜12月の1年ごとに数えます。12月31日までに支払った分が、その年の寄付です。</p>`
   },
 
+  s1b: {
+    stage:1, sub:'2 / 2',
+    main: () => ({ label:'わかった、次へ →', go:'s2' }),
+    html: () => `
+      <p class="kicker">ふるさと納税を知る　2 / 2</p>
+      <h1 tabindex="-1">なぜお得なの？</h1>
+      <p class="lead">ひとことで言うと、<b>どうせ払う税金の一部で、返礼品がもらえる</b>からです。</p>
+      <div class="card">
+        <h3>ふつうの場合</h3>
+        <p>住民税などの税金は、毎年いつもどおり払います。<b>何ももらえません。</b></p>
+      </div>
+      <div class="card" style="border-color:var(--blue-line)">
+        <h3>ふるさと納税をした場合</h3>
+        <p>税金の一部を、選んだ自治体への寄付に回すイメージです。払う合計は<b>2,000円増えるだけ</b>で、<b>返礼品がもらえます。</b></p>
+      </div>
+      <div class="card">
+        <p class="small" style="margin-bottom:6px">例：上限の範囲内で 30,000円 寄付した場合</p>
+        <div class="example">
+          <div><span class="small">増える負担</span><br><span class="big-num">2,000円</span></div>
+          <div class="arrow">→</div>
+          <div><span class="small">もらえる返礼品</span><br><span class="big-num">最大 約9,000円分</span></div>
+        </div>
+        <p class="small" style="margin-top:8px">返礼品にかける費用は「寄付額の3割まで」というルールがあります。</p>
+      </div>
+      <div class="box box-warn">
+        <p class="box-h">知っておきたいこと</p>
+        <ul>
+          <li><b>税金そのものが減る「節税」ではありません。</b>払う先が変わるだけです。</li>
+          <li>寄付のお金は<b>先に払います</b>。税金が安くなるのは後から（主に翌年の住民税）です。</li>
+          <li>上限額を超えると、超えた分はそのまま自分の負担になります。</li>
+        </ul>
+      </div>`
+  },
+
   s2: {
     stage:2,
     main: () => ({ label:'上限額を確認できた →', go:'s3q1' }),
@@ -368,7 +411,7 @@ const SCREENS = {
       <ol class="num-list">
         <li><b>下のボタンで計算ページを開く</b></li>
         <li><b>年収と家族構成を入れる</b><span class="small">源泉徴収票があると、より正確です。</span></li>
-        <li><b>出てきた金額をメモする</b><span class="small">このアプリには入力しません。</span></li>
+        <li><b>出てきた金額をメモする</b><span class="small">メモ帳かメモアプリに書き留めます。このアプリには入力しません。</span></li>
         <li><b>この画面に戻って、下の「確認できた」を押す</b></li>
       </ol>
       ${ext(URL.simRakuten, '上限額の計算ページを開く', '楽天ふるさと納税のかんたんシミュレーターが開きます')}
@@ -555,6 +598,7 @@ const SCREENS = {
           <li><b>欲しい返礼品を探す</b><span class="small">地域やジャンル（お米・お肉など）で探せます。</span></li>
           <li><b>寄付額が上限額の中か確認</b><span class="small">STEP 2でメモした金額と比べます。何回か寄付するなら合計で。</span></li>
           <li><b>申し込んで支払う</b><span class="small">氏名・住所は<b>住民票と同じ</b>に入力してください。</span></li>
+          <li><b>寄付した内容をメモする</b><span class="small">自治体名・金額・日付。上限額の残りや、自治体の数（5つ以内か）を数えるのに使います。</span></li>
         </ol>
         ${r === 'one' ? `
         <div class="box box-next">
@@ -622,7 +666,7 @@ const SCREENS = {
           </ul>
         </div>
         <h2>チェック</h2>
-        ${checkItem('one1', '寄付したすべての分を申請した')}
+        ${checkItem('one1', '寄付したすべての分を申請した', 'STEP 5で書いたメモと照らし合わせると確実です')}
         ${checkItem('one2', '受付の連絡（メール・はがき等）を確認した', '連絡がない自治体もあります')}
         <p class="small">あとで申請する場合は、このまま閉じてOKです。</p>`;
       return `
@@ -643,7 +687,7 @@ const SCREENS = {
           <p style="margin:0">ワンストップ特例を申請していても、確定申告をするなら特例は無効になります。<b>すべての寄付</b>を確定申告に入れてください。</p>
         </div>
         <h2>チェック</h2>
-        ${checkItem('tax1', '証明書をすべて保管した')}
+        ${checkItem('tax1', '証明書をすべて保管した', 'STEP 5で書いたメモと数が合っているか確認します')}
         ${checkItem('tax2', '寄附金控除を入れて確定申告を出した')}
         <p class="small">確定申告の時期（2〜3月）まで待つ場合は、このまま閉じてOKです。</p>`;
     }
