@@ -40,7 +40,9 @@ html.big{--fs:19.5px}
 *{box-sizing:border-box}
 html{font-size:var(--fs);-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{
-  margin:0;background:var(--bg);color:var(--ink);
+  margin:0;
+  /* 縦に並べ、短い画面でも下のバーが画面の一番下に来るようにする */
+  display:flex;flex-direction:column;min-height:100vh;min-height:100dvh;background:var(--bg);color:var(--ink);
   font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI","Meiryo",sans-serif;
   line-height:1.75;letter-spacing:.01em;
   -webkit-tap-highlight-color:transparent;
@@ -66,7 +68,8 @@ a{color:var(--blue)}
 
 /* ===== 本文 ===== */
 /* 下のバーの実際の高さ（--bb-h、JSで計測）＋余白ぶん空けて、最後の文章まで読めるようにする */
-main.wrap{padding-top:18px;padding-bottom:calc(var(--bb-h, 120px) + 32px)}
+/* 下のバーは本文の後ろに置く（sticky）ので、最後までスクロールすれば必ず全文が見える */
+main.wrap{flex:1 0 auto;width:100%;padding-top:18px;padding-bottom:40px}
 .screen{animation:inR .22s ease-out}
 .screen.back{animation:inL .22s ease-out}
 @keyframes inR{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
@@ -160,7 +163,7 @@ p{margin:0 0 12px}
 .flow button.txt b{color:var(--blue);text-decoration:underline;text-underline-offset:3px}
 
 /* ===== 下部固定：戻る / 次へ ===== */
-.bottombar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--bar-bg);
+.bottombar{position:sticky;bottom:0;z-index:20;background:var(--bar-bg);
   -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
   border-top:1px solid var(--line);padding:10px 0 calc(10px + env(safe-area-inset-bottom))}
 .bottombar .wrap{display:flex;gap:10px}
@@ -238,6 +241,7 @@ p{margin:0 0 12px}
       <button class="mini-btn" id="optReset" type="button">最初からやり直す</button>
     </div>
     <p class="small">青い文字のステップは、タップするとその画面へ戻れます。</p>
+    <p class="small">版：2026-09-26c</p>
   </div>
 </div>
 
