@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f6fd1">
+<meta name="format-detection" content="telephone=no">
+<meta name="description" content="はじめてのふるさと納税を、画面の案内どおりに寄付から税金の手続きまで進められるナビです。">
+<title>ふるさと納税かんたんナビ</title>
+<style>
+:root{
+  --fs:17px;
+  --bg:#f3f6fa; --card:#ffffff; --ink:#1b2733; --sub:#52616f; --line:#dde5ee;
+  --blue:#1f6fd1; --blue-ink:#ffffff; --blue-soft:#e9f1fc; --blue-line:#b9d3f5;
+  --green:#1d9a60; --green-soft:#e7f6ee;
+  --gray:#c9d2dc; --gray-ink:#7a8794;
+  --warn:#a45f00; --warn-soft:#fff4e2; --warn-line:#f2d19c;
+  --shadow:0 1px 2px rgba(20,40,70,.06),0 4px 14px rgba(20,40,70,.06);
+  --bar-bg:rgba(255,255,255,.94);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f151c; --card:#18212b; --ink:#e8eef4; --sub:#a9b6c3; --line:#2a3642;
+    --blue:#4b93ec; --blue-ink:#08111c; --blue-soft:#15273d; --blue-line:#2d4f78;
+    --green:#3cc486; --green-soft:#12291f;
+    --gray:#3a4653; --gray-ink:#8795a3;
+    --warn:#f0b35a; --warn-soft:#2b2211; --warn-line:#5a4520;
+    --shadow:none; --bar-bg:rgba(20,28,37,.94);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f151c; --card:#18212b; --ink:#e8eef4; --sub:#a9b6c3; --line:#2a3642;
+  --blue:#4b93ec; --blue-ink:#08111c; --blue-soft:#15273d; --blue-line:#2d4f78;
+  --green:#3cc486; --green-soft:#12291f;
+  --gray:#3a4653; --gray-ink:#8795a3;
+  --warn:#f0b35a; --warn-soft:#2b2211; --warn-line:#5a4520;
+  --shadow:none; --bar-bg:rgba(20,28,37,.94);
+}
+html.big{--fs:19.5px}
+*{box-sizing:border-box}
+html{font-size:var(--fs);-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI","Meiryo",sans-serif;
+  line-height:1.75;letter-spacing:.01em;
+  -webkit-tap-highlight-color:transparent;
+}
+button{font:inherit;color:inherit}
+a{color:var(--blue)}
+.wrap{max-width:560px;margin:0 auto;padding:0 16px}
+
+/* ===== 上部：現在地（コンパクト） ===== */
+.topbar{position:sticky;top:0;z-index:20;background:var(--bar-bg);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top)}
+.where{display:block;width:100%;border:0;background:none;text-align:left;cursor:pointer;padding:10px 0 10px}
+.where-row{display:flex;align-items:center;gap:10px;min-height:32px}
+.pill{flex:none;font-size:13px;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--blue);color:var(--blue-ink);white-space:nowrap}
+.pill.done{background:var(--green)}
+.where-title{flex:1;min-width:0;font-weight:700;font-size:16.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.where-more{flex:none;font-size:13px;color:var(--sub);border:1px solid var(--line);border-radius:999px;padding:2px 10px;background:var(--card)}
+.segs{display:flex;gap:4px;margin-top:8px}
+.seg{flex:1;height:6px;border-radius:3px;background:var(--gray)}
+.seg.done{background:var(--green)}
+.seg.now{background:var(--blue)}
+
+/* ===== 本文 ===== */
+main{padding:18px 0 calc(120px + env(safe-area-inset-bottom))}
+.screen{animation:inR .22s ease-out}
+.screen.back{animation:inL .22s ease-out}
+@keyframes inR{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+@keyframes inL{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){.screen,.screen.back{animation:none}}
+.kicker{font-size:.85rem;font-weight:700;color:var(--blue);margin:0 0 4px}
+h1{font-size:1.45rem;line-height:1.45;margin:0 0 12px;outline:none}
+h2{font-size:1.1rem;margin:22px 0 10px}
+p{margin:0 0 12px}
+.lead{color:var(--sub);margin-bottom:18px}
+.small{font-size:.88rem;color:var(--sub)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px;box-shadow:var(--shadow);margin:0 0 12px}
+.card h3{margin:0 0 4px;font-size:1.05rem}
+.card p:last-child{margin-bottom:0}
+.term{display:block;font-size:.88rem;color:var(--sub);margin-top:4px}
+.num-list{list-style:none;padding:0;margin:0 0 12px;counter-reset:n}
+.num-list>li{counter-increment:n;position:relative;padding:12px 14px 12px 52px;background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:8px}
+.num-list>li::before{content:counter(n);position:absolute;left:14px;top:12px;width:28px;height:28px;border-radius:50%;background:var(--blue-soft);color:var(--blue);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:.9rem}
+.num-list>li b{display:block}
+.num-list>li .small{display:block;margin-top:2px}
+.box{border-radius:16px;padding:14px 16px;margin:0 0 12px}
+.box-next{background:var(--blue-soft);border:1px solid var(--blue-line)}
+.box-next .box-h{color:var(--blue)}
+.box-warn{background:var(--warn-soft);border:1px solid var(--warn-line)}
+.box-warn .box-h{color:var(--warn)}
+.box-ok{background:var(--green-soft);border:1px solid var(--green)}
+.box-ok .box-h{color:var(--green)}
+.box-h{font-weight:700;margin:0 0 6px;font-size:.95rem}
+.box ul,.box ol{margin:0;padding-left:1.3em}
+.box li{margin:2px 0}
+.big-num{font-size:1.25rem;font-weight:700}
+.example{display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:center;flex-wrap:wrap}
+.example div{flex:1;min-width:90px}
+.example .arrow{flex:none;min-width:0;color:var(--sub)}
+
+/* 結果カード */
+.result{border-radius:20px;padding:18px;margin:0 0 14px;border:2px solid var(--blue);background:var(--card)}
+.result .label{font-size:.85rem;color:var(--sub);margin:0}
+.result .answer{font-size:1.35rem;font-weight:800;color:var(--blue);line-height:1.45;margin:2px 0 8px}
+.result.gray{border-color:var(--gray)}
+.result.gray .answer{color:var(--ink)}
+
+/* 選択肢ボタン */
+.choices{display:grid;gap:10px;margin:16px 0}
+.choice{display:flex;align-items:center;gap:12px;width:100%;min-height:64px;padding:12px 16px;text-align:left;cursor:pointer;
+  background:var(--card);border:2px solid var(--line);border-radius:16px;font-size:1.05rem;font-weight:700;box-shadow:var(--shadow)}
+.choice:active{transform:scale(.99)}
+.choice:hover,.choice:focus-visible{border-color:var(--blue)}
+.choice .c-sub{display:block;font-weight:400;font-size:.86rem;color:var(--sub);margin-top:2px}
+.choice .c-txt{flex:1}
+.choice::after{content:"›";font-size:1.6rem;color:var(--gray-ink);line-height:1}
+.choice.selected{border-color:var(--blue);background:var(--blue-soft)}
+
+/* 外部リンクボタン */
+.ext{display:flex;align-items:center;justify-content:center;gap:8px;min-height:58px;padding:12px 16px;border-radius:16px;
+  background:var(--card);border:2px solid var(--blue);color:var(--blue);font-weight:700;font-size:1.05rem;text-decoration:none;text-align:center;margin:0 0 8px}
+.ext:active{transform:scale(.99)}
+.ext .ico{font-size:.95rem}
+.ext-note{font-size:.88rem;color:var(--sub);text-align:center;margin:0 0 16px}
+.linkline{display:inline-block;padding:10px 0;min-height:44px}
+
+/* サイトカード */
+.site{display:flex;align-items:center;gap:12px}
+.site .s-body{flex:1;min-width:0}
+.site .s-name{font-weight:700}
+.site .s-why{font-size:.88rem;color:var(--sub);display:block}
+.mini-btn{flex:none;min-height:44px;padding:8px 14px;border-radius:12px;border:1px solid var(--blue-line);background:var(--blue-soft);color:var(--blue);font-weight:700;cursor:pointer;font-size:.9rem}
+
+/* チェックリスト */
+.check{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:8px;cursor:pointer;min-height:56px}
+.check input{width:24px;height:24px;flex:none;margin:2px 0 0;accent-color:var(--green)}
+
+/* 全体の流れ */
+.flow{list-style:none;padding:0;margin:0 0 16px}
+.flow li{display:flex;gap:12px;align-items:stretch}
+.flow .dotcol{display:flex;flex-direction:column;align-items:center;flex:none;width:34px}
+.flow .dot{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem;
+  background:var(--card);border:2px solid var(--gray);color:var(--gray-ink)}
+.flow .bar{flex:1;width:2px;background:var(--gray);min-height:10px}
+.flow li:last-child .bar{display:none}
+.flow .done .dot{background:var(--green);border-color:var(--green);color:#fff}
+.flow .done .bar{background:var(--green)}
+.flow .now .dot{background:var(--blue);border-color:var(--blue);color:var(--blue-ink)}
+.flow .txt{padding:4px 0 14px;flex:1;min-width:0}
+.flow .txt b{display:block;line-height:1.4}
+.flow .txt span{font-size:.86rem;color:var(--sub)}
+.flow .state{font-size:.78rem;font-weight:700;margin-left:6px}
+.flow .done .state{color:var(--green)}
+.flow .now .state{color:var(--blue)}
+.flow button.txt{border:0;background:none;text-align:left;cursor:pointer;padding:4px 0 14px}
+.flow button.txt b{color:var(--blue);text-decoration:underline;text-underline-offset:3px}
+
+/* ===== 下部固定：戻る / 次へ ===== */
+.bottombar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--bar-bg);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  border-top:1px solid var(--line);padding:10px 0 calc(10px + env(safe-area-inset-bottom))}
+.bottombar .wrap{display:flex;gap:10px}
+.btn{min-height:56px;border-radius:14px;font-weight:700;font-size:1.05rem;cursor:pointer;padding:8px 14px;border:2px solid transparent;line-height:1.35}
+.btn:active{transform:scale(.99)}
+.btn-back{flex:0 0 32%;background:var(--card);border-color:var(--line);color:var(--ink)}
+.btn-main{flex:1;background:var(--blue);color:var(--blue-ink)}
+.btn-main.pulse{animation:pulse 1.2s ease-in-out 3}
+@keyframes pulse{50%{box-shadow:0 0 0 6px var(--blue-line)}}
+.btn-sub{width:100%;background:var(--card);border-color:var(--line);color:var(--ink);margin-top:4px}
+.btn[hidden]{display:none}
+.hint-back{font-size:.82rem;color:var(--sub);align-self:center;flex:1}
+
+/* シート（全体一覧） */
+.sheet-bg{position:fixed;inset:0;background:rgba(10,20,30,.45);z-index:40;display:none}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;background:var(--bg);border-radius:20px 20px 0 0;
+  max-height:88vh;overflow:auto;padding:8px 0 calc(16px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .22s ease-out}
+.sheet.open{transform:none}
+.sheet-bg.open{display:block}
+.sheet .grab{width:44px;height:5px;border-radius:3px;background:var(--gray);margin:4px auto 10px}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.sheet-head h2{margin:0}
+.close{min-width:44px;min-height:44px;border-radius:12px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-size:1.1rem}
+.opts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.opts .mini-btn{background:var(--card);color:var(--ink);border-color:var(--line)}
+.opts .mini-btn[aria-pressed="true"]{background:var(--blue-soft);color:var(--blue);border-color:var(--blue-line)}
+
+/* トースト */
+.toast{position:fixed;left:16px;right:16px;bottom:calc(92px + env(safe-area-inset-bottom));z-index:30;max-width:528px;margin:0 auto;
+  background:var(--ink);color:var(--bg);border-radius:14px;padding:12px 16px;font-size:.95rem;box-shadow:0 6px 20px rgba(0,0,0,.2);
+  opacity:0;transform:translateY(10px);transition:.25s;pointer-events:none}
+.toast.show{opacity:1;transform:none}
+
+.foot{font-size:.8rem;color:var(--sub);margin-top:24px;border-top:1px solid var(--line);padding-top:12px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <button class="where" id="where" type="button" aria-haspopup="dialog" aria-controls="sheet">
+      <span class="where-row">
+        <span class="pill" id="pill">はじめに</span>
+        <span class="where-title" id="whereTitle">ふるさと納税かんたんナビ</span>
+        <span class="where-more">全体 ▾</span>
+      </span>
+      <span class="segs" id="segs" aria-hidden="true"></span>
+    </button>
+  </div>
+</header>
+
+<main class="wrap" id="main" aria-live="polite"></main>
+
+<nav class="bottombar" aria-label="操作">
+  <div class="wrap">
+    <button class="btn btn-back" id="btnBack" type="button">← 戻る</button>
+    <span class="hint-back" id="hintBack" hidden>答えを選ぶと次へ進みます</span>
+    <button class="btn btn-main" id="btnMain" type="button">次へ →</button>
+  </div>
+</nav>
+
+<div class="sheet-bg" id="sheetBg"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <div class="wrap">
+    <div class="grab"></div>
+    <div class="sheet-head">
+      <h2 id="sheetTitle">全体の流れ</h2>
+      <button class="close" id="sheetClose" type="button" aria-label="閉じる">✕</button>
+    </div>
+    <ol class="flow" id="sheetFlow"></ol>
+    <div class="opts">
+      <button class="mini-btn" id="optBig" type="button" aria-pressed="false">文字を大きく</button>
+      <button class="mini-btn" id="optHome" type="button">はじめの画面へ</button>
+      <button class="mini-btn" id="optReset" type="button">最初からやり直す</button>
+    </div>
+    <p class="small">青い文字のステップは、タップするとその画面へ戻れます。</p>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(() => {
+'use strict';
+
+/* ---------- 定数 ---------- */
+const STEPS = [
+  { n:1, title:'ふるさと納税を知る',   desc:'しくみを1分で' },
+  { n:2, title:'上限額を確認',         desc:'いくらまで寄付できるか' },
+  { n:3, title:'手続方法を確認',       desc:'3つの質問に答える' },
+  { n:4, title:'利用サイトを選ぶ',     desc:'2つの質問でおすすめを表示' },
+  { n:5, title:'返礼品を選んで寄付',   desc:'サイトで申し込む' },
+  { n:6, title:'控除の手続き',         desc:'寄付のあとに行う' },
+  { n:7, title:'翌年、控除を確認',     desc:'翌年の5〜6月ごろ' }
+];
+const TOTAL = STEPS.length;
+
+const URL = {
+  simRakuten:'https://event.rakuten.co.jp/furusato/guide/simulation/',
+  simChoice:'https://www.furusato-tax.jp/about/simulation',
+  soumu:'https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/furusato/mechanism/procedure.html',
+  nta:'https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1155.htm',
+  ntaReturn:'https://www.nta.go.jp/taxes/shiraberu/shinkoku/tokushu/keisubetsu/furusato.htm',
+  ntaCorner:'https://www.keisan.nta.go.jp/'
+};
+
+const SITES = {
+  rakuten: { name:'楽天ふるさと納税', url:'https://event.rakuten.co.jp/furusato/',
+             why:'いつもの楽天のアカウントと支払い方法で、そのまま寄付できます。' },
+  choice:  { name:'ふるさとチョイス', url:'https://www.furusato-tax.jp/',
+             why:'自治体や返礼品の情報が多く、見比べながら選びやすいサイトです。' },
+  satofull:{ name:'さとふる', url:'https://www.satofull.jp/',
+             why:'画面がシンプルで、はじめてでも手順を追いやすいサイトです。' },
+  furunavi:{ name:'ふるなび', url:'https://furunavi.jp/',
+             why:'大手サイトのひとつ。ほかのサイトと見比べたいときに。' }
+};
+
+const ROUTE_NAME = { one:'ワンストップ特例', tax:'確定申告', check:'まだ決めていない' };
+
+/* ---------- 保存（個人情報は保存しない） ---------- */
+const KEY = 'furusatoNavi.v3';
+const blank = () => ({ stack:['home'], a:{}, route:null, site:null, maxStage:0, checks:{} });
+let S = blank();
+function load(){
+  try{ const raw = localStorage.getItem(KEY); if(raw){ const o = JSON.parse(raw); if(o && Array.isArray(o.stack) && o.stack.length) S = Object.assign(blank(), o); } }catch(e){}
+}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function pref(k, v){
+  try{ if(v === undefined) return localStorage.getItem('furusatoNavi.'+k); localStorage.setItem('furusatoNavi.'+k, v); }catch(e){ return null; }
+}
+
+/* ---------- 小物 ---------- */
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ext = (url, label, note) =>
+  `<a class="ext" href="${url}" target="_blank" rel="noopener" data-ext>${label}<span class="ico" aria-hidden="true">↗</span><span class="sr">（別のページが開きます）</span></a>` +
+  (note ? `<p class="ext-note">${note}</p>` : '');
+const choice = (val, label, sub) =>
+  `<button class="choice" type="button" data-answer="${val}"><span class="c-txt">${label}${sub ? `<span class="c-sub">${sub}</span>` : ''}</span></button>`;
+const cur = () => S.stack[S.stack.length - 1];
+const route = () => S.route || 'check';
+const site = () => SITES[S.site] || SITES.satofull;
+
+/* ---------- 画面定義 ----------
+   stage: 上部に表示するSTEP番号（0=はじめ, 8=完了）
+   sub:   STEP内の小ステップ表示
+   main:  下部の主ボタン（null=質問画面なので非表示） */
+const SCREENS = {
+
+  home: {
+    stage:0,
+    main: () => {
+      const r = resumeStage();
+      if (!r) return { label:'はじめる →', go:'s1' };
+      return { label: r === 8 ? '完了画面を見る →' : `続きから（STEP ${r}）→`, act:'resume' };
+    },
+    html: () => `
+      <p class="kicker">はじめてのふるさと納税</p>
+      <h1 tabindex="-1">7つのステップで、<br>寄付から手続きまで</h1>
+      <p class="lead">画面の案内どおりに進むだけです。いまどこにいるかは、画面の上にいつも表示されます。</p>
+      <ol class="flow">${flowItems(false)}</ol>
+      <div class="box box-next">
+        <p class="box-h">かかる時間の目安</p>
+        <ul>
+          <li>STEP 1〜5：その日のうちに進められます</li>
+          <li>STEP 6：寄付のあと（期限あり）</li>
+          <li>STEP 7：翌年の5〜6月ごろ</li>
+        </ul>
+      </div>
+      ${S.resume ? `<button class="btn btn-sub" type="button" data-act="reset">最初からやり直す</button>` : ''}
+      <p class="foot">氏名・住所・年収などは入力しません。進み具合だけをこの端末に保存します。<br>
+      制度の内容は変わることがあります（2026年9月時点の情報）。寄付の前に各サイトや<a href="${URL.soumu}" target="_blank" rel="noopener">総務省</a>の案内もご確認ください。</p>`
+  },
+
+  s1: {
+    stage:1,
+    main: () => ({ label:'わかった、次へ →', go:'s2' }),
+    html: () => `
+      <h1 tabindex="-1">ふるさと納税って？</h1>
+      <p class="lead">むずかしい説明は省きます。大事なのはこの4つだけです。</p>
+      <ol class="num-list">
+        <li><b>好きな自治体に「寄付」する</b><span class="small">住んでいない市町村でも選べます。</span></li>
+        <li><b>お礼に「返礼品」がもらえる</b><span class="small">お米・お肉・果物など。自治体ごとに違います。</span></li>
+        <li><b>寄付から2,000円を引いた分、税金が安くなる</b><span class="small">これを「控除（こうじょ）」といいます。自分の負担は原則2,000円です。</span></li>
+        <li><b>ただし、安くなる額には「上限」がある</b><span class="small">上限を超えた分は、自分の負担になります。次のSTEPで確認します。</span></li>
+      </ol>
+      <div class="card">
+        <p class="small" style="margin-bottom:6px">例：上限の範囲内で 30,000円 寄付した場合</p>
+        <div class="example">
+          <div><span class="small">寄付</span><br><span class="big-num">30,000円</span></div>
+          <div class="arrow">→</div>
+          <div><span class="small">税金が安くなる</span><br><span class="big-num">28,000円</span></div>
+        </div>
+        <p class="small" style="margin-top:8px">実質 2,000円 の負担で返礼品が受け取れます。</p>
+      </div>
+      <p class="small">※1月〜12月の1年ごとに数えます。12月31日までに支払った分が、その年の寄付です。</p>`
+  },
+
+  s2: {
+    stage:2,
+    main: () => ({ label:'上限額を確認できた →', go:'s3q1' }),
+    html: () => `
+      <h1 tabindex="-1">あなたの上限額を確認しましょう</h1>
+      <p class="lead">上限額＝「いくらまで寄付すると、自己負担2,000円で済むか」の目安です。</p>
+      <ol class="num-list">
+        <li><b>下のボタンで計算ページを開く</b></li>
+        <li><b>年収と家族構成を入れる</b><span class="small">源泉徴収票があると、より正確です。</span></li>
+        <li><b>出てきた金額をメモする</b><span class="small">このアプリには入力しません。</span></li>
+        <li><b>この画面に戻って、下の「確認できた」を押す</b></li>
+      </ol>
+      ${ext(URL.simRakuten, '上限額の計算ページを開く', '楽天ふるさと納税のかんたんシミュレーターが開きます')}
+      <div class="box box-warn">
+        <p class="box-h">ポイント</p>
+        <ul>
+          <li>出てくる金額は「目安」です。上限ギリギリより、少し余裕をもって寄付すると安心です。</li>
+          <li>何回かに分けて寄付するときは、<b>合計</b>が上限額に収まるようにします。</li>
+        </ul>
+      </div>
+      <p class="small">別の計算ページを使いたい場合：<a class="linkline" href="${URL.simChoice}" target="_blank" rel="noopener" data-ext>ふるさとチョイスの計算ページ ↗</a></p>`
+  },
+
+  s3q1: {
+    stage:3, sub:'質問 1 / 3',
+    html: () => `
+      <p class="kicker">手続方法のチェック　質問 1 / 3</p>
+      <h1 tabindex="-1">ふだん、確定申告をしていますか？</h1>
+      <p class="lead">会社員で、会社の「年末調整」だけで済んでいる人は「していない」です。</p>
+      <div class="choices">
+        ${choice('no',  'していない', '会社の年末調整だけで済んでいる')}
+        ${choice('yes', 'している', '自営業・フリーランス など')}
+        ${choice('unknown', 'よく分からない')}
+      </div>
+      <p class="small">※確定申告（かくていしんこく）＝ 1年間の収入と税金を、自分で税務署に届け出る手続きです。</p>`
+  },
+
+  s3q2: {
+    stage:3, sub:'質問 2 / 3',
+    html: () => `
+      <p class="kicker">手続方法のチェック　質問 2 / 3</p>
+      <h1 tabindex="-1">寄付する年に、確定申告をする予定はありますか？</h1>
+      <p class="lead">ふだんはしなくても、次のような年は確定申告をすることがあります。</p>
+      <div class="card">
+        <ul style="margin:0;padding-left:1.2em">
+          <li>医療費控除を受ける</li>
+          <li>住宅ローン控除の1年目</li>
+          <li>副業などの所得が20万円を超える</li>
+        </ul>
+      </div>
+      <div class="choices">
+        ${choice('no',  '予定はない')}
+        ${choice('yes', '予定がある')}
+        ${choice('unknown', 'よく分からない')}
+      </div>`
+  },
+
+  s3q3: {
+    stage:3, sub:'質問 3 / 3',
+    html: () => `
+      <p class="kicker">手続方法のチェック　質問 3 / 3</p>
+      <h1 tabindex="-1">寄付先の自治体は、5つ以内にしますか？</h1>
+      <p class="lead">1年間（1〜12月）の合計で数えます。同じ自治体に何回寄付しても「1つ」です。</p>
+      <div class="choices">
+        ${choice('le5', '5つ以内にする', 'まだ決めていない人も、こちらがおすすめ')}
+        ${choice('ge6', '6つ以上になりそう')}
+      </div>
+      <p class="small">5つ以内なら、確定申告なしで手続きできる「ワンストップ特例」が使えます。</p>`
+  },
+
+  s3r: {
+    stage:3, sub:'判定結果',
+    main: () => ({ label:'サイトを選ぶ →', go:'s4q1' }),
+    html: () => {
+      const r = route();
+      if (r === 'one') return `
+        <p class="kicker">手続方法のチェック　結果</p>
+        <div class="result">
+          <p class="label">あなたは</p>
+          <p class="answer" tabindex="-1" id="focusMe">ワンストップ特例で<br>進められそうです</p>
+          <p>確定申告のかわりに、<b>寄付先へ申請するだけ</b>で税金の手続きが終わるしくみです。</p>
+        </div>
+        <div class="box box-next">
+          <p class="box-h">このあとやること</p>
+          <ol>
+            <li>サイトを選ぶ</li>
+            <li>返礼品を選んで寄付する<br><span class="small">申し込むとき「ワンストップ特例の申請書を希望する」を選びます</span></li>
+            <li>寄付先ごとに申請する<br><span class="small">期限：寄付した翌年の1月10日まで（必着）</span></li>
+          </ol>
+        </div>
+        <div class="box box-warn">
+          <p class="box-h">注意</p>
+          <p style="margin:0">あとで確定申告をすることになったら、ワンストップ特例は使えなくなります。その場合は、ふるさと納税の分も確定申告に入れれば大丈夫です。</p>
+        </div>
+        <button class="btn btn-sub" type="button" data-act="redo3">質問に答え直す</button>`;
+      if (r === 'tax') return `
+        <p class="kicker">手続方法のチェック　結果</p>
+        <div class="result">
+          <p class="label">あなたは</p>
+          <p class="answer" tabindex="-1" id="focusMe">確定申告で<br>手続きします</p>
+          <p>確定申告のときに、ふるさと納税の分も一緒に届け出ます。<b>ワンストップ特例の申請は不要</b>です（しても使えません）。</p>
+        </div>
+        <div class="box box-next">
+          <p class="box-h">このあとやること</p>
+          <ol>
+            <li>サイトを選ぶ</li>
+            <li>返礼品を選んで寄付する</li>
+            <li>届いた「寄附金受領証明書」を保管する</li>
+            <li>寄付した翌年の3月15日までに確定申告する</li>
+          </ol>
+        </div>
+        <button class="btn btn-sub" type="button" data-act="redo3">質問に答え直す</button>`;
+      return `
+        <p class="kicker">手続方法のチェック　結果</p>
+        <div class="result gray">
+          <p class="label">いまは</p>
+          <p class="answer" tabindex="-1" id="focusMe">まだ決めなくて<br>大丈夫です</p>
+          <p>手続方法は、<b>寄付のあと（STEP 6）</b>で決められます。先に進んでください。</p>
+        </div>
+        <div class="box box-next">
+          <p class="box-h">それまでに確認しておくこと</p>
+          <ul>
+            <li>会社の年末調整だけで済んでいるか（勤め先に聞くと確実です）</li>
+            <li>今年、医療費控除などで確定申告をするか</li>
+          </ul>
+        </div>
+        <div class="box box-ok">
+          <p class="box-h">迷ったときは</p>
+          <p style="margin:0">確定申告をすれば、どちらの場合でも控除を受けられます。</p>
+        </div>
+        ${ext(URL.nta, '国税庁の説明を見る', '')}
+        <button class="btn btn-sub" type="button" data-act="redo3">質問に答え直す</button>`;
+    }
+  },
+
+  s4q1: {
+    stage:4, sub:'質問 1 / 2',
+    html: () => `
+      <p class="kicker">サイト選び　質問 1 / 2</p>
+      <h1 tabindex="-1">楽天市場をよく使いますか？</h1>
+      <p class="lead">寄付は「ふるさと納税サイト」で申し込みます。あなたに合いそうなサイトを表示します。</p>
+      <div class="choices">
+        ${choice('yes', 'よく使う', '楽天のアカウントを持っている')}
+        ${choice('no',  'あまり使わない')}
+      </div>
+      <p class="small">どのサイトで寄付しても、税金が安くなるしくみや自己負担2,000円は同じです。</p>`
+  },
+
+  s4q2: {
+    stage:4, sub:'質問 2 / 2',
+    html: () => `
+      <p class="kicker">サイト選び　質問 2 / 2</p>
+      <h1 tabindex="-1">返礼品の選び方は、どちらが近いですか？</h1>
+      <div class="choices">
+        ${choice('simple', 'かんたんに選びたい', 'わかりやすい画面がいい')}
+        ${choice('compare', 'じっくり見比べたい', 'いろいろな地域・返礼品から選びたい')}
+      </div>`
+  },
+
+  s4r: {
+    stage:4, sub:'おすすめ',
+    main: () => ({ label:'このサイトで進む →', go:'s5' }),
+    html: () => {
+      const s = site();
+      const others = Object.keys(SITES).filter(k => k !== S.site);
+      return `
+        <p class="kicker">サイト選び　結果</p>
+        <div class="result">
+          ${S.site === S.rec
+            ? `<p class="label">あなたには</p><p class="answer" tabindex="-1" id="focusMe">${esc(s.name)}が<br>使いやすそうです</p>`
+            : `<p class="label">あなたが選んだサイト</p><p class="answer" tabindex="-1" id="focusMe">${esc(s.name)}</p>`}
+          <p style="margin:0">${esc(s.why)}</p>
+        </div>
+        <p class="small">「絶対にここが一番」というわけではありません。気になる場合は、ほかのサイトを選んでもかまいません。</p>
+        <h2>ほかのサイト</h2>
+        ${others.map(k => `
+          <div class="card site">
+            <div class="s-body"><span class="s-name">${esc(SITES[k].name)}</span><span class="s-why">${esc(SITES[k].why)}</span></div>
+            <button class="mini-btn" type="button" data-site="${k}">こちらにする</button>
+          </div>`).join('')}`;
+    }
+  },
+
+  s5: {
+    stage:5,
+    main: () => ({ label:'寄付した →', go:'s6' }),
+    html: () => {
+      const s = site(), r = route();
+      return `
+        <h1 tabindex="-1">返礼品を選んで寄付しましょう</h1>
+        <p class="lead">${esc(s.name)}で、次の順に進めます。</p>
+        <ol class="num-list">
+          <li><b>サイトを開く</b><span class="small">初めての場合は会員登録をします。</span></li>
+          <li><b>欲しい返礼品を探す</b><span class="small">地域やジャンル（お米・お肉など）で探せます。</span></li>
+          <li><b>寄付額が上限額の中か確認</b><span class="small">STEP 2でメモした金額と比べます。何回か寄付するなら合計で。</span></li>
+          <li><b>申し込んで支払う</b><span class="small">氏名・住所は<b>住民票と同じ</b>に入力してください。</span></li>
+        </ol>
+        ${r === 'one' ? `
+        <div class="box box-next">
+          <p class="box-h">申し込むときに忘れずに</p>
+          <p style="margin:0">「ワンストップ特例の申請書を希望する」を選んでください。寄付先の自治体は5つ以内に。</p>
+        </div>` : r === 'tax' ? `
+        <div class="box box-next">
+          <p class="box-h">申し込むときに</p>
+          <p style="margin:0">ワンストップ特例の申請書は「不要」でかまいません。あとで届く「寄附金受領証明書」は捨てずに保管します。</p>
+        </div>` : `
+        <div class="box box-next">
+          <p class="box-h">申し込むときに</p>
+          <p style="margin:0">手続方法を決めていない場合は、「ワンストップ特例の申請書を希望する」を選んでおくと、あとでどちらにも対応できます。</p>
+        </div>`}
+        ${ext(s.url, `${esc(s.name)}を開く`, '寄付が終わったら、この画面に戻って下の「寄付した」を押してください')}
+        <div class="box box-warn">
+          <p class="box-h">知っておくと安心</p>
+          <ul>
+            <li>12月31日までに支払った分が、その年の寄付です。年末は混み合うので早めがおすすめです。</li>
+            <li>まだ寄付しない場合は、このまま閉じてもOK。次に開くと続きから始められます。</li>
+          </ul>
+        </div>`;
+    }
+  },
+
+  s6: {
+    stage:6,
+    main: () => route() === 'check' ? null : ({ label:'手続きした →', go:'s7' }),
+    html: () => {
+      const r = route();
+      if (r === 'check') return `
+        <h1 tabindex="-1">手続方法を決めましょう</h1>
+        <p class="lead">当てはまる方を選んでください。</p>
+        <div class="choices">
+          ${choice('one', 'ワンストップ特例にする', '年末調整だけで済む（確定申告しない）＋ 寄付先が5つ以内')}
+          ${choice('tax', '確定申告にする', '確定申告をする／やっぱり分からない')}
+        </div>
+        <div class="box box-ok">
+          <p class="box-h">迷ったときは</p>
+          <p style="margin:0">確定申告をすれば、どちらの場合でも控除を受けられます。</p>
+        </div>
+        ${ext(URL.nta, '国税庁の説明を見る', '')}`;
+      if (r === 'one') return `
+        <p class="kicker">あなたの手続き：ワンストップ特例</p>
+        <h1 tabindex="-1">寄付先ごとに申請します</h1>
+        <div class="box box-warn">
+          <p class="box-h">期限</p>
+          <p style="margin:0"><span class="big-num">寄付した翌年の1月10日</span>まで（必着）</p>
+        </div>
+        <h2>申請のしかた（どちらか）</h2>
+        <div class="card">
+          <h3>A. スマホで申請</h3>
+          <p>寄付先によっては、マイナンバーカードを使ってオンラインで申請できます。寄付のあとに届くメールや、寄付先の案内を確認してください。</p>
+        </div>
+        <div class="card">
+          <h3>B. 郵送で申請</h3>
+          <p>届いた申請書に記入し、マイナンバーと本人確認書類のコピーを同封して送り返します。</p>
+        </div>
+        <div class="box box-next">
+          <p class="box-h">大事なこと</p>
+          <ul>
+            <li>申請は<b>寄付ごと</b>に必要です（同じ自治体に2回寄付したら2回）。</li>
+            <li>申請後に引っ越し・名前の変更があったら、翌年1月10日までに寄付先へ変更の届出をします。</li>
+            <li>あとで確定申告をすることになったら、特例は使えません。ふるさと納税の分も確定申告に入れてください。</li>
+          </ul>
+        </div>
+        <h2>チェック</h2>
+        ${checkItem('one1', '寄付したすべての分を申請した')}
+        ${checkItem('one2', '受付の連絡（メール・はがき等）を確認した', '連絡がない自治体もあります')}
+        <p class="small">あとで申請する場合は、このまま閉じてOKです。</p>`;
+      return `
+        <p class="kicker">あなたの手続き：確定申告</p>
+        <h1 tabindex="-1">確定申告で控除を受けます</h1>
+        <div class="box box-warn">
+          <p class="box-h">期限</p>
+          <p style="margin:0"><span class="big-num">寄付した翌年の3月15日</span>まで</p>
+        </div>
+        <ol class="num-list">
+          <li><b>証明書を保管する</b><span class="small">寄付先から届く「寄附金受領証明書」。サイトによっては、寄付をまとめた証明書をダウンロードできます。</span></li>
+          <li><b>確定申告書に「寄附金控除」を入れる</b><span class="small">国税庁の作成コーナーなら、スマホでも作れます。</span></li>
+          <li><b>提出する</b><span class="small">e-Tax（インターネット）、郵送、税務署の窓口のどれか。</span></li>
+        </ol>
+        ${ext(URL.ntaReturn, '国税庁「ふるさと納税をされた方へ」', '')}
+        <div class="box box-next">
+          <p class="box-h">大事なこと</p>
+          <p style="margin:0">ワンストップ特例を申請していても、確定申告をするなら特例は無効になります。<b>すべての寄付</b>を確定申告に入れてください。</p>
+        </div>
+        <h2>チェック</h2>
+        ${checkItem('tax1', '証明書をすべて保管した')}
+        ${checkItem('tax2', '寄附金控除を入れて確定申告を出した')}
+        <p class="small">確定申告の時期（2〜3月）まで待つ場合は、このまま閉じてOKです。</p>`;
+    }
+  },
+
+  s7: {
+    stage:7,
+    main: () => ({ label:'確認できた（完了）→', go:'done' }),
+    html: () => {
+      const r = route();
+      const one = `
+        <div class="card">
+          <h3>住民税の「決定通知書」を見る</h3>
+          <p>翌年の5〜6月ごろに届きます（会社員は勤め先から渡されることが多いです）。「寄附金税額控除」の欄に金額が入っていれば反映されています。</p>
+        </div>`;
+      const tax = `
+        <div class="card">
+          <h3>① 所得税：還付金を確認</h3>
+          <p>確定申告のあと、払いすぎた税金が口座に戻ってきます（納める税金が減る場合もあります）。</p>
+        </div>
+        <div class="card">
+          <h3>② 住民税：「決定通知書」を見る</h3>
+          <p>翌年の5〜6月ごろに届きます。「寄附金税額控除」の欄に金額が入っていれば反映されています。</p>
+        </div>`;
+      return `
+        <h1 tabindex="-1">翌年、控除されたか確認しましょう</h1>
+        <p class="lead">ここまでできれば、ふるさと納税は完了です。</p>
+        ${r === 'one' ? one : tax}
+        <div class="box box-ok">
+          <p class="box-h">目安</p>
+          <p style="margin:0">上限額の範囲内なら、${r === 'one' ? '住民税から' : '所得税と住民税の合計で'}おおよそ<b>「寄付額 − 2,000円」</b>が安くなっています。</p>
+        </div>
+        <div class="box box-warn">
+          <p class="box-h">反映されていないときは</p>
+          <p style="margin:0">お住まいの市区町村の住民税の窓口に問い合わせてください。</p>
+        </div>`;
+    }
+  },
+
+  done: {
+    stage:8,
+    main: () => ({ label:'はじめの画面へ', act:'home' }),
+    html: () => `
+      <div class="result" style="border-color:var(--green)">
+        <p class="label">7つのステップ</p>
+        <p class="answer" style="color:var(--green)" tabindex="-1" id="focusMe">すべて完了しました</p>
+        <p style="margin:0">おつかれさまでした。</p>
+      </div>
+      <div class="card">
+        <p class="small" style="margin:0">あなたの手続方法</p>
+        <p><b>${ROUTE_NAME[route()]}</b></p>
+        <p class="small" style="margin:0">使ったサイト</p>
+        <p style="margin:0"><b>${esc(site().name)}</b></p>
+      </div>
+      <ol class="flow">${flowItems(false)}</ol>
+      <p class="small">来年もふるさと納税をするときは、「最初からやり直す」で同じ流れをたどれます。</p>
+      <button class="btn btn-sub" type="button" data-act="reset">最初からやり直す</button>`
+  }
+};
+
+/* 小ステップ画面を持つSTEPの入口 */
+const STAGE_ENTRY = { 1:'s1', 2:'s2', 3:'s3q1', 4:'s4q1', 5:'s5', 6:'s6', 7:'s7' };
+
+function checkItem(id, label, sub){
+  return `<label class="check"><input type="checkbox" data-check="${id}" ${S.checks[id] ? 'checked' : ''}>
+    <span>${label}${sub ? `<br><span class="small">${sub}</span>` : ''}</span></label>`;
+}
+
+function stageOf(id){ return SCREENS[id] ? SCREENS[id].stage : 0; }
+function curStage(){ return stageOf(cur()); }
+
+// 「続きから」で戻る画面の STEP 番号（なければ 0）
+function resumeStage(){ return S.resume ? stageOf(S.resume[S.resume.length - 1]) : 0; }
+
+function stateOf(n){
+  const st = curStage();
+  if (st === 8 || n < st) return 'done';
+  if (n === st) return 'now';
+  return 'todo';
+}
+
+function flowItems(linkable){
+  const st = curStage();
+  return STEPS.map(s => {
+    let cls = 'todo';
+    if (st === 0){ const r = resumeStage(); cls = !r ? 'todo' : (s.n < r || r === 8) ? 'done' : s.n === r ? 'now' : 'todo'; }
+    else cls = stateOf(s.n);
+    const label = cls === 'done' ? '完了' : cls === 'now' ? (st === 0 ? '続きはここから' : 'いまここ') : '';
+    const mark = cls === 'done' ? '✓' : s.n;
+    const canJump = linkable && s.n <= S.maxStage && s.n !== st;
+    const body = `<b>${s.title}${label ? `<span class="state">${label}</span>` : ''}</b><span>${s.desc}</span>`;
+    return `<li class="${cls}"><span class="dotcol"><span class="dot">${mark}</span><span class="bar"></span></span>${
+      canJump ? `<button class="txt" type="button" data-jump="${s.n}">${body}</button>` : `<span class="txt">${body}</span>`}</li>`;
+  }).join('');
+}
+
+/* ---------- 表示 ---------- */
+let lastDir = 'fwd';
+function render(){
+  const id = cur(), sc = SCREENS[id] || SCREENS.home;
+  const st = sc.stage;
+  if (st > S.maxStage) S.maxStage = st;
+  save();
+
+  // 上部：現在地
+  const pill = $('pill'), title = $('whereTitle');
+  pill.classList.toggle('done', st === 8);
+  pill.hidden = st === 0;
+  if (st === 0){ pill.textContent = 'はじめに'; title.textContent = 'ふるさと納税かんたんナビ'; }
+  else if (st === 8){ pill.textContent = '完了'; title.textContent = 'すべて完了'; }
+  else { pill.textContent = `STEP ${st} / ${TOTAL}`; title.textContent = STEPS[st-1].title; }
+  $('segs').innerHTML = STEPS.map(s => `<span class="seg ${st === 0 ? '' : stateOf(s.n)}"></span>`).join('');
+  $('where').setAttribute('aria-label', `現在地：${pill.textContent} ${title.textContent}${sc.sub ? ' ' + sc.sub : ''}。タップで全体の流れを表示`);
+
+  // 本文
+  const main = $('main');
+  main.innerHTML = `<section class="screen ${lastDir === 'back' ? 'back' : ''}">${sc.html()}</section>`;
+  window.scrollTo(0, 0);
+  const f = main.querySelector('#focusMe') || main.querySelector('h1');
+  if (f) try{ f.focus({preventScroll:true}); }catch(e){}
+
+  // 下部：戻る / 次へ
+  const m = sc.main ? sc.main() : null;
+  const bMain = $('btnMain'), bBack = $('btnBack');
+  bBack.hidden = S.stack.length <= 1;
+  $('hintBack').hidden = !!m || bBack.hidden;
+  bMain.hidden = !m;
+  if (m){ bMain.textContent = m.label; bMain.dataset.go = m.go || ''; bMain.dataset.act = m.act || ''; }
+  bMain.classList.remove('pulse');
+  bBack.style.flex = m ? '' : '0 0 40%';
+}
+
+/* ---------- 画面遷移（Androidの戻るボタンにも対応） ---------- */
+function go(id){
+  if (!SCREENS[id]) return;
+  const wasRoot = S.stack.length <= 1;
+  if (wasRoot) delete S.resume;
+  S.stack.push(id);
+  if (wasRoot) try{ history.pushState({furusato:1}, ''); }catch(e){}
+  lastDir = 'fwd'; render();
+}
+function popScreen(){
+  if (S.stack.length <= 1) return;
+  S.stack.pop();
+  lastDir = 'back'; render();
+  if (S.stack.length > 1) try{ history.pushState({furusato:1}, ''); }catch(e){}
+}
+window.addEventListener('popstate', () => { closeSheet(); popScreen(); });
+function back(){
+  if (S.stack.length <= 1) return;
+  if (history.state && history.state.furusato) history.back(); else popScreen();
+}
+function goHome(){
+  if (cur() !== 'home') S.resume = S.stack.slice();
+  S.stack = ['home']; lastDir = 'back'; render();
+}
+function resume(){
+  if (!S.resume) return go('s1');
+  S.stack = S.resume; delete S.resume;
+  try{ history.pushState({furusato:1}, ''); }catch(e){}
+  lastDir = 'fwd'; render();
+}
+function resetAll(){
+  if (!confirm('進み具合を消して、最初からやり直しますか？')) return;
+  S = blank(); save(); closeSheet(); lastDir = 'back'; render();
+}
+
+/* ---------- 回答の処理 ---------- */
+function answer(id, v){
+  S.a[id] = v;
+  switch (id){
+    case 's3q1': if (v === 'no') return go('s3q2'); S.route = v === 'yes' ? 'tax' : 'check'; return go('s3r');
+    case 's3q2': if (v === 'no') return go('s3q3'); S.route = v === 'yes' ? 'tax' : 'check'; return go('s3r');
+    case 's3q3': S.route = v === 'le5' ? 'one' : 'tax'; return go('s3r');
+    case 's4q1': if (v === 'yes'){ S.site = S.rec = 'rakuten'; return go('s4r'); } return go('s4q2');
+    case 's4q2': S.site = S.rec = v === 'compare' ? 'choice' : 'satofull'; return go('s4r');
+    case 's6':   S.route = v; lastDir = 'fwd'; return render();
+  }
+}
+
+document.addEventListener('click', e => {
+  const t = e.target.closest('button,a,label');
+  if (!t) return;
+  if (t.dataset.answer){ answer(cur(), t.dataset.answer); return; }
+  if (t.dataset.site){ S.site = t.dataset.site; lastDir = 'fwd'; render(); toast(`${SITES[S.site].name}に変更しました`); return; }
+  if (t.dataset.jump){ closeSheet(); const tgt = STAGE_ENTRY[t.dataset.jump]; if (tgt) go(tgt); return; }
+  if (t.dataset.act === 'reset'){ resetAll(); return; }
+  if (t.dataset.act === 'redo3'){
+    const i = S.stack.lastIndexOf('s3q1');
+    if (i > 0){ S.stack = S.stack.slice(0, i + 1); lastDir = 'back'; render(); } else go('s3q1');
+    return;
+  }
+  if (t.hasAttribute('data-ext')){ awayAt = Date.now(); return; }
+});
+document.addEventListener('change', e => {
+  const c = e.target.closest('[data-check]');
+  if (c){ S.checks[c.dataset.check] = c.checked; save(); }
+});
+
+$('btnBack').addEventListener('click', back);
+$('btnMain').addEventListener('click', () => {
+  const b = $('btnMain');
+  if (b.dataset.act === 'home') return goHome();
+  if (b.dataset.act === 'resume') return resume();
+  if (b.dataset.go) go(b.dataset.go);
+});
+
+/* ---------- 外部サイトから戻ったとき ---------- */
+let awayAt = 0;
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState !== 'visible' || !awayAt) return;
+  if (Date.now() - awayAt < 1500) return;
+  awayAt = 0;
+  const m = SCREENS[cur()].main ? SCREENS[cur()].main() : null;
+  toast(m ? `おかえりなさい。終わったら「${m.label.replace(/ →$/,'')}」を押してください` : 'おかえりなさい。続きから進めてください');
+  if (m){ const b = $('btnMain'); b.classList.remove('pulse'); void b.offsetWidth; b.classList.add('pulse'); }
+});
+
+let toastTimer;
+function toast(msg){
+  const t = $('toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 4000);
+}
+
+/* ---------- 全体シート ---------- */
+function openSheet(){
+  $('sheetFlow').innerHTML = flowItems(true);
+  $('sheet').classList.add('open'); $('sheetBg').classList.add('open');
+  $('sheetClose').focus();
+}
+function closeSheet(){ $('sheet').classList.remove('open'); $('sheetBg').classList.remove('open'); }
+$('where').addEventListener('click', openSheet);
+$('sheetClose').addEventListener('click', closeSheet);
+$('sheetBg').addEventListener('click', closeSheet);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
+$('optHome').addEventListener('click', () => { closeSheet(); goHome(); });
+$('optReset').addEventListener('click', resetAll);
+$('optBig').addEventListener('click', () => {
+  const on = !document.documentElement.classList.contains('big');
+  document.documentElement.classList.toggle('big', on);
+  $('optBig').setAttribute('aria-pressed', on);
+  pref('big', on ? '1' : '0');
+});
+
+/* ---------- 起動 ---------- */
+load();
+if (pref('big') === '1'){ document.documentElement.classList.add('big'); $('optBig').setAttribute('aria-pressed', 'true'); }
+// 再訪時は「はじめ」画面（全体像＋続きから）を見せる
+if (cur() !== 'home'){ S.resume = S.stack.slice(); S.stack = ['home']; }
+render();
+})();
+</script>
+</body>
+</html>
