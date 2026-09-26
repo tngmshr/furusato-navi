@@ -7,6 +7,24 @@
 <meta name="format-detection" content="telephone=no">
 <meta name="description" content="はじめてのふるさと納税を、画面の案内どおりに寄付から税金の手続きまで進められるナビです。">
 <title>ふるさと納税かんたんナビ</title>
+<script>
+/* LINE のアプリ内ブラウザは画面下が隠れて最後まで読めないため、外部ブラウザ（Safari / Chrome）で開き直す。
+   openExternalBrowser=1 は LINE 公式のクエリパラメータ。付けても外に出られなかった場合は、下の余白を増やして案内を出す。 */
+(function(){
+  var inLine = /\bLine\//i.test(navigator.userAgent);
+  var hasParam = /[?&]openExternalBrowser=1\b/.test(location.search);
+  if (inLine && !hasParam) {
+    location.replace(location.pathname + (location.search ? location.search + '&' : '?') + 'openExternalBrowser=1' + location.hash);
+    return;
+  }
+  if (inLine) document.documentElement.classList.add('line');
+  else if (hasParam && history.replaceState) {
+    // 外部ブラウザで開けたら、URL からパラメータを消しておく
+    var q = location.search.replace(/[?&]openExternalBrowser=1\b/, '').replace(/^&/, '?');
+    history.replaceState(null, '', location.pathname + q + location.hash);
+  }
+})();
+</script>
 <style>
 :root{
   --fs:17px;
@@ -70,6 +88,10 @@ a{color:var(--blue)}
 /* 下のバーの実際の高さ（--bb-h、JSで計測）＋余白ぶん空けて、最後の文章まで読めるようにする */
 /* 下のバーは本文の後ろに置く（sticky）ので、最後までスクロールすれば必ず全文が見える */
 main.wrap{flex:1 0 auto;width:100%;padding-top:18px;padding-bottom:40px}
+/* LINE 内で開いたまま：画面下が LINE の操作部に隠れるので余白を多めにとる */
+html.line main.wrap{padding-bottom:160px}
+.inapp-note{display:none;margin:0;padding:10px 16px;background:var(--warn-soft);color:var(--ink);font-size:.9rem;line-height:1.6;border-bottom:1px solid var(--warn-line)}
+html.line .inapp-note{display:block}
 .screen{animation:inR .22s ease-out}
 .screen.back{animation:inL .22s ease-out}
 @keyframes inR{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
@@ -203,6 +225,7 @@ p{margin:0 0 12px}
 </head>
 <body>
 
+<p class="inapp-note">LINEの中で開いているため、画面の下が隠れることがあります。右上（または右下）のメニューから「ブラウザで開く」「Safariで開く」を選ぶと読みやすくなります。</p>
 <header class="topbar">
   <div class="wrap">
     <button class="where" id="where" type="button" aria-haspopup="dialog" aria-controls="sheet">
@@ -241,7 +264,7 @@ p{margin:0 0 12px}
       <button class="mini-btn" id="optReset" type="button">最初からやり直す</button>
     </div>
     <p class="small">青い文字のステップは、タップするとその画面へ戻れます。</p>
-    <p class="small">版：2026-09-26c</p>
+    <p class="small">版：2026-09-26d</p>
   </div>
 </div>
 
