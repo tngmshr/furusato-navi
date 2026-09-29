@@ -126,6 +126,20 @@ p{margin:0 0 12px}
 .example{display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:center;flex-wrap:wrap}
 .example div{flex:1;min-width:90px}
 .example .arrow{flex:none;min-width:0;color:var(--sub)}
+.ex-h{font-weight:700;margin:0 0 2px}
+.bars{margin:12px 0 4px}
+.bar-row{margin:0 0 10px}
+.bar-label{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:.9rem;margin:0 0 4px}
+.bar-label b{white-space:nowrap}
+.bar-track{height:22px;border-radius:6px;background:var(--bg)}
+.bar{height:100%;border-radius:6px}
+.bar-pay{background:var(--warn)}
+.bar-get{background:var(--green)}
+.calc{width:100%;border-collapse:collapse;margin:8px 0 0;font-size:.95rem}
+.calc td{padding:6px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.calc td:last-child{text-align:right;white-space:nowrap;padding-left:8px;font-weight:700}
+.nw{white-space:nowrap}
+.calc-total{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0 8px;margin:10px 0 0;color:var(--green);font-size:1.1rem}
 
 /* 結果カード */
 .result{border-radius:20px;padding:18px;margin:0 0 14px;border:2px solid var(--blue);background:var(--card)}
@@ -349,6 +363,10 @@ const SCREENS = {
       <p class="kicker">はじめてのふるさと納税</p>
       <h1 tabindex="-1">7つのステップで、<br>寄付から手続きまで</h1>
       <p class="lead">画面の案内どおりに進むだけです。いまどこにいるかは、画面の上にいつも表示されます。</p>
+      <div class="box box-ok">
+        <p class="box-h">どれくらいお得？</p>
+        <p style="margin:0">例：<b>年収500万円・独身の会社員</b>なら、自己負担<b>2,000円</b>で、<b class="nw">最大 約18,000円分</b>の返礼品がもらえます。<span class="small">くわしくは STEP 1 で説明します。</span></p>
+      </div>
       <ol class="flow">${flowItems(false)}</ol>
       <div class="box box-warn">
         <p class="box-h">はじめる前に用意してください</p>
@@ -373,7 +391,7 @@ const SCREENS = {
 
   s1: {
     stage:1, sub:'1 / 2',
-    main: () => ({ label:'なぜお得なの？ →', go:'s1b' }),
+    main: () => ({ label:'いくらお得なの？ →', go:'s1b' }),
     html: () => `
       <p class="kicker">ふるさと納税を知る　1 / 2</p>
       <h1 tabindex="-1">ふるさと納税って？</h1>
@@ -385,11 +403,11 @@ const SCREENS = {
         <li><b>ただし、安くなる額には「上限」がある</b><span class="small">上限を超えた分は、自分の負担になります。次のSTEPで確認します。</span></li>
       </ol>
       <div class="card">
-        <p class="small" style="margin-bottom:6px">例：上限の範囲内で 30,000円 寄付した場合</p>
+        <p class="small" style="margin-bottom:6px">例：年収500万円・独身の会社員が 60,000円 寄付した場合（上限の範囲内）</p>
         <div class="example">
-          <div><span class="small">寄付</span><br><span class="big-num">30,000円</span></div>
+          <div><span class="small">寄付</span><br><span class="big-num">60,000円</span></div>
           <div class="arrow">→</div>
-          <div><span class="small">税金が安くなる</span><br><span class="big-num">28,000円</span></div>
+          <div><span class="small">税金が安くなる</span><br><span class="big-num">58,000円</span></div>
         </div>
         <p class="small" style="margin-top:8px">実質 2,000円 の負担で返礼品が受け取れます。</p>
       </div>
@@ -401,7 +419,7 @@ const SCREENS = {
     main: () => ({ label:'わかった、次へ →', go:'s2' }),
     html: () => `
       <p class="kicker">ふるさと納税を知る　2 / 2</p>
-      <h1 tabindex="-1">なぜお得なの？</h1>
+      <h1 tabindex="-1">いくらお得なの？</h1>
       <p class="lead">ひとことで言うと、<b>どうせ払う税金の一部で、返礼品がもらえる</b>からです。</p>
       <div class="card">
         <h3>ふつうの場合</h3>
@@ -412,13 +430,26 @@ const SCREENS = {
         <p>税金の一部を、選んだ自治体への寄付に回すイメージです。払う合計は<b>2,000円増えるだけ</b>で、<b>返礼品がもらえます。</b></p>
       </div>
       <div class="card">
-        <p class="small" style="margin-bottom:6px">例：上限の範囲内で 30,000円 寄付した場合</p>
-        <div class="example">
-          <div><span class="small">増える負担</span><br><span class="big-num">2,000円</span></div>
-          <div class="arrow">→</div>
-          <div><span class="small">もらえる返礼品</span><br><span class="big-num">最大 約9,000円分</span></div>
+        <p class="ex-h">例：年収500万円・独身の会社員</p>
+        <p class="small" style="margin:0">上限額の目安は 約6万円。そのうち <b class="nw">60,000円</b> を寄付した場合です。</p>
+        <div class="bars" role="img" aria-label="払う2,000円に対して、もらう返礼品は最大約18,000円分">
+          <div class="bar-row">
+            <p class="bar-label"><span>払う（増える負担）</span><b>2,000円</b></p>
+            <div class="bar-track"><div class="bar bar-pay" style="width:11%"></div></div>
+          </div>
+          <div class="bar-row">
+            <p class="bar-label"><span>もらう（返礼品）</span><b>最大 約18,000円分</b></p>
+            <div class="bar-track"><div class="bar bar-get" style="width:100%"></div></div>
+          </div>
         </div>
-        <p class="small" style="margin-top:8px">返礼品にかける費用は「寄付額の3割まで」というルールがあります。</p>
+        <table class="calc">
+          <tr><td>寄付する</td><td>−60,000円</td></tr>
+          <tr><td>税金が安くなる<br><span class="small">主に翌年の住民税</span></td><td>＋58,000円</td></tr>
+          <tr><td>返礼品<br><span class="small">最大で寄付額の3割</span></td><td>＋約18,000円分</td></tr>
+        </table>
+        <p class="calc-total"><span>差し引き</span><b class="nw">最大 約16,000円分お得</b></p>
+        <p class="small" style="margin-top:8px">お得な分は、お金ではなく<b>返礼品（品物）</b>で受け取ります。返礼品にかける費用は「寄付額の3割まで」というルールがあるため、実際の価値はこれより少ないこともあります。</p>
+        <p class="small" style="margin:6px 0 0">上限額は年収や家族構成で変わり、年収が高いほど大きくなります。あなたの上限額は次のSTEPで確認します。</p>
       </div>
       <div class="box box-warn">
         <p class="box-h">知っておきたいこと</p>
