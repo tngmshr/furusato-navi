@@ -7,7 +7,21 @@
 <meta name="format-detection" content="telephone=no">
 <meta name="description" content="はじめてのふるさと納税を、画面の案内どおりに寄付から税金の手続きまで進められるナビです。">
 <title>ふるさと納税かんたんナビ</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%231f6fd1%27/%3E%3Crect x=%2714%27 y=%2728%27 width=%2736%27 height=%2724%27 rx=%273%27 fill=%27%23fff%27/%3E%3Crect x=%2710%27 y=%2720%27 width=%2744%27 height=%2710%27 rx=%273%27 fill=%27%23fff%27/%3E%3Crect x=%2729%27 y=%2720%27 width=%276%27 height=%2732%27 fill=%27%23f5b940%27/%3E%3C/svg%3E">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-title" content="ふるさとナビ">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ふるさと納税かんたんナビ">
+<meta property="og:title" content="ふるさと納税かんたんナビ｜はじめてでも7ステップで">
+<meta property="og:description" content="寄付から税金の手続き、翌年の確認まで。画面の案内どおりに進めるだけ。氏名や年収の入力はいりません。">
+<meta property="og:url" content="https://tngmshr.github.io/furusato-navi/">
+<meta property="og:image" content="https://tngmshr.github.io/furusato-navi/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="ふるさと納税かんたんナビ">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
 <script>
 /* LINE のアプリ内ブラウザは画面下が隠れて最後まで読めないため、外部ブラウザ（Safari / Chrome）で開き直す。
    openExternalBrowser=1 は LINE 公式のクエリパラメータ。付けても外に出られなかった場合は、下の余白を増やして案内を出す。 */
@@ -142,16 +156,6 @@ p{margin:0 0 12px}
 .calc td{padding:6px 0;border-bottom:1px solid var(--line);vertical-align:top}
 .calc td:last-child{text-align:right;white-space:nowrap;padding-left:8px;font-weight:700}
 .nw{white-space:nowrap}
-.ill{display:block;width:100%;height:auto;margin:0 0 16px;border-radius:18px}
-.ill .bg{fill:var(--blue-soft)}
-.ill .cloud{fill:var(--card)}
-.ill .hill{fill:var(--green-soft)}
-.ill .hill2{fill:var(--green);opacity:.28}
-.ill .wall{fill:var(--card);stroke:var(--line);stroke-width:1.5}
-.ill .roof1{fill:var(--warn)}
-.ill .roof2{fill:var(--blue)}
-.ill .door{fill:var(--sub)}
-.ill .tree{fill:var(--green)}
 .ic-bg1{fill:var(--blue-soft)}
 .ic-bg2{fill:var(--green-soft)}
 .ic-bg3{fill:var(--warn-soft)}
@@ -164,7 +168,6 @@ p{margin:0 0 12px}
 .trio .ar{flex:none;align-self:center;color:var(--sub);margin-top:-30px}
 .trio b{display:block;font-size:.9rem;line-height:1.35}
 .trio span{display:block;font-size:.76rem;color:var(--sub);line-height:1.4}
-.done-ill{display:block;width:180px;height:auto;margin:0 auto 8px}
 .tl{list-style:none;padding:0;margin:10px 0 6px}
 .tl li{position:relative;padding:0 0 14px 28px}
 .tl li::before{content:'';position:absolute;left:3px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--blue)}
@@ -269,6 +272,55 @@ p{margin:0 0 12px}
 .toast.show{opacity:1;transform:none}
 
 .foot{font-size:.8rem;color:var(--sub);margin-top:24px;border-top:1px solid var(--line);padding-top:12px}
+
+/* 画像イラスト（AI生成・文字なし） */
+.hero{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:18px;margin:0 0 16px;background:var(--blue-soft)}
+.done-pic{display:block;width:min(240px,70%);height:auto;aspect-ratio:1;border-radius:50%;margin:0 auto 10px;background:var(--green-soft)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .hero,:root:not([data-theme="light"]) .done-pic{filter:brightness(.88)}}
+
+/* はじめの画面の小さな操作（文字を大きく・教える） */
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.tools .mini-btn{background:var(--card);color:var(--ink);border-color:var(--line)}
+.tools .mini-btn[aria-pressed="true"]{background:var(--blue-soft);color:var(--blue);border-color:var(--blue-line)}
+
+/* 折りたたみ（年収1,000万円の例・ホーム画面に追加の方法） */
+details.more{background:var(--card);border:1px solid var(--line);border-radius:16px;margin:0 0 12px}
+details.more>summary{list-style:none;cursor:pointer;padding:14px 44px 14px 16px;font-weight:700;position:relative;min-height:48px}
+details.more>summary::-webkit-details-marker{display:none}
+details.more>summary::after{content:"＋";position:absolute;right:16px;top:13px;color:var(--blue)}
+details.more[open]>summary::after{content:"−"}
+details.more>.more-body{padding:0 16px 14px}
+
+/* ことばの説明 */
+.yogo{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-decoration:underline dotted var(--blue);text-decoration-thickness:2px;text-underline-offset:4px}
+.yogo::after{content:"?";display:inline-flex;align-items:center;justify-content:center;width:1.05em;height:1.05em;margin-left:2px;border-radius:50%;
+  background:var(--blue-soft);color:var(--blue);font-size:.72em;font-weight:700;vertical-align:.15em;text-decoration:none}
+.gloss dt{font-weight:700;margin-top:12px}
+.gloss dd{margin:2px 0 0;color:var(--sub);font-size:.95rem}
+
+/* 寄付の記録 */
+.log-sum{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 10px}
+.log-sum>div{background:var(--bg);border-radius:12px;padding:8px 10px}
+.log-sum b{display:block;font-size:1.1rem}
+.log-list{list-style:none;padding:0;margin:0 0 10px}
+.log-list li{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.log-list .l-body{flex:1;min-width:0}
+.log-list .l-city{font-weight:700;overflow-wrap:anywhere}
+.log-list .l-meta{display:block;font-size:.85rem;color:var(--sub)}
+.log-list label{display:flex;align-items:center;gap:4px;font-size:.8rem;color:var(--sub);flex:none;cursor:pointer}
+.log-list input{width:20px;height:20px;accent-color:var(--green)}
+.log-del{flex:none;min-width:44px;min-height:44px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--sub);cursor:pointer}
+.log-form{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 8px}
+.log-form label{font-size:.85rem;color:var(--sub);display:block}
+.log-form .full{grid-column:1/-1}
+.field{display:block;width:100%;min-height:48px;padding:8px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;font-size:max(16px,1rem)}
+.field:focus{outline:2px solid var(--blue);outline-offset:1px}
+.btn-add{width:100%;min-height:48px;background:var(--blue);color:var(--blue-ink)}
+.warn-txt{color:var(--warn);font-weight:700}
+
+/* カレンダー登録 */
+.cal-row{display:grid;gap:8px;margin:8px 0 0}
+.cal-row .mini-btn{display:flex;align-items:center;justify-content:center;width:100%;text-align:center;text-decoration:none;line-height:1.4}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 </style>
 </head>
@@ -309,11 +361,26 @@ p{margin:0 0 12px}
     <ol class="flow" id="sheetFlow"></ol>
     <div class="opts">
       <button class="mini-btn" id="optBig" type="button" aria-pressed="false">文字を大きく</button>
+      <button class="mini-btn" type="button" data-act="gloss">ことばの説明</button>
+      <button class="mini-btn" type="button" data-act="share">友だちに教える</button>
+      <a class="mini-btn" href="qr.html" style="text-decoration:none;display:inline-flex;align-items:center">QRコード・配る用</a>
       <button class="mini-btn" id="optHome" type="button">はじめの画面へ</button>
       <button class="mini-btn" id="optReset" type="button">最初からやり直す</button>
     </div>
     <p class="small">青い文字のステップは、タップするとその画面へ戻れます。</p>
-    <p class="small">版：2026-09-26d</p>
+    <p class="small">版：2026-09-29</p>
+  </div>
+</div>
+
+<div class="sheet-bg" id="gBg"></div>
+<div class="sheet" id="gSheet" role="dialog" aria-modal="true" aria-labelledby="gTitle">
+  <div class="wrap">
+    <div class="grab"></div>
+    <div class="sheet-head">
+      <h2 id="gTitle">ことばの説明</h2>
+      <button class="close" id="gClose" type="button" aria-label="閉じる">✕</button>
+    </div>
+    <div id="gBody"></div>
   </div>
 </div>
 
@@ -357,7 +424,7 @@ const SITES = {
 
 const ROUTE_NAME = { one:'ワンストップ特例', tax:'確定申告', check:'まだ決めていない' };
 
-/* ---------- 保存（個人情報は保存しない） ---------- */
+/* ---------- 保存（進み具合だけ。氏名・住所・年収は扱わない） ---------- */
 const KEY = 'furusatoNavi.v3';
 const blank = () => ({ stack:['home'], a:{}, route:null, site:null, maxStage:0, checks:{} });
 let S = blank();
@@ -393,20 +460,6 @@ const GIFT = (x, y, k) => `<g transform="translate(${x} ${y}) scale(${k})">
   <rect x="20" y="3" width="8" height="43" fill="#f5b940"/>
   <ellipse cx="16" cy="-1" rx="9" ry="5" fill="none" stroke="#f5b940" stroke-width="4"/>
   <ellipse cx="32" cy="-1" rx="9" ry="5" fill="none" stroke="#f5b940" stroke-width="4"/></g>`;
-const ILL_HERO = `<svg class="ill" viewBox="0 0 320 132" aria-hidden="true">
-  <rect class="bg" width="320" height="132" rx="18"/>
-  <circle cx="276" cy="32" r="15" fill="#f5b940"/>
-  <g class="cloud"><ellipse cx="60" cy="30" rx="22" ry="9"/><ellipse cx="76" cy="24" rx="14" ry="10"/><ellipse cx="206" cy="22" rx="16" ry="7"/></g>
-  <path class="hill2" d="M0 104 Q70 64 150 96 T320 88 V132 H0Z"/>
-  <path class="hill" d="M0 112 Q90 88 170 110 T320 104 V132 H0Z"/>
-  <path class="roof1" d="M22 88 L46 68 L70 88Z"/><rect class="wall" x="28" y="87" width="36" height="26"/><rect class="door" x="41" y="98" width="10" height="15" rx="2"/>
-  <path class="roof2" d="M76 94 L94 79 L112 94Z"/><rect class="wall" x="81" y="93" width="26" height="20"/><rect class="door" x="89" y="101" width="9" height="12" rx="2"/>
-  <circle class="tree" cx="128" cy="92" r="11"/><rect class="door" x="126" y="100" width="4" height="13"/>
-  ${GIFT(196, 60, 1)}
-  <path d="M168 44c-4-7-15-3-11 5l11 10 11-10c4-8-7-12-11-5z" fill="#e5534b"/>
-  <path d="M260 62l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" fill="#f5b940"/>
-  <path d="M178 76l2 4 4 2-4 2-2 4-2-4-4-2 4-2z" fill="#f5b940"/>
-</svg>`;
 const IC_YEN = `<svg viewBox="0 0 60 60" aria-hidden="true"><circle class="ic-bg1" cx="30" cy="30" r="29"/>
   <circle cx="30" cy="30" r="16" fill="#f5b940"/><circle cx="30" cy="30" r="12" fill="none" stroke="#d99a1e" stroke-width="2"/>
   <path d="M24 22l6 8 6-8M30 30v10M24.5 32h11M24.5 36h11" fill="none" stroke="#8a5a00" stroke-width="2.4" stroke-linecap="round"/></svg>`;
@@ -416,16 +469,189 @@ const IC_TAX = `<svg viewBox="0 0 60 60" aria-hidden="true"><circle class="ic-bg
   <path class="ic-line" d="M21 20h14M21 26h14M21 32h9"/>
   <circle class="ic-ok" cx="40" cy="40" r="10"/>
   <path d="M40 34.5v10m-4.5-4.5l4.5 4.5 4.5-4.5" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-const ILL_DONE = `<svg class="done-ill" viewBox="0 0 180 110" aria-hidden="true">
-  <circle cx="90" cy="56" r="36" fill="var(--green)"/>
-  <path d="M73 57l12 12 23-24" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-  <rect x="26" y="20" width="10" height="5" rx="2" fill="#f5b940" transform="rotate(-25 31 22)"/>
-  <rect x="146" y="26" width="10" height="5" rx="2" fill="#e5534b" transform="rotate(30 151 28)"/>
-  <rect x="136" y="84" width="9" height="5" rx="2" fill="var(--blue)" transform="rotate(-15 140 86)"/>
-  <rect x="34" y="82" width="9" height="5" rx="2" fill="#e5534b" transform="rotate(20 38 84)"/>
-  <circle cx="52" cy="14" r="3.5" fill="var(--blue)"/><circle cx="132" cy="10" r="3" fill="#f5b940"/>
-  <circle cx="18" cy="56" r="3" fill="var(--green)"/><circle cx="164" cy="60" r="3.5" fill="#f5b940"/>
-</svg>`;
+
+const APP_URL = 'https://tngmshr.github.io/furusato-navi/';
+
+/* ---------- ことばの説明 ---------- */
+const GLOSS = {
+  jumin:  { w:'住民税', d:'住んでいる市区町村と都道府県に納める税金です。会社員は、6月から翌年5月までの毎月の給料から引かれます。ふるさと納税で主に安くなるのはこの税金です。' },
+  kojo:   { w:'控除（こうじょ）', d:'税金を計算するときに差し引くことです。ふるさと納税では、上限額の範囲内なら「寄付額 − 2,000円」が所得税と住民税から差し引かれます。' },
+  limit:  { w:'上限額', d:'自己負担が2,000円で済む寄付額の目安です。年収や家族構成で変わります。超えた分は自分の負担になります。' },
+  one:    { w:'ワンストップ特例', d:'確定申告をしない会社員などが、寄付先の自治体に申請するだけで控除を受けられるしくみです。1年間の寄付先が5つ以内のときに使えます。期限は寄付した翌年の1月10日（必着）です。' },
+  tax:    { w:'確定申告', d:'1年間の収入と税金を、自分で税務署に届け出る手続きです。期限は原則、翌年の3月15日です。ふるさと納税は「寄附金控除」として入れます。' },
+  cert:   { w:'寄附金受領証明書', d:'寄付先の自治体が「寄付を受け取りました」と証明する書類です。確定申告で使うので、捨てずに保管します。' },
+  kettei: { w:'決定通知書', d:'住民税の「税額決定通知書」です。1年分の住民税の額が書かれていて、会社員は5〜6月ごろに勤め先から渡されることが多いです。「寄附金税額控除」の欄で、ふるさと納税が反映されたか確かめられます。' },
+  henrei: { w:'返礼品', d:'寄付のお礼に自治体から届く品物です。費用は寄付額の3割以下で、その地域の産品に限るというルールがあります。' }
+};
+const T = (k, label) => `<button class="yogo" type="button" data-term="${k}">${label || GLOSS[k].w}</button>`;
+
+/* ---------- 寄付の記録（この端末の中だけに保存し、外には送らない） ---------- */
+const LOG_KEY = 'furusatoNavi.log';
+let LOG = { limit:0, items:[] };
+function loadLog(){ try{ const o = JSON.parse(localStorage.getItem(LOG_KEY) || 'null'); if (o && Array.isArray(o.items)) LOG = o; }catch(e){} }
+function saveLog(){ try{ localStorage.setItem(LOG_KEY, JSON.stringify(LOG)); }catch(e){ toast('この端末には保存できませんでした。メモ帳に書いてください'); } }
+const yen = n => Number(n).toLocaleString('ja-JP') + '円';
+const pad2 = n => String(n).padStart(2, '0');
+const today = () => { const d = new Date(); return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`; };
+// 全角数字・カンマ・「円」を許して数値にする
+const num = s => { const t = String(s).replace(/[０-９]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0)).replace(/[,，、円\s]/g, ''); return /^\d{1,9}$/.test(t) ? +t : NaN; };
+// 表示する寄付の年：いちばん新しい記録の年（なければ今年）
+function logYear(){ return LOG.items.length ? Math.max(...LOG.items.map(i => +i.date.slice(0, 4))) : thisYear(); }
+function logPanel(){
+  const y = logYear();
+  const items = LOG.items.filter(i => +i.date.slice(0, 4) === y).sort((a, b) => a.date < b.date ? -1 : 1);
+  const older = LOG.items.length - items.length;
+  const total = items.reduce((s, i) => s + i.amount, 0);
+  const cities = new Set(items.map(i => i.city.replace(/\s/g, ''))).size;
+  const lim = +LOG.limit || 0;
+  const rest = lim - total;
+  return `<div class="card" id="logPanel">
+      <h3>寄付の記録（${y}年分）</h3>
+      <p class="small" style="margin:0">この端末の中だけに保存し、外には送りません。</p>
+      <div class="log-sum">
+        <div><span class="small">寄付の合計</span><b>${yen(total)}</b>${lim ? `<span class="small">${rest >= 0 ? `上限の目安まで あと${yen(rest)}` : `<span class="warn-txt">上限の目安を${yen(-rest)}超えています</span>`}</span>` : ''}</div>
+        <div><span class="small">寄付先の自治体</span><b>${cities}つ</b><span class="small">${cities > 5 ? '<span class="warn-txt">ワンストップ特例は使えません（確定申告へ）</span>' : 'ワンストップ特例は5つまで'}</span></div>
+      </div>
+      ${items.length ? `<ul class="log-list">${items.map(i => `
+        <li><span class="l-body"><span class="l-city">${esc(i.city)}</span><span class="l-meta">${i.date.replace(/-/g, '/')}　${yen(i.amount)}</span></span>
+          ${route() === 'one' ? `<label><input type="checkbox" data-logone="${i.id}" ${i.one ? 'checked' : ''}>申請済み</label>` : ''}
+          <button class="log-del" type="button" data-logdel="${i.id}" aria-label="${esc(i.city)}の記録を消す">✕</button></li>`).join('')}</ul>`
+        : '<p class="small">まだ記録はありません。寄付したら、下に入れてください。</p>'}
+      <div class="log-form">
+        <label class="full">寄付した自治体<input class="field" id="logCity" type="text" autocomplete="off" maxlength="40" placeholder="例：〇〇県△△町"></label>
+        <label>金額（円）<input class="field" id="logAmt" type="text" inputmode="numeric" autocomplete="off" placeholder="10000"></label>
+        <label>寄付した日<input class="field" id="logDate" type="date" value="${today()}"></label>
+        <button class="btn btn-add full" type="button" data-act="logadd">記録する</button>
+        <label class="full">上限額の目安（STEP 2で調べた額・入れなくても可）<input class="field" id="logLimit" type="text" inputmode="numeric" autocomplete="off" value="${lim || ''}" placeholder="60000"></label>
+      </div>
+      <p class="small" style="margin:0">ブラウザのデータを消したときや、長いあいだ開かなかったときに消えることがあります。念のため、紙やメモアプリにも残してください。</p>
+      ${older ? `<button class="mini-btn" type="button" data-act="logold" style="margin-top:8px">${y}年より前の記録（${older}件）を消す</button>` : ''}
+    </div>`;
+}
+function refreshLog(){ const p = $('logPanel'); if (p) p.outerHTML = logPanel(); }
+function addLog(){
+  const city = $('logCity').value.trim(), amount = num($('logAmt').value), date = $('logDate').value;
+  if (!city){ toast('自治体名を入れてください'); $('logCity').focus(); return; }
+  if (!(amount > 0)){ toast('金額を数字で入れてください（例：10000）'); $('logAmt').focus(); return; }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)){ toast('寄付した日を選んでください'); return; }
+  LOG.items.push({ id: Date.now().toString(36), city, amount, date, one:false });
+  saveLog(); refreshLog(); toast(`${city}（${yen(amount)}）を記録しました`);
+}
+
+/* ---------- カレンダー登録（.ics と Googleカレンダー） ---------- */
+let calYearSel = 0;
+// 寄付した年：記録があればその年。なければ 1〜3月は前の年、4月以降は今年
+function donationYear(){
+  if (calYearSel) return calYearSel;
+  if (LOG.items.length) return logYear();
+  const d = new Date(); return d.getMonth() < 3 ? d.getFullYear() - 1 : d.getFullYear();
+}
+const ymd = d => `${d.getFullYear()}${pad2(d.getMonth() + 1)}${pad2(d.getDate())}`;
+const jdate = d => `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
+function calEvents(y){
+  const ev = [];
+  const r = route();
+  if (r === 'one') ev.push({ d:new Date(y + 1, 0, 10), short:'ワンストップ特例の申請期限', alarm:'-P7D',
+    title:'ふるさと納税：ワンストップ特例の申請期限（必着）',
+    desc:`${y}年に寄付した自治体すべてに、申請書（またはオンライン申請）が届いているか確認します。` });
+  if (r === 'tax'){
+    const d = new Date(y + 1, 2, 15);
+    while (d.getDay() === 0 || d.getDay() === 6) d.setDate(d.getDate() + 1); // 土日なら翌平日
+    ev.push({ d, short:'確定申告の期限', alarm:'-P7D',
+      title:'ふるさと納税：確定申告の期限',
+      desc:`${y}年の寄付を「寄附金控除」として確定申告に入れます。寄附金受領証明書を用意します。` });
+  }
+  ev.push({ d:new Date(y + 1, 5, 10), short:'控除されたか確認（住民税の決定通知書）', alarm:'PT9H',
+    title:'ふるさと納税：控除されたか確認',
+    desc:`5〜6月ごろに届く住民税の決定通知書で「寄附金税額控除」の欄を確認します（${y}年の寄付の分）。` });
+  return ev;
+}
+// iCalendar の文字をエスケープし、75バイトごとに折り返す
+const icsEsc = s => s.replace(/\\/g, '\\\\').replace(/[;,]/g, m => '\\' + m).replace(/\n/g, '\\n');
+function icsFold(line){
+  const enc = new TextEncoder(); let out = '', cur = '', n = 0;
+  for (const ch of line){ const b = enc.encode(ch).length; if (n + b > 73){ out += cur + '\r\n '; cur = ''; n = 1; } cur += ch; n += b; }
+  return out + cur;
+}
+function makeIcs(y){
+  const stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '');
+  const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//furusato-navi//JA', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH'];
+  calEvents(y).forEach((e, i) => {
+    const end = new Date(e.d); end.setDate(end.getDate() + 1);
+    lines.push('BEGIN:VEVENT', `UID:${ymd(e.d)}-${i}-${stamp}@furusato-navi`, `DTSTAMP:${stamp}`,
+      `DTSTART;VALUE=DATE:${ymd(e.d)}`, `DTEND;VALUE=DATE:${ymd(end)}`,
+      `SUMMARY:${icsEsc(e.title)}`, `DESCRIPTION:${icsEsc(e.desc + '\n手順はこちら：' + APP_URL)}`, `URL:${APP_URL}`,
+      'BEGIN:VALARM', 'ACTION:DISPLAY', `DESCRIPTION:${icsEsc(e.title)}`, `TRIGGER:${e.alarm}`, 'END:VALARM', 'END:VEVENT');
+  });
+  lines.push('END:VCALENDAR');
+  return lines.map(icsFold).join('\r\n') + '\r\n';
+}
+function downloadIcs(){
+  const blob = new Blob([makeIcs(donationYear())], { type:'text/calendar;charset=utf-8' });
+  const u = window.URL.createObjectURL(blob), a = document.createElement('a');
+  a.href = u; a.download = 'furusato-nouzei.ics'; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => window.URL.revokeObjectURL(u), 30000);
+  toast('予定のファイルを保存しました。開いて「追加」を押してください');
+}
+function gcalUrl(e){
+  const end = new Date(e.d); end.setDate(end.getDate() + 1);
+  return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent(e.title)
+    + `&dates=${ymd(e.d)}/${ymd(end)}&details=` + encodeURIComponent(e.desc + '\n手順はこちら：' + APP_URL);
+}
+function calBox(){
+  const y = donationYear(), evs = calEvents(y);
+  const years = [...new Set([thisYear() - 1, thisYear(), y])].sort();
+  return `<div class="card" id="calBox">
+      <h3>忘れないように、カレンダーに登録</h3>
+      <ul class="small" style="margin:0;padding-left:1.2em">${evs.map(e => `<li>${jdate(e.d)}：${e.short}</li>`).join('')}</ul>
+      <label class="small" style="display:block;margin-top:8px">寄付した年
+        <select class="field" id="calYear">${years.map(v => `<option value="${v}" ${v === y ? 'selected' : ''}>${v}年</option>`).join('')}</select></label>
+      <div class="cal-row">
+        <button class="mini-btn" type="button" data-act="ics">スマホのカレンダーに登録</button>
+        ${evs.map(e => `<a class="mini-btn" href="${esc(gcalUrl(e))}" target="_blank" rel="noopener">Googleカレンダー：${e.short}</a>`).join('')}
+      </div>
+      <p class="small" style="margin:8px 0 0">「スマホのカレンダーに登録」は予定のファイルを保存します。保存したファイルを開いて「追加」を押してください。予定には、このナビのURLも入ります。</p>
+    </div>`;
+}
+
+/* ---------- ホーム画面に追加（PWA） ---------- */
+let installEvt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault(); installEvt = e;
+  document.querySelectorAll('[data-act="install"]').forEach(b => b.hidden = false);
+});
+const standalone = () => (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+const isIOS = () => /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+function installBox(){
+  if (standalone()) return '';
+  return `<details class="more">
+      <summary>ホーム画面に追加しておく</summary>
+      <div class="more-body">
+        <p class="small">アプリのように1タップで開けます。翌年の確認（STEP 7）のときにも迷わず戻ってこられます。</p>
+        <button class="btn btn-add" type="button" data-act="install" ${installEvt ? '' : 'hidden'}>ホーム画面に追加する</button>
+        ${isIOS() ? `<ol class="small" style="padding-left:1.3em;margin:8px 0 0">
+          <li>共有ボタン（四角から上向きの矢印）を押します。見当たらないときは「…」を押すと出てきます</li>
+          <li>「ホーム画面に追加」を選びます</li>
+          <li>右上の「追加」を押します</li></ol>`
+        : `<p class="small" style="margin:8px 0 0">ボタンが出ないときは、ブラウザのメニュー（︙）から「ホーム画面に追加」または「アプリをインストール」を選びます。</p>`}
+      </div>
+    </details>`;
+}
+
+/* ---------- 文字の大きさ・教える ---------- */
+const isBig = () => document.documentElement.classList.contains('big');
+function toggleBig(){
+  const on = !isBig();
+  document.documentElement.classList.toggle('big', on);
+  document.querySelectorAll('#optBig,[data-act="big"]').forEach(b => b.setAttribute('aria-pressed', on));
+  pref('big', on ? '1' : '0');
+}
+async function share(){
+  const data = { title:'ふるさと納税かんたんナビ', text:'はじめてのふるさと納税を、寄付から税金の手続きまで7つのステップで案内してくれるナビです。', url:APP_URL };
+  if (navigator.share){ try{ await navigator.share(data); }catch(e){} return; }
+  try{ await navigator.clipboard.writeText(APP_URL); toast('URLをコピーしました。LINEやメールに貼り付けて送れます'); }
+  catch(e){ window.prompt('このURLをコピーして送ってください', APP_URL); }
+}
 
 const SCREENS = {
 
@@ -440,7 +666,12 @@ const SCREENS = {
       <p class="kicker">はじめてのふるさと納税</p>
       <h1 tabindex="-1">7つのステップで、<br>寄付から手続きまで</h1>
       <p class="lead">画面の案内どおりに進むだけです。いまどこにいるかは、画面の上にいつも表示されます。</p>
-      ${ILL_HERO}
+      <img class="hero" src="img/hero.webp" width="960" height="540" alt="" decoding="async">
+      <div class="tools">
+        <button class="mini-btn" type="button" data-act="big" aria-pressed="${isBig()}">文字を大きく</button>
+        <button class="mini-btn" type="button" data-act="share">友だちに教える</button>
+        <button class="mini-btn" type="button" data-act="gloss">ことばの説明</button>
+      </div>
       <div class="box box-ok">
         <p class="box-h">どれくらいお得？</p>
         <p style="margin:0">例：<b>年収500万円・独身の会社員</b>なら、自己負担<b>2,000円</b>で、<b class="nw">最大 約18,000円分</b>の返礼品がもらえます。<span class="small">くわしくは STEP 1 で説明します。</span></p>
@@ -452,8 +683,9 @@ const SCREENS = {
           <li><b>メモ帳と筆記用具</b>、または<b>スマホのメモアプリ</b></li>
           <li>あれば<b>源泉徴収票</b>（上限額をより正確に出せます）</li>
         </ul>
-        <p class="small" style="margin:6px 0 0">上限額や寄付した自治体などを書き留めます。このアプリは金額や自治体名を保存しないためです。</p>
+        <p class="small" style="margin:6px 0 0">上限額や寄付した自治体などを書き留めます。このアプリにも記録できますが（この端末の中だけに保存し、外には送りません）、ブラウザの設定や、長く開かなかったときに消えることがあるため、紙やメモアプリにも残してください。</p>
       </div>
+      ${installBox()}
       <div class="box box-next">
         <p class="box-h">かかる時間の目安</p>
         <ul>
@@ -463,7 +695,7 @@ const SCREENS = {
         </ul>
       </div>
       ${S.resume ? `<button class="btn btn-sub" type="button" data-act="reset">最初からやり直す</button>` : ''}
-      <p class="foot">氏名・住所・年収などは入力しません。進み具合だけをこの端末に保存します。<br>
+      <p class="foot">氏名・住所・年収などは入力しません。進み具合と、記録した寄付のメモ（自治体名・金額など）は、この端末の中だけに保存し、外には送りません。<br>
       制度の内容は変わることがあります（2026年9月時点の情報）。寄付の前に各サイトや<a href="${URL.soumu}" target="_blank" rel="noopener">総務省</a>の案内もご確認ください。</p>`
   },
 
@@ -484,7 +716,7 @@ const SCREENS = {
       <ol class="num-list">
         <li><b>好きな自治体に「寄付」する</b><span class="small">住んでいない市町村でも選べます。</span></li>
         <li><b>お礼に「返礼品」がもらえる</b><span class="small">お米・お肉・果物など。自治体ごとに違います。</span></li>
-        <li><b>寄付から2,000円を引いた分、税金が安くなる</b><span class="small">これを「控除（こうじょ）」といいます。安くなるのは主に<strong>翌年度の住民税</strong>です。自分の負担は原則2,000円です。</span></li>
+        <li><b>寄付から2,000円を引いた分、税金が安くなる</b><span class="small">これを「控除（こうじょ）」といいます。安くなるのは主に<strong>翌年度の${T('jumin', '住民税')}</strong>です。自分の負担は原則2,000円です。</span></li>
         <li><b>ただし、安くなる額には「上限」がある</b><span class="small">上限を超えた分は、自分の負担になります。次のSTEPで確認します。</span></li>
       </ol>
       <div class="card">
@@ -536,6 +768,19 @@ const SCREENS = {
         <p class="small" style="margin-top:8px">お得な分は、お金ではなく<b>返礼品（品物）</b>で受け取ります。返礼品にかける費用は「寄付額の3割まで」というルールがあるため、実際の価値はこれより少ないこともあります。</p>
         <p class="small" style="margin:6px 0 0">上限額は年収や家族構成で変わり、年収が高いほど大きくなります。あなたの上限額は次のSTEPで確認します。</p>
       </div>
+      <details class="more">
+        <summary>年収1,000万円の場合は？</summary>
+        <div class="more-body">
+          <p class="small" style="margin:0">例：年収1,000万円・独身の会社員。上限額の目安は 約17万円。そのうち <b class="nw">170,000円</b> を寄付した場合です。</p>
+          <table class="calc">
+            <tr><td>寄付する</td><td>−170,000円</td></tr>
+            <tr><td>税金が安くなる</td><td>＋168,000円</td></tr>
+            <tr><td>返礼品<br><span class="small">最大で寄付額の3割</span></td><td>＋約51,000円分</td></tr>
+          </table>
+          <p class="calc-total"><span>差し引き</span><b class="nw">最大 約49,000円分お得</b></p>
+          <p class="small" style="margin:8px 0 0">自己負担は同じ2,000円でも、上限額が大きいぶん、受け取れる返礼品が増えます。社会保険料を年収の約15%として計算した目安です。</p>
+        </div>
+      </details>
       <div class="card">
         <h3>税金はいつ安くなるの？</h3>
         <p class="small" style="margin:0">${thisYear()}年に寄付した場合（上の例の会社員）</p>
@@ -622,7 +867,7 @@ const SCREENS = {
         ${choice('le5', '5つ以内にする', 'まだ決めていない人も、こちらがおすすめ')}
         ${choice('ge6', '6つ以上になりそう')}
       </div>
-      <p class="small">5つ以内なら、確定申告なしで手続きできる「ワンストップ特例」が使えます。</p>`
+      <p class="small">5つ以内なら、確定申告なしで手続きできる「${T('one')}」が使えます。</p>`
   },
 
   s3r: {
@@ -662,7 +907,7 @@ const SCREENS = {
           <ol>
             <li>サイトを選ぶ</li>
             <li>返礼品を選んで寄付する</li>
-            <li>届いた「寄附金受領証明書」を保管する</li>
+            <li>届いた「${T('cert')}」を保管する</li>
             <li>寄付した翌年の3月15日までに確定申告する</li>
           </ol>
         </div>
@@ -751,7 +996,7 @@ const SCREENS = {
           <li><b>欲しい返礼品を探す</b><span class="small">地域やジャンル（お米・お肉など）で探せます。</span></li>
           <li><b>寄付額が上限額の中か確認</b><span class="small">STEP 2でメモした金額と比べます。何回か寄付するなら合計で。</span></li>
           <li><b>申し込んで支払う</b><span class="small">氏名・住所は<b>住民票と同じ</b>に入力してください。</span></li>
-          <li><b>寄付した内容をメモする</b><span class="small">自治体名・金額・日付。上限額の残りや、自治体の数（5つ以内か）を数えるのに使います。</span></li>
+          <li><b>寄付した内容を記録する</b><span class="small">自治体名・金額・日付。この画面の下の「寄付の記録」に入れると、合計や自治体の数（5つ以内か）を数えてくれます。</span></li>
         </ol>
         ${r === 'one' ? `
         <div class="box box-next">
@@ -766,7 +1011,8 @@ const SCREENS = {
           <p class="box-h">申し込むときに</p>
           <p style="margin:0">手続方法を決めていない場合は、「ワンストップ特例の申請書を希望する」を選んでおくと、あとでどちらにも対応できます。</p>
         </div>`}
-        ${ext(s.url, `${esc(s.name)}を開く`, '寄付が終わったら、この画面に戻って下の「寄付した」を押してください')}
+        ${ext(s.url, `${esc(s.name)}を開く`, '寄付が終わったら、この画面に戻って記録し、下の「寄付した」を押してください')}
+        ${logPanel()}
         <div class="box box-warn">
           <p class="box-h">知っておくと安心</p>
           <ul>
@@ -818,9 +1064,11 @@ const SCREENS = {
             <li>あとで確定申告をすることになったら、特例は使えません。ふるさと納税の分も確定申告に入れてください。</li>
           </ul>
         </div>
+        ${logPanel()}
         <h2>チェック</h2>
-        ${checkItem('one1', '寄付したすべての分を申請した', 'STEP 5で書いたメモと照らし合わせると確実です')}
+        ${checkItem('one1', '寄付したすべての分を申請した', '「寄付の記録」やメモと照らし合わせると確実です')}
         ${checkItem('one2', '受付の連絡（メール・はがき等）を確認した', '連絡がない自治体もあります')}
+        ${calBox()}
         <p class="small">あとで申請する場合は、このまま閉じてOKです。</p>`;
       return `
         <p class="kicker">あなたの手続き：確定申告</p>
@@ -830,7 +1078,7 @@ const SCREENS = {
           <p style="margin:0"><span class="big-num">寄付した翌年の3月15日</span>まで</p>
         </div>
         <ol class="num-list">
-          <li><b>証明書を保管する</b><span class="small">寄付先から届く「寄附金受領証明書」。サイトによっては、寄付をまとめた証明書をダウンロードできます。</span></li>
+          <li><b>証明書を保管する</b><span class="small">寄付先から届く「${T('cert')}」。サイトによっては、寄付をまとめた証明書をダウンロードできます。</span></li>
           <li><b>確定申告書に「寄附金控除」を入れる</b><span class="small">国税庁の作成コーナーなら、スマホでも作れます。</span></li>
           <li><b>提出する</b><span class="small">e-Tax（インターネット）、郵送、税務署の窓口のどれか。</span></li>
         </ol>
@@ -839,9 +1087,11 @@ const SCREENS = {
           <p class="box-h">大事なこと</p>
           <p style="margin:0">ワンストップ特例を申請していても、確定申告をするなら特例は無効になります。<b>すべての寄付</b>を確定申告に入れてください。</p>
         </div>
+        ${logPanel()}
         <h2>チェック</h2>
-        ${checkItem('tax1', '証明書をすべて保管した', 'STEP 5で書いたメモと数が合っているか確認します')}
+        ${checkItem('tax1', '証明書をすべて保管した', '「寄付の記録」やメモと数が合っているか確認します')}
         ${checkItem('tax2', '寄附金控除を入れて確定申告を出した')}
+        ${calBox()}
         <p class="small">確定申告の時期（2〜3月）まで待つ場合は、このまま閉じてOKです。</p>`;
     }
   },
@@ -854,7 +1104,7 @@ const SCREENS = {
       const one = `
         <div class="card">
           <h3>住民税の「決定通知書」を見る</h3>
-          <p>翌年の5〜6月ごろに届きます（会社員は勤め先から渡されることが多いです）。「寄附金税額控除」の欄に金額が入っていれば反映されています。</p>
+          <p>${T('kettei')}は、翌年の5〜6月ごろに届きます（会社員は勤め先から渡されることが多いです）。「寄附金税額控除」の欄に金額が入っていれば反映されています。</p>
           <p class="small">6月からの給料明細の「住民税」が前の年より少なくなっているかでも確かめられます（年収が変わると住民税も変わります）。</p>
         </div>`;
       const tax = `
@@ -864,7 +1114,7 @@ const SCREENS = {
         </div>
         <div class="card">
           <h3>② 住民税：「決定通知書」を見る</h3>
-          <p>翌年の5〜6月ごろに届きます。「寄附金税額控除」の欄に金額が入っていれば反映されています。</p>
+          <p>${T('kettei')}は、翌年の5〜6月ごろに届きます。「寄附金税額控除」の欄に金額が入っていれば反映されています。</p>
           <p class="small">6月からの給料明細の「住民税」が前の年より少なくなっているかでも確かめられます（年収が変わると住民税も変わります）。</p>
         </div>`;
       return `
@@ -878,7 +1128,8 @@ const SCREENS = {
         <div class="box box-warn">
           <p class="box-h">反映されていないときは</p>
           <p style="margin:0">お住まいの市区町村の住民税の窓口に問い合わせてください。</p>
-        </div>`;
+        </div>
+        ${calBox()}`;
     }
   },
 
@@ -886,8 +1137,8 @@ const SCREENS = {
     stage:8,
     main: () => ({ label:'はじめの画面へ', act:'home' }),
     html: () => `
-      <div class="result" style="border-color:var(--green)">
-        ${ILL_DONE}
+      <div class="result" style="border-color:var(--green);text-align:center">
+        <img class="done-pic" src="img/done.webp" width="480" height="480" alt="" decoding="async">
         <p class="label">7つのステップ</p>
         <p class="answer" style="color:var(--green)" tabindex="-1" id="focusMe">すべて完了しました</p>
         <p style="margin:0">おつかれさまでした。</p>
@@ -899,7 +1150,13 @@ const SCREENS = {
         <p style="margin:0"><b>${esc(site().name)}</b></p>
       </div>
       <ol class="flow">${flowItems(false)}</ol>
-      <p class="small">来年もふるさと納税をするときは、「最初からやり直す」で同じ流れをたどれます。</p>
+      ${installBox()}
+      <div class="card">
+        <h3>役に立ったら</h3>
+        <p class="small">はじめての家族や友だちにも教えてあげてください。</p>
+        <button class="mini-btn" type="button" data-act="share" style="width:100%">友だちに教える</button>
+      </div>
+      <p class="small">来年もふるさと納税をするときは、「最初からやり直す」で同じ流れをたどれます。寄付の記録は消えません。</p>
       <button class="btn btn-sub" type="button" data-act="reset">最初からやり直す</button>`
   }
 };
@@ -991,7 +1248,15 @@ function popScreen(){
   lastDir = 'back'; render();
   if (S.stack.length > 1) try{ history.pushState({furusato:1}, ''); }catch(e){}
 }
-window.addEventListener('popstate', () => { closeSheet(); popScreen(); });
+window.addEventListener('popstate', () => {
+  // 全体の流れ・ことばの説明が開いているときは、閉じるだけで画面は戻さない
+  if ($('sheet').classList.contains('open') || $('gSheet').classList.contains('open')){
+    closeSheet(); closeGloss();
+    if (S.stack.length > 1) try{ history.pushState({furusato:1}, ''); }catch(e){}
+    return;
+  }
+  popScreen();
+});
 function back(){
   if (S.stack.length <= 1) return;
   if (history.state && history.state.furusato) history.back(); else popScreen();
@@ -1036,11 +1301,40 @@ document.addEventListener('click', e => {
     if (i > 0){ S.stack = S.stack.slice(0, i + 1); lastDir = 'back'; render(); } else go('s3q1');
     return;
   }
+  if (t.dataset.term){ openGloss(t.dataset.term); return; }
+  if (t.dataset.logdel){
+    const it = LOG.items.find(i => i.id === t.dataset.logdel);
+    if (it && confirm(`${it.city}（${yen(it.amount)}）の記録を消しますか？`)){ LOG.items = LOG.items.filter(i => i !== it); saveLog(); refreshLog(); }
+    return;
+  }
+  switch (t.dataset.act){
+    case 'gloss': closeSheet(); openGloss(); return;
+    case 'share': share(); return;
+    case 'big': toggleBig(); return;
+    case 'ics': downloadIcs(); return;
+    case 'logadd': addLog(); return;
+    case 'logold': {
+      const y = logYear();
+      if (confirm(`${y}年より前の記録を消しますか？`)){ LOG.items = LOG.items.filter(i => +i.date.slice(0, 4) >= y); saveLog(); refreshLog(); }
+      return;
+    }
+    case 'install':
+      if (installEvt){ installEvt.prompt(); installEvt.userChoice.finally(() => { installEvt = null; t.hidden = true; }); }
+      return;
+  }
   if (t.hasAttribute('data-ext')){ awayAt = Date.now(); return; }
 });
 document.addEventListener('change', e => {
   const c = e.target.closest('[data-check]');
-  if (c){ S.checks[c.dataset.check] = c.checked; save(); }
+  if (c){ S.checks[c.dataset.check] = c.checked; save(); return; }
+  const lo = e.target.closest('[data-logone]');
+  if (lo){ const it = LOG.items.find(i => i.id === lo.dataset.logone); if (it){ it.one = lo.checked; saveLog(); } return; }
+  if (e.target.id === 'logLimit'){ const v = num(e.target.value); LOG.limit = v > 0 ? v : 0; saveLog(); refreshLog(); return; }
+  if (e.target.id === 'calYear'){ calYearSel = +e.target.value; const b = $('calBox'); if (b) b.outerHTML = calBox(); $('calYear').focus(); }
+});
+// 金額欄で Enter を押したら記録する
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && (e.target.id === 'logAmt' || e.target.id === 'logCity') && !e.isComposing){ e.preventDefault(); addLog(); }
 });
 
 $('btnBack').addEventListener('click', back);
@@ -1075,21 +1369,41 @@ function openSheet(){
   $('sheetClose').focus();
 }
 function closeSheet(){ $('sheet').classList.remove('open'); $('sheetBg').classList.remove('open'); }
+
+/* ことばの説明（1語、または一覧） */
+let glossFrom = null;
+function openGloss(k){
+  glossFrom = document.activeElement;
+  const one = k && GLOSS[k];
+  $('gTitle').textContent = one ? GLOSS[k].w : 'ことばの説明';
+  $('gBody').innerHTML = one
+    ? `<p>${GLOSS[k].d}</p><button class="mini-btn" type="button" data-act="gloss">ほかのことばも見る</button>`
+    : `<dl class="gloss">${Object.values(GLOSS).map(g => `<dt>${g.w}</dt><dd>${g.d}</dd>`).join('')}</dl>`;
+  $('gSheet').classList.add('open'); $('gBg').classList.add('open');
+  $('gSheet').scrollTop = 0;
+  $('gClose').focus();
+}
+function closeGloss(){
+  $('gSheet').classList.remove('open'); $('gBg').classList.remove('open');
+  if (glossFrom && glossFrom.focus) try{ glossFrom.focus({preventScroll:true}); }catch(e){}
+}
+$('gClose').addEventListener('click', closeGloss);
+$('gBg').addEventListener('click', closeGloss);
 $('where').addEventListener('click', openSheet);
 $('sheetClose').addEventListener('click', closeSheet);
 $('sheetBg').addEventListener('click', closeSheet);
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape'){ closeSheet(); closeGloss(); } });
 $('optHome').addEventListener('click', () => { closeSheet(); goHome(); });
 $('optReset').addEventListener('click', resetAll);
-$('optBig').addEventListener('click', () => {
-  const on = !document.documentElement.classList.contains('big');
-  document.documentElement.classList.toggle('big', on);
-  $('optBig').setAttribute('aria-pressed', on);
-  pref('big', on ? '1' : '0');
-});
+$('optBig').addEventListener('click', toggleBig);
 
 /* ---------- 起動 ---------- */
 load();
+loadLog();
+// オフラインでも開けるようにする（sw.js は「まずネット、だめなら保存分」）
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')){
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+}
 if (pref('big') === '1'){ document.documentElement.classList.add('big'); $('optBig').setAttribute('aria-pressed', 'true'); }
 // 再訪時は「はじめ」画面（全体像＋続きから）を見せる
 if (cur() !== 'home'){ S.resume = S.stack.slice(); S.stack = ['home']; }
