@@ -1,0 +1,22 @@
+﻿[
+    {
+        "path":  ".nojekyll",
+        "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "length":  0
+    },
+    {
+        "path":  "index.html",
+        "sha256":  "ad02f2e0068499c9d6694ee31faf038cfc22d816da2fc4013e97dded32709476",
+        "length":  65390
+    },
+    {
+        "path":  "qr.png",
+        "sha256":  "46a4d51424c2bc14b3afd56585636d34a7a2bb1cc63370a76961b8a3cf75c1e4",
+        "length":  755
+    },
+    {
+        "path":  "README.md",
+        "sha256":  "dc0343c6f7fc088548b8e181a81c51a7be07d428400ecfba64581de706204e8e",
+        "length":  619
+    }
+]

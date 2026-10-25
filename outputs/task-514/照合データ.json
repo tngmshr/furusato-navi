@@ -1,0 +1,1707 @@
+{
+  "task": 514,
+  "checked_on": "2026-10-22",
+  "target": "作業時点のローカル index.html。公開URLとの同一性は未検証。",
+  "status_definitions": {
+    "一致": "取得した一次本文と明示の条件内で整合。算術・実装の確認はその旨を明記。",
+    "相違": "一次本文との矛盾、必要条件の欠落、根拠から導けない数値・断定。",
+    "未確認": "本文未取得、外部未検証、個別条件不足。出典候補があっても適合確認済みとは限らない。"
+  },
+  "sources": [
+    {
+      "id": "N01",
+      "title": "国税庁 No.1155 ふるさと納税（寄附金控除）",
+      "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1155.htm",
+      "checked_on": "2026-10-22",
+      "body_verified": true,
+      "version": "令和8年4月1日現在法令等",
+      "location": "概要／計算方法・計算式／手続き／注意事項",
+      "note": ""
+    },
+    {
+      "id": "N02",
+      "title": "国税庁 No.1150 一定の寄附金を支払ったとき",
+      "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1150.htm",
+      "checked_on": "2026-10-22",
+      "body_verified": true,
+      "version": "令和8年4月1日現在法令等",
+      "location": "計算方法・計算式／手続き",
+      "note": ""
+    },
+    {
+      "id": "N03",
+      "title": "国税庁 No.1199 基礎控除",
+      "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1199.htm",
+      "checked_on": "2026-10-22",
+      "body_verified": true,
+      "version": "令和8年4月1日現在法令等",
+      "location": "基礎控除の金額／注1〜3",
+      "note": ""
+    },
+    {
+      "id": "N04",
+      "title": "国税庁 No.1410 給与所得控除",
+      "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1410.htm",
+      "checked_on": "2026-10-22",
+      "body_verified": true,
+      "version": "令和8年4月1日現在法令等",
+      "location": "令和8年分・令和9年分／注3",
+      "note": "660万円未満は別表第五による。速算式だけで全給与帯の正確な額を保証しない。"
+    },
+    {
+      "id": "N05",
+      "title": "国税庁 No.2260 所得税の税率",
+      "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2260.htm",
+      "checked_on": "2026-10-22",
+      "body_verified": true,
+      "version": "令和8年4月1日現在法令等",
+      "location": "速算表／注2・注3",
+      "note": ""
+    },
+    {
+      "id": "N06",
+      "title": "国税庁 令和8年度税制改正による基礎控除の引上げ等",
+      "url": "https://www.nta.go.jp/users/gensen/2026kiso/index.htm",
+      "checked_on": "2026-10-22",
+      "body_verified": true,
+      "version": "令和8年度改正",
+      "location": "施行日・適用年分",
+      "note": ""
+    },
+    {
+      "id": "N07",
+      "title": "国税庁 令和8年4月 源泉所得税の改正のあらまし",
+      "url": "https://www.nta.go.jp/publication/pamph/gensen/2026kaisei.pdf",
+      "checked_on": "2026-10-22",
+      "body_verified": true,
+      "version": "令和8年4月1日現在法令等",
+      "location": "PDF 1〜2ページ",
+      "note": "改正前の令和8年分と改正後を混同しない。"
+    },
+    {
+      "id": "N08",
+      "title": "国税庁 令和8年度税制改正Q&A",
+      "url": "https://www.nta.go.jp/users/gensen/2026kiso/pdf/0026005-024.pdf",
+      "checked_on": "2026-10-22",
+      "body_verified": true,
+      "version": "令和8年5月1日現在法令・通達等",
+      "location": "Q1-1、Q1-3、Q3-1",
+      "note": "原則12月1日施行、2026年分へ適用。施行前の死亡・出国等は別扱い。"
+    },
+    {
+      "id": "N09",
+      "title": "国税庁 No.2030 還付申告",
+      "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2030.htm",
+      "checked_on": "2026-10-22",
+      "body_verified": true,
+      "version": "令和8年4月1日現在法令等",
+      "location": "概要／申告等の期限／還付申告の具体例",
+      "note": ""
+    },
+    {
+      "id": "N10",
+      "title": "国税庁 No.2020 確定申告",
+      "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2020.htm",
+      "checked_on": "2026-10-22",
+      "body_verified": true,
+      "version": "令和8年4月1日現在法令等",
+      "location": "概要／申告等の期間・期限・方法",
+      "note": ""
+    },
+    {
+      "id": "N11",
+      "title": "国税庁 No.1900 給与所得者で確定申告が必要な人",
+      "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1900.htm",
+      "checked_on": "2026-10-22",
+      "body_verified": true,
+      "version": "令和8年4月1日現在法令等",
+      "location": "概要 1〜3",
+      "note": ""
+    },
+    {
+      "id": "N12",
+      "title": "国税庁 ふるさと納税をされた方へ",
+      "url": "https://www.nta.go.jp/taxes/shiraberu/shinkoku/tokushu/keisubetsu/furusato.htm",
+      "checked_on": "2026-10-22",
+      "body_verified": true,
+      "version": "閲覧時は令和7年分確定申告特集",
+      "location": "寄附金控除／ワンストップ特例／一時所得の注意",
+      "note": "一般的仕組みの補助資料。2026年分の申告日程・画面の保証には使わない。適用確認シート画像は取得できず未読。"
+    },
+    {
+      "id": "N13",
+      "title": "国税庁 申告書の提出",
+      "url": "https://www.nta.go.jp/taxes/shiraberu/shinkoku/qa/06.htm",
+      "checked_on": "2026-10-22",
+      "body_verified": true,
+      "version": "令和7年分申告期の案内を含む",
+      "location": "Q19 郵送提出／Q20 添付書類",
+      "note": "本文の2026年3月16日は2025年分の期限。2026年寄附分と混同しない。"
+    },
+    {
+      "id": "N14",
+      "title": "国税庁 寄附金を支出したとき",
+      "url": "https://www.nta.go.jp/publication/pamph/koho/kurashi/html/04_3.htm",
+      "checked_on": "2026-10-22",
+      "body_verified": true,
+      "version": "ページに法令基準日の明記なし",
+      "location": "個人の寄附金控除／手続／個人住民税の参考",
+      "note": ""
+    },
+    {
+      "id": "N15",
+      "title": "国税庁 地方公共団体から謝礼を受けた場合の課税関係",
+      "url": "https://www.nta.go.jp/law/shitsugi/shotoku/02/37.htm",
+      "checked_on": "2026-10-22",
+      "body_verified": true,
+      "version": "令和7年8月1日現在法令・通達等",
+      "location": "回答要旨／注記",
+      "note": "個別事例の回答。一般説明はN12でも一時所得の注意を確認。"
+    },
+    {
+      "id": "M01",
+      "title": "総務省 ふるさと納税制度の適正な運用について（内閣府掲載）",
+      "url": "https://www.cao.go.jp/bunken-suishin/teianbosyu/doc/r06/tb_r6fu_07mic_034.pdf",
+      "checked_on": "2026-10-22",
+      "body_verified": true,
+      "version": "令和6年9月26日 総税市第95号",
+      "location": "PDF 3ページ 3.返礼割合3割以下基準",
+      "note": "総務省作成の通知原文を内閣府の公式掲載で確認。2026年最新通知全文の代替ではない。"
+    },
+    {
+      "id": "M02",
+      "title": "総務省 令和7年度地方税制改正・地方税務行政の留意事項（内閣府掲載）",
+      "url": "https://www.cao.go.jp/bunken-suishin/teianbosyu/doc/r06/tb_r6fu_07mic_102_b.pdf",
+      "checked_on": "2026-10-22",
+      "body_verified": true,
+      "version": "令和7年1月22日 事務連絡",
+      "location": "本文19ページ(8)②／20ページ③（PDFでは20・21枚目）",
+      "note": "2025年10月以降のポイント付与ポータル経由募集禁止とオンライン申請の存在。2026年の全細則確認とは区別。"
+    },
+    {
+      "id": "U01",
+      "title": "総務省 ふるさと納税 手続き",
+      "url": "https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/furusato/mechanism/procedure.html",
+      "checked_on": "2026-10-22",
+      "body_verified": false,
+      "version": "不明",
+      "location": "本文未取得",
+      "note": "Web閲覧でnon-retryable error。検索要約だけで一致にはしない。"
+    },
+    {
+      "id": "U02",
+      "title": "総務省 ふるさと納税 控除",
+      "url": "https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/furusato/mechanism/deduction.html",
+      "checked_on": "2026-10-22",
+      "body_verified": false,
+      "version": "不明",
+      "location": "本文未取得",
+      "note": "Web閲覧でnon-retryable error。"
+    },
+    {
+      "id": "U03",
+      "title": "総務省 2024年指定基準改正資料",
+      "url": "https://www.soumu.go.jp/main_content/000955667.pdf",
+      "checked_on": "2026-10-22",
+      "body_verified": false,
+      "version": "候補：2024年6月公表",
+      "location": "本文未取得",
+      "note": "Web閲覧でnon-retryable error。ポイント禁止の詳細・例外は未確認。"
+    },
+    {
+      "id": "U04",
+      "title": "総務省 指定制度運用通知",
+      "url": "https://www.soumu.go.jp/main_content/001079766.pdf",
+      "checked_on": "2026-10-22",
+      "body_verified": false,
+      "version": "候補：2026年6月26日",
+      "location": "本文未取得",
+      "note": "Web閲覧でnon-retryable error。題名・日付の原文照合も未完了。"
+    },
+    {
+      "id": "U05",
+      "title": "総務省 指定基準に係る告示改正資料",
+      "url": "https://www.soumu.go.jp/main_content/001070694.pdf",
+      "checked_on": "2026-10-22",
+      "body_verified": false,
+      "version": "候補：2026年3月24日",
+      "location": "本文未取得",
+      "note": "Web閲覧でnon-retryable error。将来の定額上限等は確定扱いしない。"
+    },
+    {
+      "id": "U06",
+      "title": "総務省 個人住民税の資料",
+      "url": "https://www.soumu.go.jp/main_content/000434110.pdf",
+      "checked_on": "2026-10-22",
+      "body_verified": false,
+      "version": "不明",
+      "location": "本文未取得",
+      "note": "Web閲覧でnon-retryable error。特別徴収の月割り・通知時期の直接確認は未完了。"
+    }
+  ],
+  "rows": [
+    {
+      "id": "R01",
+      "group": "基本と計算例",
+      "file": "index.html",
+      "ranges": [
+        [
+          478,
+          488
+        ]
+      ],
+      "anchor": "好きな自治体",
+      "claim": "居住地以外の自治体にも寄附できる。",
+      "status": "一致",
+      "finding": "選んだ自治体への寄附という基本構造と一致。返礼品や指定の条件とは別。",
+      "source_ids": [
+        "N01"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1155.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": null
+    },
+    {
+      "id": "R02",
+      "group": "基本と計算例",
+      "file": "index.html",
+      "ranges": [
+        [
+          480,
+          488
+        ]
+      ],
+      "anchor": "返礼品",
+      "claim": "寄附すれば返礼品がもらえる。",
+      "status": "未確認",
+      "finding": "全寄附・居住自治体への寄附でも必ず受け取れるとの保証は未確認。返礼品なしの寄附を含め寄附先の条件確認が必要。",
+      "source_ids": [
+        "U04",
+        "M01"
+      ],
+      "source_urls": [
+        "https://www.soumu.go.jp/main_content/001079766.pdf",
+        "https://www.cao.go.jp/bunken-suishin/teianbosyu/doc/r06/tb_r6fu_07mic_034.pdf"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P02"
+    },
+    {
+      "id": "R03",
+      "group": "基本と計算例",
+      "file": "index.html",
+      "ranges": [
+        [
+          487,
+          497
+        ],
+        [
+          703,
+          703
+        ],
+        [
+          876,
+          876
+        ]
+      ],
+      "anchor": "2,000円",
+      "claim": "上限内で必要な手続をすれば年合計の寄附額−2,000円が控除の目安。",
+      "status": "一致",
+      "finding": "上限・申告等の条件付き。2,000円は寄附1回ごと・サイトごとではない。",
+      "source_ids": [
+        "N01",
+        "N02",
+        "N14"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1155.htm",
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1150.htm",
+        "https://www.nta.go.jp/publication/pamph/koho/kurashi/html/04_3.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": null
+    },
+    {
+      "id": "R04",
+      "group": "基本と計算例",
+      "file": "index.html",
+      "ranges": [
+        [
+          488,
+          488
+        ],
+        [
+          553,
+          553
+        ]
+      ],
+      "anchor": "自分の負担",
+      "claim": "上限を超えた分は、そのまま全額が自己負担になる。",
+      "status": "相違",
+      "finding": "特例分の限度超過後も、別の限度内で所得税や住民税基本分の控除が残り得る。",
+      "source_ids": [
+        "N01"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1155.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P03"
+    },
+    {
+      "id": "R05",
+      "group": "基本と計算例",
+      "file": "index.html",
+      "ranges": [
+        [
+          499,
+          499
+        ],
+        [
+          773,
+          773
+        ]
+      ],
+      "anchor": "12月31日",
+      "claim": "1〜12月に支払った寄附を年単位で扱う。",
+      "status": "一致",
+      "finding": "当年に支出した寄附合計による。申込みだけでは年内支出とならない。決済・入金の受領日は寄附先へ確認する補足が必要。",
+      "source_ids": [
+        "N02",
+        "N10",
+        "N14"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1150.htm",
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2020.htm",
+        "https://www.nta.go.jp/publication/pamph/koho/kurashi/html/04_3.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P04"
+    },
+    {
+      "id": "R06",
+      "group": "基本と計算例",
+      "file": "index.html",
+      "ranges": [
+        [
+          482,
+          487
+        ],
+        [
+          532,
+          532
+        ],
+        [
+          552,
+          552
+        ]
+      ],
+      "anchor": "住民税",
+      "claim": "寄附年の所得税と翌年度の住民税で軽減。ワンストップは住民税から。",
+      "status": "一致",
+      "finding": "所得税の年分と住民税の年度を区別すれば一致。",
+      "source_ids": [
+        "N01",
+        "N12"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1155.htm",
+        "https://www.nta.go.jp/taxes/shiraberu/shinkoku/tokushu/keisubetsu/furusato.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": null
+    },
+    {
+      "id": "R07",
+      "group": "基本と計算例",
+      "file": "index.html",
+      "ranges": [
+        [
+          543,
+          543
+        ]
+      ],
+      "anchor": "この年の給料",
+      "claim": "寄附年の給料から引かれる税金は変わらない。",
+      "status": "一致",
+      "finding": "寄附金控除を給与の通常の年末調整で処理しない範囲で整合。2026年税制改正等、寄附以外を理由とする徴収額の変化は別。",
+      "source_ids": [
+        "N01",
+        "N06",
+        "N10"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1155.htm",
+        "https://www.nta.go.jp/users/gensen/2026kiso/index.htm",
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2020.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P05"
+    },
+    {
+      "id": "R08",
+      "group": "基本と計算例",
+      "file": "index.html",
+      "ranges": [
+        [
+          544,
+          544
+        ],
+        [
+          876,
+          876
+        ]
+      ],
+      "anchor": "12か月",
+      "claim": "給与の住民税が翌年6月から翌々年5月まで12か月に分かれて減る。",
+      "status": "未確認",
+      "finding": "取得した総務省・国税庁本文では特別徴収の期間・端数調整まで直接確認できない。58,000円全部を住民税とするには手続経路等の条件がある。",
+      "source_ids": [
+        "U06",
+        "N12"
+      ],
+      "source_urls": [
+        "https://www.soumu.go.jp/main_content/000434110.pdf",
+        "https://www.nta.go.jp/taxes/shiraberu/shinkoku/tokushu/keisubetsu/furusato.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P05"
+    },
+    {
+      "id": "R09",
+      "group": "基本と計算例",
+      "file": "index.html",
+      "ranges": [
+        [
+          446,
+          446
+        ],
+        [
+          491,
+          497
+        ],
+        [
+          518,
+          519
+        ]
+      ],
+      "anchor": "年収500万円",
+      "claim": "年収500万円・独身なら上限約6万円、60,000円は上限内。",
+      "status": "未確認",
+      "finding": "社会保険料・他控除・住民税所得割額が非表示で一意に算出できない。2026年改正も考慮が必要。上限値は確定しない。",
+      "source_ids": [
+        "N01",
+        "N03",
+        "N04",
+        "N06",
+        "U02"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1155.htm",
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1199.htm",
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1410.htm",
+        "https://www.nta.go.jp/users/gensen/2026kiso/index.htm",
+        "https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/furusato/mechanism/deduction.html"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P01"
+    },
+    {
+      "id": "R10",
+      "group": "基本と計算例",
+      "file": "index.html",
+      "ranges": [
+        [
+          491,
+          497
+        ],
+        [
+          530,
+          532
+        ]
+      ],
+      "anchor": "58,000円",
+      "claim": "60,000円寄附で58,000円軽減する計算。",
+      "status": "一致",
+      "finding": "引き算は正しい。全額控除上限内の仮定であり、R09の年収条件で上限内と証明したわけではない。",
+      "source_ids": [
+        "N01",
+        "N14"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1155.htm",
+        "https://www.nta.go.jp/publication/pamph/koho/kurashi/html/04_3.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": null
+    },
+    {
+      "id": "R11",
+      "group": "基本と計算例",
+      "file": "index.html",
+      "ranges": [
+        [
+          546,
+          546
+        ]
+      ],
+      "anchor": "約5,900円",
+      "claim": "同じ年収500万円の例で所得税還付は約5,900円。",
+      "status": "相違",
+      "finding": "暗黙の10%×1.021固定は2026年の全ケースに合わない。合成条件（社会保険料75万円・基礎控除104万円・他控除なし）では課税所得177万円、税率5%、軽減概算約2,961円。口座還付は既納税額等にも依存。",
+      "source_ids": [
+        "N01",
+        "N03",
+        "N04",
+        "N05",
+        "N06",
+        "N07"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1155.htm",
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1199.htm",
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1410.htm",
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2260.htm",
+        "https://www.nta.go.jp/users/gensen/2026kiso/index.htm",
+        "https://www.nta.go.jp/publication/pamph/gensen/2026kaisei.pdf"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P01"
+    },
+    {
+      "id": "R12",
+      "group": "基本と計算例",
+      "file": "index.html",
+      "ranges": [
+        [
+          546,
+          546
+        ]
+      ],
+      "anchor": "約52,000円",
+      "claim": "確定申告なら残り約52,000円が住民税から減る。",
+      "status": "相違",
+      "finding": "約5,900円との固定配分は保証できない。住民税の限度未達を仮定した合成条件なら55,039.1円。ただし実際の税率判定・限度・端数を確認せずこの数値に置換しない。",
+      "source_ids": [
+        "N01",
+        "N03",
+        "N05",
+        "U02"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1155.htm",
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1199.htm",
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2260.htm",
+        "https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/furusato/mechanism/deduction.html"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P01"
+    },
+    {
+      "id": "R13",
+      "group": "基本と計算例",
+      "file": "index.html",
+      "ranges": [
+        [
+          546,
+          546
+        ]
+      ],
+      "anchor": "春ごろ",
+      "claim": "確定申告すると翌年春ごろ口座へ還付される。",
+      "status": "相違",
+      "finding": "還付申告は翌年1月1日から5年間。申告時期・既納税額に依存し、全員の春の口座還付を保証できない。",
+      "source_ids": [
+        "N09"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2030.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P05"
+    },
+    {
+      "id": "R14",
+      "group": "基本と計算例",
+      "file": "index.html",
+      "ranges": [
+        [
+          544,
+          544
+        ]
+      ],
+      "anchor": "58,000円 ÷ 12",
+      "claim": "58,000÷12から毎月約4,800円を得る。",
+      "status": "一致",
+      "finding": "平均4,833.33…円で概算の算術は正しい。実際の毎月の減少額が均一という確認にはならない。R08は未確認。",
+      "source_ids": [
+        "N12",
+        "U06"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/shinkoku/tokushu/keisubetsu/furusato.htm",
+        "https://www.soumu.go.jp/main_content/000434110.pdf"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P05"
+    },
+    {
+      "id": "R15",
+      "group": "基本と計算例",
+      "file": "index.html",
+      "ranges": [
+        [
+          446,
+          446
+        ],
+        [
+          520,
+          536
+        ]
+      ],
+      "anchor": "3割",
+      "claim": "寄附額の3割なので60,000円なら返礼品の価値は最大約18,000円。",
+      "status": "相違",
+      "finding": "総務省通知の3割は自治体の調達費用であり、寄附者の市場価格や主観的価値の上限・保証ではない。最新通知全文は未取得でも、この価値換算は当該根拠から導けない。",
+      "source_ids": [
+        "M01",
+        "U04"
+      ],
+      "source_urls": [
+        "https://www.cao.go.jp/bunken-suishin/teianbosyu/doc/r06/tb_r6fu_07mic_034.pdf",
+        "https://www.soumu.go.jp/main_content/001079766.pdf"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P02"
+    },
+    {
+      "id": "R16",
+      "group": "基本と計算例",
+      "file": "index.html",
+      "ranges": [
+        [
+          530,
+          536
+        ]
+      ],
+      "anchor": "16,000円",
+      "claim": "返礼品18,000円−自己負担2,000円で最大16,000円お得。",
+      "status": "相違",
+      "finding": "算術自体は正しいが、調達費用から利用者の利益額へ換算する前提が不成立。",
+      "source_ids": [
+        "M01"
+      ],
+      "source_urls": [
+        "https://www.cao.go.jp/bunken-suishin/teianbosyu/doc/r06/tb_r6fu_07mic_034.pdf"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P02"
+    },
+    {
+      "id": "R17",
+      "group": "基本と計算例",
+      "file": "index.html",
+      "ranges": [
+        [
+          515,
+          515
+        ],
+        [
+          551,
+          552
+        ]
+      ],
+      "anchor": "2,000円",
+      "claim": "払う合計は2,000円増えるだけ、払う先が変わるだけ。",
+      "status": "相違",
+      "finding": "上限・申請条件に加えて返礼品の一時所得課税の例外がない。全員の最終負担を2,000円と断定しない。",
+      "source_ids": [
+        "N12",
+        "N15",
+        "N09"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/shinkoku/tokushu/keisubetsu/furusato.htm",
+        "https://www.nta.go.jp/law/shitsugi/shotoku/02/37.htm",
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2030.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P02"
+    },
+    {
+      "id": "R18",
+      "group": "上限確認",
+      "file": "index.html",
+      "ranges": [
+        [
+          537,
+          537
+        ],
+        [
+          563,
+          575
+        ]
+      ],
+      "anchor": "年収",
+      "claim": "上限は年収や家族構成で変わり、年収が高いほど大きくなる。",
+      "status": "一致",
+      "finding": "他条件が同じ場合の一般的傾向。実際には控除・所得の種類などにも依存し、年収だけで判断しない。",
+      "source_ids": [
+        "N01",
+        "N03",
+        "N04",
+        "N07"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1155.htm",
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1199.htm",
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1410.htm",
+        "https://www.nta.go.jp/publication/pamph/gensen/2026kaisei.pdf"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P01"
+    },
+    {
+      "id": "R19",
+      "group": "上限確認",
+      "file": "index.html",
+      "ranges": [
+        [
+          566,
+          566
+        ]
+      ],
+      "anchor": "今年",
+      "claim": "年収は寄附年の見込額面。前年の源泉徴収票の支払金額は参考。",
+      "status": "一致",
+      "finding": "当年の所得で見る点と給与収入・給与所得を区別する点が整合。前年値をそのまま当年の確定値としない。",
+      "source_ids": [
+        "N02",
+        "N04",
+        "N10"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1150.htm",
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1410.htm",
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2020.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": null
+    },
+    {
+      "id": "R20",
+      "group": "上限確認",
+      "file": "index.html",
+      "ranges": [
+        [
+          339,
+          340
+        ],
+        [
+          570,
+          578
+        ]
+      ],
+      "anchor": "simRakuten",
+      "claim": "楽天・チョイスの外部シミュレーターを上限確認に使う。",
+      "status": "未確認",
+      "finding": "内部に上限計算関数はなく外部へ依存。外部サイトの2026年改正対応・実計算は未検証。公的説明から製品の正確性は保証できない。",
+      "source_ids": [
+        "N06",
+        "U02"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/users/gensen/2026kiso/index.htm",
+        "https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/furusato/mechanism/deduction.html"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P01"
+    },
+    {
+      "id": "R21",
+      "group": "上限確認",
+      "file": "index.html",
+      "ranges": [
+        [
+          574,
+          575
+        ],
+        [
+          752,
+          754
+        ]
+      ],
+      "anchor": "合計",
+      "claim": "複数回・複数サイトの寄附を合算して上限確認する。",
+      "status": "一致",
+      "finding": "年間支出合計での計算と整合。余裕を持つ案内は助言であって控除保証ではない。",
+      "source_ids": [
+        "N02",
+        "N14"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1150.htm",
+        "https://www.nta.go.jp/publication/pamph/koho/kurashi/html/04_3.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": null
+    },
+    {
+      "id": "R22",
+      "group": "手続方法の判定",
+      "file": "index.html",
+      "ranges": [
+        [
+          585,
+          592
+        ]
+      ],
+      "anchor": "年末調整",
+      "claim": "通常会社の年末調整だけで済む人は確定申告していないと回答する。",
+      "status": "一致",
+      "finding": "大部分の給与所得者は年末調整で納税完了。ただし例外は後続判定で把握する必要がある。",
+      "source_ids": [
+        "N11"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1900.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": null
+    },
+    {
+      "id": "R23",
+      "group": "手続方法の判定",
+      "file": "index.html",
+      "ranges": [
+        [
+          599,
+          605
+        ],
+        [
+          681,
+          681
+        ]
+      ],
+      "anchor": "寄付する年に",
+      "claim": "寄附する年に確定申告をする予定を尋ねる。",
+      "status": "相違",
+      "finding": "2026年に提出した2025年分の申告と混同し得る。寄附年分の所得について翌年等に申告するかを尋ねる必要がある。",
+      "source_ids": [
+        "N01",
+        "N10"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1155.htm",
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2020.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P06"
+    },
+    {
+      "id": "R24",
+      "group": "手続方法の判定",
+      "file": "index.html",
+      "ranges": [
+        [
+          603,
+          605
+        ]
+      ],
+      "anchor": "医療費控除",
+      "claim": "医療費控除・住宅ローン控除初年・副業所得20万円超は確定申告の例。",
+      "status": "一致",
+      "finding": "医療費・住宅取得は還付申告の例。給与1か所で他所得20万円超は申告義務の例。売上ではなく所得。複数給与・給与収入2,000万円超等は別にもある。",
+      "source_ids": [
+        "N09",
+        "N11",
+        "N13"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2030.htm",
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1900.htm",
+        "https://www.nta.go.jp/taxes/shiraberu/shinkoku/qa/06.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P06"
+    },
+    {
+      "id": "R25",
+      "group": "手続方法の判定",
+      "file": "index.html",
+      "ranges": [
+        [
+          619,
+          625
+        ],
+        [
+          759,
+          759
+        ]
+      ],
+      "anchor": "5つ以内",
+      "claim": "ワンストップ特例の寄附先は5団体以内。",
+      "status": "一致",
+      "finding": "確定申告等をしないなどの他条件と合わせれば一致。団体数だけで適用可とはならない。",
+      "source_ids": [
+        "N01"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1155.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": null
+    },
+    {
+      "id": "R26",
+      "group": "手続方法の判定",
+      "file": "index.html",
+      "ranges": [
+        [
+          620,
+          620
+        ]
+      ],
+      "anchor": "1つ",
+      "claim": "同じ自治体への複数回寄附は自治体数1として数える。",
+      "status": "一致",
+      "finding": "要件が寄附件数ではなく寄附先団体数であることからの解釈。申請寄附の網羅とは別。",
+      "source_ids": [
+        "N01"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1155.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": null
+    },
+    {
+      "id": "R27",
+      "group": "手続方法の判定",
+      "file": "index.html",
+      "ranges": [
+        [
+          625,
+          638
+        ],
+        [
+          789,
+          790
+        ],
+        [
+          1018,
+          1023
+        ]
+      ],
+      "anchor": "S.route",
+      "claim": "所得税の申告なし・5団体以内でoneへ進み、住民税申告は質問しない。",
+      "status": "相違",
+      "finding": "国税庁は個人住民税の申告を行う場合も除外。現行answer()と後段の直接選択にこの条件がない。",
+      "source_ids": [
+        "N01"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1155.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P06"
+    },
+    {
+      "id": "R28",
+      "group": "手続方法の判定",
+      "file": "index.html",
+      "ranges": [
+        [
+          623,
+          625
+        ],
+        [
+          653,
+          666
+        ],
+        [
+          1020,
+          1020
+        ]
+      ],
+      "anchor": "ge6",
+      "claim": "6団体以上なら確定申告へ案内する。",
+      "status": "一致",
+      "finding": "5団体以内の条件と整合。",
+      "source_ids": [
+        "N01"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1155.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": null
+    },
+    {
+      "id": "R29",
+      "group": "手続方法の判定",
+      "file": "index.html",
+      "ranges": [
+        [
+          650,
+          650
+        ],
+        [
+          818,
+          818
+        ],
+        [
+          840,
+          840
+        ]
+      ],
+      "anchor": "無効",
+      "claim": "確定申告するなら特例は無効、特例申請分を含む全寄附を申告する。",
+      "status": "一致",
+      "finding": "記載漏れの場合の更正の請求等は別途相談。",
+      "source_ids": [
+        "N01"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1155.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": null
+    },
+    {
+      "id": "R30",
+      "group": "手続方法の判定",
+      "file": "index.html",
+      "ranges": [
+        [
+          686,
+          686
+        ],
+        [
+          794,
+          794
+        ]
+      ],
+      "anchor": "どちらの場合",
+      "claim": "ワンストップ可否に迷っても確定申告で控除を受けられる。",
+      "status": "一致",
+      "finding": "対象寄附・課税・必要記載・各限度内の条件付き。無条件の全額控除・現金還付の意味ではない。",
+      "source_ids": [
+        "N01",
+        "N09"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1155.htm",
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2030.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": null
+    },
+    {
+      "id": "R31",
+      "group": "申請・申告",
+      "file": "index.html",
+      "ranges": [
+        [
+          645,
+          645
+        ],
+        [
+          802,
+          802
+        ]
+      ],
+      "anchor": "1月10日",
+      "claim": "ワンストップ申請は翌年1月10日必着。",
+      "status": "未確認",
+      "finding": "国税庁取得本文に具体日なし、総務省手続本文は取得失敗。2027年1月10日は日曜だが全国一律の繰延べ可否は未確認。寄附先の正式期限を確認する。",
+      "source_ids": [
+        "U01"
+      ],
+      "source_urls": [
+        "https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/furusato/mechanism/procedure.html"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P07"
+    },
+    {
+      "id": "R32",
+      "group": "申請・申告",
+      "file": "index.html",
+      "ranges": [
+        [
+          816,
+          816
+        ],
+        [
+          822,
+          823
+        ]
+      ],
+      "anchor": "寄付ごと",
+      "claim": "同自治体でも寄附2回なら申請2回が必要。",
+      "status": "未確認",
+      "finding": "団体数とは別の申請単位・合算申請等の細則は未確認。各寄附が対象に含まれていることを寄附先で確認する案。",
+      "source_ids": [
+        "U01",
+        "N01"
+      ],
+      "source_urls": [
+        "https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/furusato/mechanism/procedure.html",
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1155.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P07"
+    },
+    {
+      "id": "R33",
+      "group": "申請・申告",
+      "file": "index.html",
+      "ranges": [
+        [
+          817,
+          817
+        ]
+      ],
+      "anchor": "変更",
+      "claim": "住所・氏名の変更があれば翌年1月10日までに変更届。",
+      "status": "未確認",
+      "finding": "対象となる変更時点・翌年1月1日の住所等、期限の原文照合が未完了。",
+      "source_ids": [
+        "U01"
+      ],
+      "source_urls": [
+        "https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/furusato/mechanism/procedure.html"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P07"
+    },
+    {
+      "id": "R34",
+      "group": "申請・申告",
+      "file": "index.html",
+      "ranges": [
+        [
+          807,
+          807
+        ]
+      ],
+      "anchor": "オンライン",
+      "claim": "寄附先によってはマイナンバーカードでオンライン申請できる。",
+      "status": "一致",
+      "finding": "総務省の事務連絡でサービスの存在を確認。各自治体の2026年対応・受付状況は別途未検証。",
+      "source_ids": [
+        "M02"
+      ],
+      "source_urls": [
+        "https://www.cao.go.jp/bunken-suishin/teianbosyu/doc/r06/tb_r6fu_07mic_102_b.pdf"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": null
+    },
+    {
+      "id": "R35",
+      "group": "申請・申告",
+      "file": "index.html",
+      "ranges": [
+        [
+          811,
+          811
+        ]
+      ],
+      "anchor": "コピー",
+      "claim": "郵送は申請書と番号確認・本人確認書類のコピーを送る。",
+      "status": "未確認",
+      "finding": "所得税申告用の本人確認案内をワンストップへ流用しない。カード有無等による添付の組合せは未確認。",
+      "source_ids": [
+        "U01"
+      ],
+      "source_urls": [
+        "https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/furusato/mechanism/procedure.html"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P07"
+    },
+    {
+      "id": "R36",
+      "group": "申請・申告",
+      "file": "index.html",
+      "ranges": [
+        [
+          644,
+          644
+        ],
+        [
+          759,
+          767
+        ]
+      ],
+      "anchor": "申請書を希望",
+      "claim": "寄附時に「ワンストップ申請書を希望する」を選ぶ。",
+      "status": "未確認",
+      "finding": "ポータルごとの操作。制度上は実際の申請が必要。選択必須か、オンライン申請ではどう扱うかは未検証。",
+      "source_ids": [
+        "N01",
+        "U01"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1155.htm",
+        "https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/furusato/mechanism/procedure.html"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P07"
+    },
+    {
+      "id": "R37",
+      "group": "申請・申告",
+      "file": "index.html",
+      "ranges": [
+        [
+          753,
+          753
+        ]
+      ],
+      "anchor": "住民票と同じ",
+      "claim": "氏名・住所は住民票と同じにして申し込む。",
+      "status": "未確認",
+      "finding": "寄附情報・決済名義・本人確認・翌年賦課期日の住所を一括した説明。制度・申請先の原文照合は未完了。",
+      "source_ids": [
+        "U01"
+      ],
+      "source_urls": [
+        "https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/furusato/mechanism/procedure.html"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P07"
+    },
+    {
+      "id": "R38",
+      "group": "申請・申告",
+      "file": "index.html",
+      "ranges": [
+        [
+          665,
+          665
+        ],
+        [
+          763,
+          763
+        ],
+        [
+          833,
+          833
+        ]
+      ],
+      "anchor": "証明書",
+      "claim": "寄附金受領証明書を保管する。",
+      "status": "一致",
+      "finding": "受領証の添付・提示の案内と整合。e-Tax等の添付省略条件は今回網羅していない。",
+      "source_ids": [
+        "N02",
+        "N13"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1150.htm",
+        "https://www.nta.go.jp/taxes/shiraberu/shinkoku/qa/06.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": null
+    },
+    {
+      "id": "R39",
+      "group": "申請・申告",
+      "file": "index.html",
+      "ranges": [
+        [
+          833,
+          833
+        ]
+      ],
+      "anchor": "まとめた証明書",
+      "claim": "サイトによっては寄附をまとめた証明書を利用できる。",
+      "status": "一致",
+      "finding": "国税庁長官指定の特定事業者の年間証明書を代用できる。任意のサイトの明細ではない。",
+      "source_ids": [
+        "N02",
+        "N14"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1150.htm",
+        "https://www.nta.go.jp/publication/pamph/koho/kurashi/html/04_3.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P08"
+    },
+    {
+      "id": "R40",
+      "group": "申請・申告",
+      "file": "index.html",
+      "ranges": [
+        [
+          834,
+          834
+        ],
+        [
+          840,
+          840
+        ]
+      ],
+      "anchor": "寄附金控除",
+      "claim": "確定申告書に寄附金控除を入れれば手続きが済む。",
+      "status": "相違",
+      "finding": "第二表の住民税に関する事項の対象欄も必要。寄附金控除だけでは住民税で控除されない場合があるという注意がない。",
+      "source_ids": [
+        "N01"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1155.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P08"
+    },
+    {
+      "id": "R41",
+      "group": "申請・申告",
+      "file": "index.html",
+      "ranges": [
+        [
+          666,
+          666
+        ],
+        [
+          830,
+          830
+        ]
+      ],
+      "anchor": "3月15日",
+      "claim": "確定申告は一律に翌年3月15日まで。",
+      "status": "相違",
+      "finding": "申告義務のある人の原則期限は整合するが、申告義務のない人の還付申告は翌年1月1日から5年間。年別日程も公式案内を確認する。",
+      "source_ids": [
+        "N09",
+        "N10",
+        "N13"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2030.htm",
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2020.htm",
+        "https://www.nta.go.jp/taxes/shiraberu/shinkoku/qa/06.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P08"
+    },
+    {
+      "id": "R42",
+      "group": "申請・申告",
+      "file": "index.html",
+      "ranges": [
+        [
+          834,
+          835
+        ]
+      ],
+      "anchor": "スマホ",
+      "claim": "作成コーナー・e-Tax、郵送等で提出できる。",
+      "status": "一致",
+      "finding": "スマホ利用を含む作成コーナーの案内と郵送提出を確認。利用環境・受付時間・本人確認は公式案内に従う。",
+      "source_ids": [
+        "N10",
+        "N12",
+        "N13"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2020.htm",
+        "https://www.nta.go.jp/taxes/shiraberu/shinkoku/tokushu/keisubetsu/furusato.htm",
+        "https://www.nta.go.jp/taxes/shiraberu/shinkoku/qa/06.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": null
+    },
+    {
+      "id": "R43",
+      "group": "翌年の確認",
+      "file": "index.html",
+      "ranges": [
+        [
+          863,
+          863
+        ]
+      ],
+      "anchor": "納める税金",
+      "claim": "所得税は還付、または納付額の減少として確認する。",
+      "status": "一致",
+      "finding": "既納税額との過不足を精算する仕組みと一致。還付発生は既納税額等に依存。",
+      "source_ids": [
+        "N09",
+        "N10"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2030.htm",
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2020.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": null
+    },
+    {
+      "id": "R44",
+      "group": "翌年の確認",
+      "file": "index.html",
+      "ranges": [
+        [
+          334,
+          334
+        ],
+        [
+          462,
+          462
+        ],
+        [
+          857,
+          858
+        ],
+        [
+          867,
+          868
+        ]
+      ],
+      "anchor": "5〜6月",
+      "claim": "住民税通知は翌年5〜6月ごろ、給与明細は6月以降に見る。",
+      "status": "未確認",
+      "finding": "翌年度対象である点は確認済み。配付時期・勤務先での交付・欄名の直接確認は今回未完了。",
+      "source_ids": [
+        "U06",
+        "N12"
+      ],
+      "source_urls": [
+        "https://www.soumu.go.jp/main_content/000434110.pdf",
+        "https://www.nta.go.jp/taxes/shiraberu/shinkoku/tokushu/keisubetsu/furusato.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P09"
+    },
+    {
+      "id": "R45",
+      "group": "翌年の確認",
+      "file": "index.html",
+      "ranges": [
+        [
+          857,
+          857
+        ],
+        [
+          867,
+          867
+        ]
+      ],
+      "anchor": "金額が入って",
+      "claim": "通知書の寄附金税額控除欄に金額があれば反映されている。",
+      "status": "相違",
+      "finding": "非ゼロだけでは全寄附・正しい限度額の反映を証明できない。N01の計算構造からの判断。通知様式自体はR44で未確認。",
+      "source_ids": [
+        "N01",
+        "U06"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1155.htm",
+        "https://www.soumu.go.jp/main_content/000434110.pdf"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P09"
+    },
+    {
+      "id": "R46",
+      "group": "翌年の確認",
+      "file": "index.html",
+      "ranges": [
+        [
+          858,
+          858
+        ],
+        [
+          868,
+          868
+        ]
+      ],
+      "anchor": "前の年より",
+      "claim": "前年より住民税が少なくなったかでも確認できる。",
+      "status": "未確認",
+      "finding": "前年比較を確認方法とする公的本文は未確認。所得や他控除でも変わるため比較だけで寄附金控除の正否を断定しない。",
+      "source_ids": [
+        "U06",
+        "N01"
+      ],
+      "source_urls": [
+        "https://www.soumu.go.jp/main_content/000434110.pdf",
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1155.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P09"
+    },
+    {
+      "id": "R47",
+      "group": "翌年の確認",
+      "file": "index.html",
+      "ranges": [
+        [
+          880,
+          880
+        ]
+      ],
+      "anchor": "市区町村",
+      "claim": "住民税反映が不明なら居住地市区町村の窓口へ相談する。",
+      "status": "一致",
+      "finding": "国税庁も住民税の寄附金控除について市区町村相談を案内。所得税の訂正等は税務署も関係する。",
+      "source_ids": [
+        "N14",
+        "N01"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/publication/pamph/koho/kurashi/html/04_3.htm",
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1155.htm"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": null
+    },
+    {
+      "id": "R48",
+      "group": "ポイント・適用年",
+      "file": "index.html",
+      "ranges": [
+        [
+          348,
+          355
+        ],
+        [
+          697,
+          713
+        ],
+        [
+          1021,
+          1022
+        ]
+      ],
+      "anchor": "楽天のアカウント",
+      "claim": "サイト診断はアカウントや選びやすさが基準でポイントを約束していない。",
+      "status": "一致",
+      "finding": "実装確認済み。2025年10月以降のポイント付与ポータル経由募集禁止という通知の方向と整合。主観的な使いやすさは国の認定ではない。",
+      "source_ids": [
+        "M02"
+      ],
+      "source_urls": [
+        "https://www.cao.go.jp/bunken-suishin/teianbosyu/doc/r06/tb_r6fu_07mic_102_b.pdf"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": null
+    },
+    {
+      "id": "R49",
+      "group": "ポイント・適用年",
+      "file": "index.html",
+      "ranges": [
+        [
+          697,
+          703
+        ]
+      ],
+      "anchor": "楽天市場",
+      "claim": "ポイント禁止の説明や通常決済ポイントとの区別はない。",
+      "status": "未確認",
+      "finding": "2025年10月以降の禁止導入はM02で確認。2026年の最新細則、通常決済ポイントの例外・上乗せの扱いは未確認。「全ポイント禁止」と拡大しない。",
+      "source_ids": [
+        "M02",
+        "U03",
+        "U04"
+      ],
+      "source_urls": [
+        "https://www.cao.go.jp/bunken-suishin/teianbosyu/doc/r06/tb_r6fu_07mic_102_b.pdf",
+        "https://www.soumu.go.jp/main_content/000955667.pdf",
+        "https://www.soumu.go.jp/main_content/001079766.pdf"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P10"
+    },
+    {
+      "id": "R50",
+      "group": "ポイント・適用年",
+      "file": "index.html",
+      "ranges": [
+        [
+          389,
+          389
+        ],
+        [
+          467,
+          467
+        ],
+        [
+          541,
+          546
+        ]
+      ],
+      "anchor": "thisYear",
+      "claim": "年だけ自動追随し、制度表示は2026年9月、数値は固定。",
+      "status": "未確認",
+      "finding": "年を進めても制度改正は反映しない。2026年改正の適用はN06、2027年以後の附加税の変更はN05で確認。将来の上限制度全体はU05未取得で承認しない。",
+      "source_ids": [
+        "N05",
+        "N06",
+        "U05"
+      ],
+      "source_urls": [
+        "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2260.htm",
+        "https://www.nta.go.jp/users/gensen/2026kiso/index.htm",
+        "https://www.soumu.go.jp/main_content/001070694.pdf"
+      ],
+      "checked_on": "2026-10-22",
+      "proposal": "P11"
+    }
+  ],
+  "calculations": {
+    "種別": "個人データのない合成条件。税務申告用の正確な計算器ではない。",
+    "前提": {
+      "年分": 2026,
+      "給与収入": 5000000,
+      "給与所得控除の速算値": 1440000,
+      "給与所得の仮定値": 3560000,
+      "社会保険料の仮定値": 750000,
+      "所得税基礎控除": 1040000,
+      "他の所得控除": 0,
+      "税額控除": 0,
+      "寄附額": 60000,
+      "合成の住民税所得割額": 235500
+    },
+    "出典ID": [
+      "N01",
+      "N03",
+      "N04",
+      "N05",
+      "N06",
+      "N07"
+    ],
+    "注意": [
+      "社会保険料75万円は年収の15%の仮置き。法定の一律保険料率ではない。",
+      "給与所得356万円は速算式による合成入力。660万円未満の別表第五の当該行は未照合。",
+      "住民税所得割額235,500円は上限感度を見る合成入力。基礎控除・調整控除等からの確定算定ではない。",
+      "2026年12月1日原則施行・2026年分適用の改正後を使う通常の居住者を仮定。施行前死亡・出国等は除外。",
+      "住民税特例分の税率判定、所得税との税率差、各税の端数処理、住宅ローン控除・分離課税等は未検証。"
+    ],
+    "算式": {
+      "給与所得控除の速算": "5,000,000×20%＋440,000＝1,440,000円",
+      "所得税課税所得": "3,560,000−750,000−1,040,000＝1,770,000円",
+      "税率": "所得税率5%、2026年の復興特別所得税を含め5.105%",
+      "所得税等軽減概算": "(60,000−2,000)×5%×1.021＝2,960.9円",
+      "現行表示の暗黙の概算": "(60,000−2,000)×10%×1.021＝5,921.8円",
+      "住民税基本分概算": "(60,000−2,000)×10%＝5,800円",
+      "上限未達を仮定した住民税特例分": "(60,000−2,000)×(90%−5%×1.021)＝49,239.1円",
+      "単純モデルの全額控除上限": "2,000＋住民税所得割額×20%÷(90%−所得税率×1.021)",
+      "合成所得割額での上限": "2,000＋235,500×20%÷0.84895 ≒57,479.12円",
+      "上限未達を仮定した住民税合計": "5,800＋49,239.1＝55,039.1円",
+      "月平均": "58,000÷12≒4,833.33円",
+      "調達費用の算術のみ": "60,000×30%＝18,000円。市場価値・利用者利益へ読み替えない。"
+    },
+    "結論": "所得税約5,900円を固定する例は見直しが必要。約57,479円は合成Rと単純モデルの感度計算で、年収500万円の2026年確定上限ではない。"
+  }
+}
