@@ -1,0 +1,37 @@
+{
+  "checked_on": "2026-10-25",
+  "files": [
+    {
+      "path": "index.html",
+      "sha256": "ad02f2e0068499c9d6694ee31faf038cfc22d816da2fc4013e97dded32709476"
+    },
+    {
+      "path": "README.md",
+      "sha256": "dc0343c6f7fc088548b8e181a81c51a7be07d428400ecfba64581de706204e8e"
+    },
+    {
+      "path": ".nojekyll",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "qr.png",
+      "sha256": "46a4d51424c2bc14b3afd56585636d34a7a2bb1cc63370a76961b8a3cf75c1e4"
+    },
+    {
+      "path": "outputs/task-514/照合表.md",
+      "sha256": "7be6279a7e57524ec76f10648cda22e5551d6e420b0392251deb5bdbfb287d3d"
+    },
+    {
+      "path": "outputs/task-514/照合データ.json",
+      "sha256": "cccbbae42e3208d65bb7e1c8e87b35190bd11ece0249b931d05edc85595838a4"
+    },
+    {
+      "path": "work/task-514/build-report.cjs",
+      "sha256": "2d8461e6c0b03662415741c7d452b67c03dd75d7344fa7f9a012bb56a8212f2b"
+    },
+    {
+      "path": "work/task-514/before-files.json",
+      "sha256": "cf4e72930af5f52a1cf46ff3e35cf55040f8cdf2f94a0d7ca008a24b1492ce91"
+    }
+  ]
+}
