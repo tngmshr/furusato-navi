@@ -1,0 +1,81 @@
+from pathlib import Path
+import json,hashlib,datetime,re
+ROOT=Path.cwd(); OUT=ROOT/'outputs/task-600'
+tests=json.loads((OUT/'test-results.json').read_text(encoding='utf-8'))
+assert len(tests['checks'])==20 and len(tests['testedScreens'])==90 and not tests['errors']
+now=datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9))).strftime('%Y-%m-%d %H:%M')
+report=f'''# タスク600 作業報告
+
+実施日時：{now}（JST）。ローカル修正・検証を実施。公開の判断は本人、コミットはキューrunnerが担当。
+
+## 変更ファイル
+
+- `index.html`：説明・分岐・旧保存状態の再確認処理。
+- [変更前後対照表.md](変更前後対照表.md)：P01〜P11の変更前・変更後・変更後行番号・一次URL、未確認14件の対応。
+- [計算比較.md](計算比較.md)：固定例・計算の入出力比較、旧合成算術誤差の扱い。
+- 本書（検証結果.md）。
+- [test-results.json](test-results.json)、[verify.cjs](verify.cjs)：再実行可能な検査と結果。
+- `before.json`：変更前の既存ファイルSHA-256と関係画面の原文スナップショット。
+- `*-375.png`、`*-375-bottom.png`：375×900の5画面の先頭・末尾10画像。[capture.cjs](capture.cjs)で再撮影可能。
+- `apply-fixes.py`、`finish-fixes.py`、`refine-state.py`、`refine-capture.py`、`build-report.py`、`finalize-report.py`：変更・報告作成の記録。apply-fixes.pyは変更前専用で、現状態へ再適用しない。
+
+対象外の既存ファイル、514成果、README、設定・ワークフロー・資産は変更していない。handoff-log.mdは変更していない。
+
+## 変更内容
+
+目的：514修正案11件をすべて反映し、未確認項目を断定しない説明へ改める。対象：index.htmlとoutputs/task-600/。制約：git・push・公開・アカウント操作なし、原本保全、UTF-8 BOMなし。完了条件：11件の対照表と根拠URL、計算比較、検証記録。方法：構文・算術・保存状態と分岐のブラウザ検査、画面・ファイル検査。
+
+年収に結び付けた上限・固定税額配分、返礼品の金額換算、月額例を撤去。上限内・年間合計・必要手続きという仮定を明示した例に変更した。上限超過の扱い、個人住民税申告を含む特例の条件、申告第二表、申告義務と還付申告期間、通知での確認方法、ポイント説明、自動年表示の限界を補った。
+
+手続質問1は寄付する年分の所得税申告、質問2は同じ年分の個人住民税申告、質問3は年間寄付先5団体以内を確認する。STEP6の直接選択にも同条件を表示し、不明時の質問への戻り口を追加した。旧条件で保存された特例判定は再確認とし、進行履歴と他のチェックは保持。住民税欄を含む新しい申告チェックの旧チェック状態だけは再確認のため解除する。新しい条件で確認したチェックは再読込しても保持する。
+
+未確認の申請細則は新しい確定条件に差し替えず、各寄付先の公式案内での確認へ誘導した。ホームに個別確認事項を追加。一次本文10資料の関連箇所をWebで確認したが、総務省の手続ページは今回も取得失敗し、未確認を維持した。一次URLと資料ごとの確認範囲は対照表に記載。
+
+本体に上限・税額を算出する関数はない。旧成果の57,479.12円という算術誤差も本体にないため、合成感度計算の再確認にとどめ、年収別上限として新しい値を表示していない。
+
+## テスト結果
+
+- `node outputs/task-600/verify.cjs`：**20項目合格、全15画面×3経路×2幅（375px・1280px）＝90通り描画、ブラウザ実行時エラー0、横はみ出し0**。追加依存取得なし。
+- 既存の一般テスト基盤・package.jsonはない。既存514スクリプトは成果生成・過去原本ハッシュ検査を含むためそのまま再実行せず、同じインラインJS構文検査2件と合成算術検査を読み取り専用で再利用した。
+- 所得税申告あり／住民税申告あり／両方なし＋5団体以内／6団体以上／両申告の要否不明、質問を飛ばした旧履歴、直接選択、旧判定の再確認、新旧チェック保持を検証。
+- 修正後の60,000円・58,000円・2,000円の表示をブラウザの表で確認。旧固定価値・税額・期限等の文字列が本体の代替テキストを含めて残らないことを確認。
+- `node outputs/task-600/capture.cjs`：375×900で5画面の先頭・末尾を撮影。STEP1の説明、STEP3の住民税申告質問、STEP6の両経路、ホームの計9画像を目視確認。文字・表・ボタンの欠けや重なりなし。画面下の最後の文まで表示されることを確認。
+- 最初の全ページ撮影では、表示領域外の閉じたシートまで画像に含まれる撮影上の問題があったため、実表示領域の先頭・末尾画像へ撮り直した。本体CSSは変更していない。
+- 初回ファイル作成でapply_patchが失敗し、次のPowerShell→Pythonパイプでは日本語ファイル名が変換されて失敗した。どちらも本体変更前で、ファイル未作成を確認後、許可範囲内へ明示UTF-8 BOMなしの.NET書込みで作成した。権限・システム設定の変更なし。
+- 最終の成果リンク、対照表11件・未確認対応14件、UTF-8 BOMなし、対象外既存ファイルのハッシュ保全を検査（[artifact-checks.json](artifact-checks.json)）。
+
+## 懸念点
+
+- 申請期限・書類・変更届・申請単位、通知様式・時期、決済ポイント等の最新細則、外部シミュレーターの年分対応は未確認のまま。アプリ内で断定せず公式確認へ案内した。
+- 合成算術・ブラウザの表示合格は個人の上限額や税額の保証ではない。外部計算ページへ個人情報を入力する検証は未実施。
+- 公開URLへの反映、本番との同一性、スマートフォン実機は未検証。対照表を本人が確認した後、別途公開判断が必要。
+- gitコマンドは一切実行していないため、作業前の未コミット状態やコミットSHAは確認していない。今回の差分はローカルのまま、runnerへ引き渡す。
+
+追記用1行（handoff-log.md自体は未変更）：
+
+- {now} | E:\\Claude code\\furusato-navi | タスク600：修正案11件・未確認14件の断定緩和を反映、対照表・計算比較作成、20検査と90描画合格 | 未コミット | 要確認: 対照表と公開可否、申請細則・外部計算対応・実機は未確認
+'''
+(OUT/'検証結果.md').write_text(report,encoding='utf-8')
+before=json.loads((OUT/'before.json').read_text(encoding='utf-8'))
+unchanged=[]
+for file,expected in before['hashes'].items():
+ if file=='index.html':continue
+ assert hashlib.sha256((ROOT/file).read_bytes()).hexdigest()==expected,file
+ unchanged.append(file)
+utf8=[]
+for file in [ROOT/'index.html']+list(OUT.iterdir()):
+ if file.is_file() and file.suffix not in ('.png',):
+  b=file.read_bytes();assert not b.startswith(b'\xef\xbb\xbf'),str(file);b.decode('utf-8',errors='strict');utf8.append(file.relative_to(ROOT).as_posix())
+(OUT/'artifact-checks.json').write_text('{}\n',encoding='utf-8')
+link_errors=[]
+for file in OUT.glob('*.md'):
+ for href in re.findall(r'\]\(([^)]+)\)',file.read_text(encoding='utf-8')):
+  if href.startswith(('https:','http:','#')):continue
+  if not (file.parent/href).exists():link_errors.append([file.name,href])
+assert not link_errors,link_errors
+x=(OUT/'変更前後対照表.md').read_text(encoding='utf-8')
+assert len(re.findall(r'^\| P\d{2} ',x,re.M))==11
+assert len(re.findall(r'^\| R\d{2} ',x,re.M))==14
+result={'checkedAt':now+' JST','unchangedFiles':unchanged,'utf8WithoutBom':utf8,'proposalRows':11,'unconfirmedRows':14,'linkErrors':link_errors,'indexSha256':hashlib.sha256((ROOT/'index.html').read_bytes()).hexdigest(),'status':'合格'}
+(OUT/'artifact-checks.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print(f'最終検査合格：対照表11件、未確認対応14件、対象外既存{len(unchanged)}ファイル保全、UTF-8 BOMなし{len(utf8)}ファイル、成果リンク不整合0件。')

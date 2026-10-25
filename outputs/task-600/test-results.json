@@ -1,0 +1,546 @@
+{
+  "checkedAt": "2026-10-25T03:45:23.760Z",
+  "node": "v24.22.1",
+  "checks": [
+    {
+      "name": "既存JavaScriptの構文検査を再利用",
+      "result": "合格"
+    },
+    {
+      "name": "対象外の既存ファイルの保全",
+      "result": "合格"
+    },
+    {
+      "name": "固定金額・未確認の期限等を除去（代替テキストを含む）",
+      "result": "合格"
+    },
+    {
+      "name": "514の合成算術検査を再利用",
+      "result": "合格"
+    },
+    {
+      "name": "判定：所得税・住民税とも申告なし、5団体以内",
+      "result": "合格"
+    },
+    {
+      "name": "判定：所得税申告あり",
+      "result": "合格"
+    },
+    {
+      "name": "判定：住民税申告あり",
+      "result": "合格"
+    },
+    {
+      "name": "判定：所得税申告の要否不明",
+      "result": "合格"
+    },
+    {
+      "name": "判定：住民税申告の要否不明",
+      "result": "合格"
+    },
+    {
+      "name": "判定：6団体以上",
+      "result": "合格"
+    },
+    {
+      "name": "質問を飛ばした古い履歴からは特例確定にしない",
+      "result": "合格"
+    },
+    {
+      "name": "STEP6の直接選択と申告条件の表示",
+      "result": "合格"
+    },
+    {
+      "name": "STEP6の不明時は質問へ戻る",
+      "result": "合格"
+    },
+    {
+      "name": "旧判定と旧申告チェックを再確認し、他の進み具合を保全",
+      "result": "合格"
+    },
+    {
+      "name": "新条件で確認済みの進み具合を再読込後も保持",
+      "result": "合格"
+    },
+    {
+      "name": "新たな所得税・住民税申告経路のチェックを再読込後も保持",
+      "result": "合格"
+    },
+    {
+      "name": "全15画面×3経路×2幅の描画・横はみ出し",
+      "result": "合格",
+      "count": 90
+    },
+    {
+      "name": "ホームから個別確認事項を開ける",
+      "result": "合格"
+    },
+    {
+      "name": "控除上限内という仮定付きの計算例を実画面で確認",
+      "result": "合格"
+    },
+    {
+      "name": "ブラウザ実行時エラーなし",
+      "result": "合格"
+    }
+  ],
+  "testedScreens": [
+    {
+      "width": 375,
+      "id": "home",
+      "route": "one"
+    },
+    {
+      "width": 375,
+      "id": "home",
+      "route": "tax"
+    },
+    {
+      "width": 375,
+      "id": "home",
+      "route": "check"
+    },
+    {
+      "width": 375,
+      "id": "s1",
+      "route": "one"
+    },
+    {
+      "width": 375,
+      "id": "s1",
+      "route": "tax"
+    },
+    {
+      "width": 375,
+      "id": "s1",
+      "route": "check"
+    },
+    {
+      "width": 375,
+      "id": "s1b",
+      "route": "one"
+    },
+    {
+      "width": 375,
+      "id": "s1b",
+      "route": "tax"
+    },
+    {
+      "width": 375,
+      "id": "s1b",
+      "route": "check"
+    },
+    {
+      "width": 375,
+      "id": "s2",
+      "route": "one"
+    },
+    {
+      "width": 375,
+      "id": "s2",
+      "route": "tax"
+    },
+    {
+      "width": 375,
+      "id": "s2",
+      "route": "check"
+    },
+    {
+      "width": 375,
+      "id": "s3q1",
+      "route": "one"
+    },
+    {
+      "width": 375,
+      "id": "s3q1",
+      "route": "tax"
+    },
+    {
+      "width": 375,
+      "id": "s3q1",
+      "route": "check"
+    },
+    {
+      "width": 375,
+      "id": "s3q2",
+      "route": "one"
+    },
+    {
+      "width": 375,
+      "id": "s3q2",
+      "route": "tax"
+    },
+    {
+      "width": 375,
+      "id": "s3q2",
+      "route": "check"
+    },
+    {
+      "width": 375,
+      "id": "s3q3",
+      "route": "one"
+    },
+    {
+      "width": 375,
+      "id": "s3q3",
+      "route": "tax"
+    },
+    {
+      "width": 375,
+      "id": "s3q3",
+      "route": "check"
+    },
+    {
+      "width": 375,
+      "id": "s3r",
+      "route": "one"
+    },
+    {
+      "width": 375,
+      "id": "s3r",
+      "route": "tax"
+    },
+    {
+      "width": 375,
+      "id": "s3r",
+      "route": "check"
+    },
+    {
+      "width": 375,
+      "id": "s4q1",
+      "route": "one"
+    },
+    {
+      "width": 375,
+      "id": "s4q1",
+      "route": "tax"
+    },
+    {
+      "width": 375,
+      "id": "s4q1",
+      "route": "check"
+    },
+    {
+      "width": 375,
+      "id": "s4q2",
+      "route": "one"
+    },
+    {
+      "width": 375,
+      "id": "s4q2",
+      "route": "tax"
+    },
+    {
+      "width": 375,
+      "id": "s4q2",
+      "route": "check"
+    },
+    {
+      "width": 375,
+      "id": "s4r",
+      "route": "one"
+    },
+    {
+      "width": 375,
+      "id": "s4r",
+      "route": "tax"
+    },
+    {
+      "width": 375,
+      "id": "s4r",
+      "route": "check"
+    },
+    {
+      "width": 375,
+      "id": "s5",
+      "route": "one"
+    },
+    {
+      "width": 375,
+      "id": "s5",
+      "route": "tax"
+    },
+    {
+      "width": 375,
+      "id": "s5",
+      "route": "check"
+    },
+    {
+      "width": 375,
+      "id": "s6",
+      "route": "one"
+    },
+    {
+      "width": 375,
+      "id": "s6",
+      "route": "tax"
+    },
+    {
+      "width": 375,
+      "id": "s6",
+      "route": "check"
+    },
+    {
+      "width": 375,
+      "id": "s7",
+      "route": "one"
+    },
+    {
+      "width": 375,
+      "id": "s7",
+      "route": "tax"
+    },
+    {
+      "width": 375,
+      "id": "s7",
+      "route": "check"
+    },
+    {
+      "width": 375,
+      "id": "done",
+      "route": "one"
+    },
+    {
+      "width": 375,
+      "id": "done",
+      "route": "tax"
+    },
+    {
+      "width": 375,
+      "id": "done",
+      "route": "check"
+    },
+    {
+      "width": 1280,
+      "id": "home",
+      "route": "one"
+    },
+    {
+      "width": 1280,
+      "id": "home",
+      "route": "tax"
+    },
+    {
+      "width": 1280,
+      "id": "home",
+      "route": "check"
+    },
+    {
+      "width": 1280,
+      "id": "s1",
+      "route": "one"
+    },
+    {
+      "width": 1280,
+      "id": "s1",
+      "route": "tax"
+    },
+    {
+      "width": 1280,
+      "id": "s1",
+      "route": "check"
+    },
+    {
+      "width": 1280,
+      "id": "s1b",
+      "route": "one"
+    },
+    {
+      "width": 1280,
+      "id": "s1b",
+      "route": "tax"
+    },
+    {
+      "width": 1280,
+      "id": "s1b",
+      "route": "check"
+    },
+    {
+      "width": 1280,
+      "id": "s2",
+      "route": "one"
+    },
+    {
+      "width": 1280,
+      "id": "s2",
+      "route": "tax"
+    },
+    {
+      "width": 1280,
+      "id": "s2",
+      "route": "check"
+    },
+    {
+      "width": 1280,
+      "id": "s3q1",
+      "route": "one"
+    },
+    {
+      "width": 1280,
+      "id": "s3q1",
+      "route": "tax"
+    },
+    {
+      "width": 1280,
+      "id": "s3q1",
+      "route": "check"
+    },
+    {
+      "width": 1280,
+      "id": "s3q2",
+      "route": "one"
+    },
+    {
+      "width": 1280,
+      "id": "s3q2",
+      "route": "tax"
+    },
+    {
+      "width": 1280,
+      "id": "s3q2",
+      "route": "check"
+    },
+    {
+      "width": 1280,
+      "id": "s3q3",
+      "route": "one"
+    },
+    {
+      "width": 1280,
+      "id": "s3q3",
+      "route": "tax"
+    },
+    {
+      "width": 1280,
+      "id": "s3q3",
+      "route": "check"
+    },
+    {
+      "width": 1280,
+      "id": "s3r",
+      "route": "one"
+    },
+    {
+      "width": 1280,
+      "id": "s3r",
+      "route": "tax"
+    },
+    {
+      "width": 1280,
+      "id": "s3r",
+      "route": "check"
+    },
+    {
+      "width": 1280,
+      "id": "s4q1",
+      "route": "one"
+    },
+    {
+      "width": 1280,
+      "id": "s4q1",
+      "route": "tax"
+    },
+    {
+      "width": 1280,
+      "id": "s4q1",
+      "route": "check"
+    },
+    {
+      "width": 1280,
+      "id": "s4q2",
+      "route": "one"
+    },
+    {
+      "width": 1280,
+      "id": "s4q2",
+      "route": "tax"
+    },
+    {
+      "width": 1280,
+      "id": "s4q2",
+      "route": "check"
+    },
+    {
+      "width": 1280,
+      "id": "s4r",
+      "route": "one"
+    },
+    {
+      "width": 1280,
+      "id": "s4r",
+      "route": "tax"
+    },
+    {
+      "width": 1280,
+      "id": "s4r",
+      "route": "check"
+    },
+    {
+      "width": 1280,
+      "id": "s5",
+      "route": "one"
+    },
+    {
+      "width": 1280,
+      "id": "s5",
+      "route": "tax"
+    },
+    {
+      "width": 1280,
+      "id": "s5",
+      "route": "check"
+    },
+    {
+      "width": 1280,
+      "id": "s6",
+      "route": "one"
+    },
+    {
+      "width": 1280,
+      "id": "s6",
+      "route": "tax"
+    },
+    {
+      "width": 1280,
+      "id": "s6",
+      "route": "check"
+    },
+    {
+      "width": 1280,
+      "id": "s7",
+      "route": "one"
+    },
+    {
+      "width": 1280,
+      "id": "s7",
+      "route": "tax"
+    },
+    {
+      "width": 1280,
+      "id": "s7",
+      "route": "check"
+    },
+    {
+      "width": 1280,
+      "id": "done",
+      "route": "one"
+    },
+    {
+      "width": 1280,
+      "id": "done",
+      "route": "tax"
+    },
+    {
+      "width": 1280,
+      "id": "done",
+      "route": "check"
+    }
+  ],
+  "errors": [],
+  "calculation": {
+    "donation": 60000,
+    "conditionalRelief": 58000,
+    "conditionalBurden": 2000,
+    "syntheticLimit": 57480.29919312092
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "checkedAt": "2026-10-25 12:49 JST",
+  "unchangedFiles": [
+    ".nojekyll",
+    "qr.png",
+    "README.md",
+    "outputs/task-514/修正案.md",
+    "outputs/task-514/再確認記録.md",
+    "outputs/task-514/検証結果.md",
+    "outputs/task-514/照合データ.json",
+    "outputs/task-514/照合表.md",
+    "work/task-514/before-20261025.json",
+    "work/task-514/before-files.json",
+    "work/task-514/build-report.cjs",
+    "work/task-514/complete-514-20261025.cjs",
+    "work/task-514/検証結果-20261025.json"
+  ],
+  "utf8WithoutBom": [
+    "index.html",
+    "outputs/task-600/apply-fixes.py",
+    "outputs/task-600/before.json",
+    "outputs/task-600/build-report.py",
+    "outputs/task-600/capture.cjs",
+    "outputs/task-600/finalize-report.py",
+    "outputs/task-600/finish-fixes.py",
+    "outputs/task-600/refine-capture.py",
+    "outputs/task-600/refine-state.py",
+    "outputs/task-600/test-results.json",
+    "outputs/task-600/verify.cjs",
+    "outputs/task-600/変更前後対照表.md",
+    "outputs/task-600/検証結果.md",
+    "outputs/task-600/計算比較.md"
+  ],
+  "proposalRows": 11,
+  "unconfirmedRows": 14,
+  "linkErrors": [],
+  "indexSha256": "4c0918cf452112c72e393e137e0e7d7bb1fe7b1f937e5bd379d5bb612d2d107f",
+  "status": "合格"
+}
