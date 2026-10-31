@@ -376,6 +376,30 @@ function pref(k, v){
   try{ if(v === undefined) return localStorage.getItem('furusatoNavi.'+k); localStorage.setItem('furusatoNavi.'+k, v); }catch(e){ return null; }
 }
 
+// 姉妹アプリの計算結果は同じ端末の保存領域だけで受け取る。
+function sharedLimit(){
+  try{
+    const v=JSON.parse(localStorage.getItem('setsuzeiNavi.share.v1') || 'null');
+    return v && v.year === thisYear() && Number.isSafeInteger(v.donationLimit) && v.donationLimit >= 0 ? v : null;
+  }catch{return null;}
+}
+function renderSharedLimit(){
+  const host=$('sharedLimit'); if(!host)return;
+  host.replaceChildren();
+  const v=sharedLimit();
+  if(v){
+    const card=document.createElement('div'),p=document.createElement('p'),b=document.createElement('button');
+    card.className='box box-next';p.textContent=`節税・資産形成ナビの結果：上限の目安 ${v.donationLimit.toLocaleString('ja-JP')}円（iDeCo を反映）`;
+    const note=document.createElement('p');note.className='small';note.textContent='試算の前提や、未反映の控除は節税・資産形成ナビで確認してください。';
+    b.className='btn';b.type='button';b.textContent='この金額を使う';
+    b.addEventListener('click',()=>{const latest=sharedLimit();if(!latest){renderSharedLimit();return;}S.donationLimit={year:latest.year,amount:latest.donationLimit};save();renderSharedLimit();});
+    card.append(p,note,b);host.append(card);
+  }
+  const chosen=$('chosenLimit'),value=S.donationLimit;
+  chosen.hidden=!(value && value.year===thisYear() && Number.isSafeInteger(value.amount) && value.amount>=0);
+  chosen.textContent=chosen.hidden?'':`今年使う上限の目安：${value.amount.toLocaleString('ja-JP')}円（iDeCo を反映）`;
+}
+
 /* ---------- 小物 ---------- */
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -459,7 +483,7 @@ const SCREENS = {
           <li><b>メモ帳と筆記用具</b>、または<b>スマホのメモアプリ</b></li>
           <li>あれば<b>源泉徴収票</b>（上限額をより正確に出せます）</li>
         </ul>
-        <p class="small" style="margin:6px 0 0">上限額や寄付した自治体などを書き留めます。このアプリは金額や自治体名を保存しないためです。</p>
+        <p class="small" style="margin:6px 0 0">上限額や寄付した自治体などを書き留めます。自治体名などはメモに残してください。節税・資産形成ナビから受け取った上限の目安は、選んだ場合だけこの端末に保存します。</p>
       </div>
       <div class="box box-next">
         <p class="box-h">かかる時間の目安</p>
@@ -470,7 +494,7 @@ const SCREENS = {
         </ul>
       </div>
       ${S.resume ? `<button class="btn btn-sub" type="button" data-act="reset">最初からやり直す</button>` : ''}
-      <p class="foot">氏名・住所・年収などは入力しません。進み具合だけをこの端末に保存します。<br>
+      <p class="foot">氏名・住所・年収などは入力しません。進み具合と、選んだ上限の目安をこの端末に保存します。<br>
       制度説明は2026年10月25日に一部を見直しました。年の表示が変わっても、制度や控除上限が自動更新されるわけではありません。寄付する年分の最新情報を<a href="${URL.nta}" target="_blank" rel="noopener">国税庁</a>や<a href="${URL.soumu}" target="_blank" rel="noopener">総務省</a>、寄付先の公式案内で確認してください。</p>
       <details><summary>寄付前に個別の確認が必要なこと</summary>
         <p class="small">申請期限・申請単位・変更届・本人確認書類、住民税の通知時期や記載方法、ポイントの最新細則、外部計算ページの対象年分への対応は、このアプリでは確認できていません。各自治体・提供元の最新の公式案内で確認してください。</p>
@@ -559,10 +583,11 @@ const SCREENS = {
     html: () => `
       <h1 tabindex="-1">あなたの上限額を確認しましょう</h1>
       <p class="lead">上限額＝「いくらまで寄付すると、自己負担2,000円で済むか」の目安です。</p>
+      <div id="sharedLimit"></div><div id="chosenLimit" class="box box-ok" hidden></div>
       <ol class="num-list">
         <li><b>下のボタンで外部の計算ページを開く</b></li>
         <li><b>対象年分と入力条件を確認して入力する</b><span class="small">年収は<strong>寄付する年（今年）の見込み</strong>で、税金や保険料が引かれる前の金額（額面）です。所得・社会保険料・家族構成・他の控除も上限に影響します。前年の源泉徴収票は参考ですが、今年と条件が違う場合は注意してください。</span></li>
-        <li><b>出てきた金額をメモする</b><span class="small">メモ帳かメモアプリに書き留めます。このアプリには入力しません。</span></li>
+        <li><b>出てきた金額をメモする</b><span class="small">メモ帳かメモアプリに書き留めます。節税・資産形成ナビの結果がある場合は、上の「この金額を使う」でこの端末に保存できます。</span></li>
         <li><b>この画面に戻って、下の「確認できた」を押す</b></li>
       </ol>
       ${ext(URL.simRakuten, '上限額の計算ページを開く', '楽天ふるさと納税のかんたんシミュレーターが開きます')}
@@ -939,6 +964,8 @@ function flowItems(linkable){
 }
 
 /* ---------- 表示 ---------- */
+window.addEventListener('storage',e=>{if(e.key==='setsuzeiNavi.share.v1')renderSharedLimit();});
+window.addEventListener('focus',()=>renderSharedLimit());
 let lastDir = 'fwd';
 function render(){
   const id = cur(), sc = SCREENS[id] || SCREENS.home;
@@ -959,6 +986,7 @@ function render(){
   // 本文
   const main = $('main');
   main.innerHTML = `<section class="screen ${lastDir === 'back' ? 'back' : ''}">${sc.html()}</section>`;
+  renderSharedLimit();
   window.scrollTo(0, 0);
   const f = main.querySelector('#focusMe') || main.querySelector('h1');
   if (f) try{ f.focus({preventScroll:true}); }catch(e){}
