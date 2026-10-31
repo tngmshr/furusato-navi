@@ -1,6 +1,6 @@
 // ふるさと納税かんたんナビ Service Worker
 // 方針: ネット優先（常に最新を表示）。つながらないときだけ保存しておいた版を出す。
-const CACHE = 'furusato-navi-v3';
+const CACHE = 'furusato-navi-v4';
 const PRECACHE = [
   './', 'index.html', 'manifest.webmanifest',
   'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',
