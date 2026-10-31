@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QRコード・配る用｜ふるさと納税かんたんナビ</title>
+<meta name="description" content="ふるさと納税かんたんナビを人に渡すためのQRコードと、印刷して配れる案内です。">
+<meta name="theme-color" content="#1f6fd1">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<style>
+:root{
+  --bg:#f3f6fa; --card:#ffffff; --ink:#1b2430; --sub:#4a5666; --line:#d8e0ea;
+  --blue:#1f6fd1; --blue-soft:#e9f1fc; --gold:#f5b940;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --bg:#11161d; --card:#1a2129; --ink:#e8edf3; --sub:#aab5c3; --line:#2e3844; --blue-soft:#1b2a3d; }
+}
+:root[data-theme="dark"]{ --bg:#11161d; --card:#1a2129; --ink:#e8edf3; --sub:#aab5c3; --line:#2e3844; --blue-soft:#1b2a3d; }
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","BIZ UDPGothic","Yu Gothic UI","Meiryo",system-ui,sans-serif;
+  font-size:17px;line-height:1.7}
+main{max-width:720px;margin:0 auto;padding:16px 16px 40px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:10px 18px;border-radius:12px;
+  border:2px solid var(--blue);background:var(--blue);color:#fff;font:inherit;font-weight:700;text-decoration:none;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--blue)}
+.lead{color:var(--sub);margin:0 0 16px}
+.sheet{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px 20px;margin:0 0 20px}
+.flyer h1{font-size:clamp(24px,6vw,34px);line-height:1.3;margin:0 0 4px;letter-spacing:.02em}
+.flyer .tag{margin:0 0 16px;color:var(--sub);font-weight:700}
+.flyer .hero{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:14px;margin:0 0 18px}
+.qrbox{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.qr{width:min(220px,60vw);aspect-ratio:1;background:#fff;padding:8px;border-radius:10px;border:1px solid var(--line)}
+.qr img{display:block;width:100%;height:100%}
+.qrtxt{flex:1 1 220px;min-width:0}
+.qrtxt b{display:block;font-size:20px;margin-bottom:4px}
+.url{font-family:ui-monospace,Consolas,monospace;font-size:15px;word-break:break-all;color:var(--blue)}
+ol.steps{margin:18px 0 0;padding:0;list-style:none;display:grid;gap:10px}
+ol.steps li{background:var(--blue-soft);border-radius:12px;padding:10px 14px}
+ol.steps li strong{color:var(--blue)}
+.note{font-size:15px;color:var(--sub);margin:16px 0 0}
+h2{font-size:20px;margin:0 0 6px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.cardlet{border:1.5px dashed var(--line);border-radius:10px;padding:12px;display:flex;gap:10px;align-items:center;min-width:0}
+.cardlet img.q{width:84px;height:84px;flex:none;background:#fff;padding:3px;border-radius:6px}
+.cardlet .t{font-weight:700;line-height:1.35;font-size:15px}
+.cardlet .s{font-size:12.5px;color:var(--sub);line-height:1.45;margin-top:4px}
+@media (max-width:480px){ .cards{grid-template-columns:1fr} }
+
+@page{size:A4 portrait;margin:12mm}
+@media print{
+  :root{--bg:#fff;--card:#fff;--ink:#000;--sub:#333;--line:#999;--blue-soft:#eef4fc}
+  body{font-size:12pt;background:#fff}
+  main{max-width:none;padding:0}
+  .screen-only{display:none!important}
+  .sheet{border:none;border-radius:0;padding:0;margin:0}
+  .flyer{break-after:page}
+  .flyer h1{font-size:26pt}
+  .flyer .hero{aspect-ratio:auto;height:78mm}
+  .qr{width:62mm}
+  .cards{grid-template-columns:1fr 1fr;gap:0}
+  .cardlet{height:62mm;border-radius:0;border:1px dashed #999;padding:5mm;break-inside:avoid}
+  .cardlet img.q{width:36mm;height:36mm}
+  .cardlet .t{font-size:13pt}
+  .cardlet .s{font-size:9.5pt}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<main>
+  <div class="bar screen-only">
+    <a class="btn ghost" href="./">← アプリにもどる</a>
+    <button class="btn" type="button" id="printBtn">印刷する</button>
+  </div>
+  <p class="lead screen-only">このページは、ほかの人にアプリを紹介するためのものです。スマホの画面をそのまま見せてQRコードを読み取ってもらうか、印刷して配ってください。印刷すると、1枚目が案内、2枚目が切り取って渡せるカード（8枚分）になります。</p>
+
+  <section class="sheet flyer">
+    <h1>ふるさと納税<br>かんたんナビ</h1>
+    <p class="tag">はじめてでも、7ステップで。</p>
+    <img class="hero" src="img/hero.webp" width="960" height="540" alt="">
+    <div class="qrbox">
+      <div class="qr"><img src="img/qr.svg" alt="アプリを開くQRコード"></div>
+      <div class="qrtxt">
+        <b>スマホのカメラで読み取ってください</b>
+        <span class="url">https://tngmshr.github.io/furusato-navi/</span>
+        <p class="note">アプリのインストールや登録はいりません。氏名・住所・年収の入力もありません。</p>
+      </div>
+    </div>
+    <ol class="steps">
+      <li><strong>STEP 1</strong>　しくみと、どれくらいお得かを知る</li>
+      <li><strong>STEP 2〜4</strong>　上限額の目安・手続きの方法・使うサイトを決める</li>
+      <li><strong>STEP 5〜6</strong>　返礼品を選んで寄付し、税金の手続きをする</li>
+      <li><strong>STEP 7</strong>　翌年の5〜6月ごろ、税金が減ったかを確認する</li>
+    </ol>
+    <p class="note">画面の案内どおりに進めるだけで、寄付から税金の手続き、翌年の確認まで終わります。制度の内容は総務省・国税庁の情報をもとにしています。</p>
+  </section>
+
+  <section class="sheet">
+    <h2>切り取って渡せるカード</h2>
+    <p class="note screen-only" style="margin-top:0">印刷すると点線で8枚に切り分けられます。</p>
+    <div class="cards" id="cards"></div>
+  </section>
+</main>
+<script>
+(function () {
+  var card = '<div class="cardlet"><img class="q" src="img/qr.svg" alt="QRコード">' +
+    '<div><div class="t">ふるさと納税<br>かんたんナビ</div>' +
+    '<div class="s">はじめてでも7ステップ。<br>カメラで読み取るだけ。<br>登録はいりません。</div></div></div>';
+  document.getElementById('cards').innerHTML = new Array(9).join(card);
+  document.getElementById('printBtn').addEventListener('click', function () { window.print(); });
+})();
+</script>
+</body>
+</html>
