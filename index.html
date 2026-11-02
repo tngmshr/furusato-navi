@@ -464,7 +464,7 @@ function renderSharedLimit(){
     card.className='box box-next';p.textContent=`節税・資産形成ナビの結果（${v.year}年分）：上限の目安 ${v.donationLimit.toLocaleString('ja-JP')}円（iDeCo を反映）`;
     const note=document.createElement('p');note.className='small';note.textContent='試算の前提や、未反映の控除は節税・資産形成ナビで確認してください。';
     b.className='btn';b.type='button';b.textContent='この金額を使う';
-    b.addEventListener('click',()=>{const latest=sharedLimit();if(!latest){renderSharedLimit();return;}S.donationLimit={year:latest.year,amount:latest.donationLimit};save();LOG.limit=latest.donationLimit;saveLog();renderSharedLimit();refreshLog();});
+    b.addEventListener('click',()=>{const latest=sharedLimit();if(!latest){renderSharedLimit();return;}S.donationLimit={year:latest.year,amount:latest.donationLimit};save();if(latest.year===logYear()){LOG.limit=latest.donationLimit;saveLog();}renderSharedLimit();refreshLog();});
     card.append(p,note,b);host.append(card);
   }
   const chosen=$('chosenLimit'),value=S.donationLimit;

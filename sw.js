@@ -1,6 +1,6 @@
 // ふるさと納税かんたんナビ Service Worker
 // 方針: ネット優先（常に最新を表示）。つながらないときだけ保存しておいた版を出す。
-const CACHE = 'furusato-navi-v7';
+const CACHE = 'furusato-navi-v8';
 // 起動に欠かせないもの。1つでも取れなければインストールをやり直す
 const CORE = ['./', 'index.html', 'core.js', 'manifest.webmanifest'];
 // あればよいもの。取れなくても Service Worker のインストールは止めない

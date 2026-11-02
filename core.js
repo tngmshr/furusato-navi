@@ -164,6 +164,7 @@
   const serializeState = S => JSON.stringify(S);
 
   const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+  const DROPPED_MAX = 50;
   // YYYY-MM-DD の形で、実在する日付か（2026-02-30 などは捨てる。節税・資産形成ナビの集計と同じ条件）
   function realDate(s) {
     if (typeof s !== 'string' || !DATE_RE.test(s)) return false;
@@ -171,8 +172,9 @@
     return Number.isFinite(d.getTime()) && d.toISOString().slice(0, 10) === s;
   }
   /**
-   * 寄付の記録（furusatoNavi.log）を読む。壊れた項目だけを捨て、残りは保つ。
-   * @returns {{limit:number, items:Array<{id:string, city:string, amount:number, date:string, one:boolean}>}}
+   * 寄付の記録（furusatoNavi.log）を読む。壊れた項目は表示・集計から外し、残りは保つ。
+   * 外した項目は dropped に入れて次の保存でも書き戻す（手で直せば読み込めるよう、保存データからは消さない。最大 DROPPED_MAX 件）。
+   * @returns {{limit:number, items:Array<{id:string, city:string, amount:number, date:string, one:boolean}>, dropped?:object[]}}
    */
   function parseLog(raw) {
     const o = safeJson(raw);
@@ -181,18 +183,18 @@
     const lim = Number(o.limit);
     if (Number.isSafeInteger(lim) && lim > 0) log.limit = lim;
     if (!Array.isArray(o.items)) return log;
-    const ids = new Set();
+    const ids = new Set(), dropped = Array.isArray(o.dropped) ? o.dropped.filter(isObj) : [];
     o.items.forEach((i, n) => {
       if (!isObj(i)) return;
       const city = typeof i.city === 'string' ? i.city.trim().slice(0, 40) : '';
       const amount = Number(i.amount);
-      if (!city || !Number.isSafeInteger(amount) || amount <= 0) return;
-      if (!realDate(i.date)) return;
+      if (!city || !Number.isSafeInteger(amount) || amount <= 0 || !realDate(i.date)) { dropped.push(i); return; }
       let id = typeof i.id === 'string' && i.id ? i.id : 'r' + n;
       while (ids.has(id)) id += '_';
       ids.add(id);
       log.items.push({ id, city, amount, date: i.date, one: i.one === true });
     });
+    if (dropped.length) log.dropped = dropped.slice(-DROPPED_MAX);
     return log;
   }
   const serializeLog = L => JSON.stringify(L);

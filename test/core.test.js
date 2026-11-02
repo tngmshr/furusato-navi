@@ -222,3 +222,16 @@ test('realDate：実在する YYYY-MM-DD だけ', () => {
   for (const d of ['2026-01-01', '2024-02-29', '2026-12-31']) assert.equal(C.realDate(d), true, d);
   for (const d of ['2026-02-29', '2026-02-30', '2026-13-01', '2026-1-01', '', null, 20260101]) assert.equal(C.realDate(d), false, String(d));
 });
+
+test('寄付の記録：外した項目は dropped に残し、保存し直しても消えない', () => {
+  const bad = { id: 'x5', city: 'G町', amount: 1000, date: '2026-02-30' };
+  const L = C.parseLog(JSON.stringify({ limit: 0, items: [{ id: 'a', city: 'A町', amount: 10000, date: '2026-01-02' }, bad, 'text', null] }));
+  assert.deepEqual(L.items.map(i => i.id), ['a']);
+  assert.deepEqual(L.dropped, [bad]);
+  const again = C.parseLog(C.serializeLog(L));
+  assert.deepEqual(again.items.map(i => i.id), ['a']);
+  assert.deepEqual(again.dropped, [bad]);                 // 二重にならない
+  assert.equal(C.parseLog('{"limit":0,"items":[],"dropped":"x"}').dropped, undefined);
+  const many = Array.from({ length: 80 }, (_, n) => ({ id: 'b' + n, city: '', amount: 1, date: '2026-01-01' }));
+  assert.equal(C.parseLog(JSON.stringify({ items: many })).dropped.length, 50);
+});
