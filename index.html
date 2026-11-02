@@ -254,8 +254,10 @@ p{margin:0 0 12px}
 /* シート（全体一覧） */
 .sheet-bg{position:fixed;inset:0;background:rgba(10,20,30,.45);z-index:40;display:none}
 .sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;background:var(--bg);border-radius:20px 20px 0 0;
-  max-height:88vh;max-height:88dvh;overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:8px 0 calc(16px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .22s ease-out}
-.sheet.open{transform:none}
+  max-height:88vh;max-height:88dvh;overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:8px 0 calc(16px + env(safe-area-inset-bottom));transform:translateY(100%);
+  /* 閉じているあいだは Tab や読み上げで中に入らないようにする（閉じるアニメーションのあとで隠す） */
+  visibility:hidden;transition:transform .22s ease-out,visibility 0s linear .22s}
+.sheet.open{transform:none;visibility:visible;transition:transform .22s ease-out}
 .sheet-bg.open{display:block}
 .sheet .grab{width:44px;height:5px;border-radius:3px;background:var(--gray);margin:4px auto 10px}
 .sheet-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
@@ -264,6 +266,8 @@ p{margin:0 0 12px}
 .opts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
 .opts .mini-btn{background:var(--card);color:var(--ink);border-color:var(--line)}
 .opts .mini-btn[aria-pressed="true"]{background:var(--blue-soft);color:var(--blue);border-color:var(--blue-line)}
+/* オン・オフを色だけで示さない */
+.mini-btn[aria-pressed="true"]::before{content:"✓ "}
 
 /* トースト */
 .toast{position:fixed;left:16px;right:16px;bottom:calc(var(--bb-h, 92px) + 8px);z-index:30;max-width:528px;margin:0 auto;
@@ -307,7 +311,7 @@ details.more>.more-body{padding:0 16px 14px}
 .log-list .l-body{flex:1;min-width:0}
 .log-list .l-city{font-weight:700;overflow-wrap:anywhere}
 .log-list .l-meta{display:block;font-size:.85rem;color:var(--sub)}
-.log-list label{display:flex;align-items:center;gap:4px;font-size:.8rem;color:var(--sub);flex:none;cursor:pointer}
+.log-list label{display:flex;align-items:center;gap:4px;font-size:.8rem;color:var(--sub);flex:none;cursor:pointer;min-height:44px;padding:0 4px}
 .log-list input{width:20px;height:20px;accent-color:var(--green)}
 .log-del{flex:none;min-width:44px;min-height:44px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--sub);cursor:pointer}
 .log-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,max(8em,calc((100% - 8px)/2))),1fr));gap:8px;margin:0 0 8px}
@@ -321,7 +325,7 @@ details.more>.more-body{padding:0 16px 14px}
 /* カレンダー登録 */
 .cal-row{display:grid;gap:8px;margin:8px 0 0}
 .cal-row .mini-btn{display:flex;align-items:center;justify-content:center;width:100%;text-align:center;text-decoration:none;line-height:1.4}
-.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 </style>
 </head>
 <body>
@@ -340,7 +344,7 @@ details.more>.more-body{padding:0 16px 14px}
   </div>
 </header>
 
-<main class="wrap" id="main" aria-live="polite"></main>
+<main class="wrap" id="main"></main>
 
 <nav class="bottombar" aria-label="操作">
   <div class="wrap">
@@ -386,9 +390,11 @@ details.more>.more-body{padding:0 16px 14px}
 
 <div class="toast" id="toast" role="status"></div>
 
+<script src="core.js"></script>
 <script>
 (() => {
 'use strict';
+const C = window.FurusatoCore;
 
 /* ---------- 定数 ---------- */
 const STEPS = [
@@ -433,22 +439,21 @@ const ROUTE_NAME = { one:'ワンストップ特例', tax:'確定申告', check:'
 const KEY = 'furusatoNavi.v3';
 // 住民税申告の条件追加前の判定は、進み具合を保ったまま再確認する。
 const ROUTE_RULE = '2026-10-25';
-const blank = () => ({ stack:['home'], a:{}, route:null, site:null, maxStage:0, checks:{} });
+const blank = C.blankState;
 let S = blank();
+// 古い形式・空・壊れた JSON は C.parseState が初期状態か、読める部分だけに整える
 function load(){
-  try{ const raw = localStorage.getItem(KEY); if(raw){ const o = JSON.parse(raw); if(o && Array.isArray(o.stack) && o.stack.length) { S = Object.assign(blank(), o); if (S.routeRule !== ROUTE_RULE) { if (S.route === 'one') S.route = null; delete S.checks.tax2; } } } }catch(e){}
+  let raw = null; try{ raw = localStorage.getItem(KEY); }catch(e){}
+  S = C.parseState(raw, { routeRule:ROUTE_RULE, screens:Object.keys(SCREENS) });
 }
-function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function save(){ try{ localStorage.setItem(KEY, C.serializeState(S)); }catch(e){} }
 function pref(k, v){
   try{ if(v === undefined) return localStorage.getItem('furusatoNavi.'+k); localStorage.setItem('furusatoNavi.'+k, v); }catch(e){ return null; }
 }
 
 // 姉妹アプリの計算結果は同じ端末の保存領域だけで受け取る。
 function sharedLimit(){
-  try{
-    const v=JSON.parse(localStorage.getItem('setsuzeiNavi.share.v1') || 'null');
-    return v && v.year === thisYear() && Number.isSafeInteger(v.donationLimit) && v.donationLimit >= 0 ? v : null;
-  }catch{return null;}
+  try{ return C.parseShared(localStorage.getItem('setsuzeiNavi.share.v1'), thisYear()); }catch(e){ return null; }
 }
 function renderSharedLimit(){
   const host=$('sharedLimit'); if(!host)return;
@@ -463,7 +468,7 @@ function renderSharedLimit(){
     card.append(p,note,b);host.append(card);
   }
   const chosen=$('chosenLimit'),value=S.donationLimit;
-  chosen.hidden=!(value && value.year===thisYear() && Number.isSafeInteger(value.amount) && value.amount>=0);
+  chosen.hidden=!C.validLimit(value,thisYear());
   chosen.textContent=chosen.hidden?'':`今年使う上限の目安：${value.amount.toLocaleString('ja-JP')}円（iDeCo を反映）`;
 }
 
@@ -503,6 +508,12 @@ const IC_TAX = `<svg viewBox="0 0 60 60" aria-hidden="true"><circle class="ic-bg
 
 const APP_URL = 'https://tngmshr.github.io/furusato-navi/';
 
+/* STEP 1 の例の数字（計算は core.js。表示は変えない） */
+const EX_60K = C.donationExample(60000);
+// 年収1,000万円・独身の会社員・社会保険料は年収の約15%
+const EX_10M_LIMIT = C.estimateLimit(10000000, { socialRate:0.15 }).approxMan;
+const EX_10M = C.donationExample(EX_10M_LIMIT);
+
 /* ---------- ことばの説明 ---------- */
 const GLOSS = {
   jumin:  { w:'住民税', d:'住んでいる市区町村と都道府県に納める税金です。会社員は、6月から翌年5月までの毎月の給料から引かれます。ふるさと納税で主に安くなるのはこの税金です。' },
@@ -519,15 +530,15 @@ const T = (k, label) => `<button class="yogo" type="button" data-term="${k}">${l
 /* ---------- 寄付の記録（この端末の中だけに保存し、外には送らない） ---------- */
 const LOG_KEY = 'furusatoNavi.log';
 let LOG = { limit:0, items:[] };
-function loadLog(){ try{ const o = JSON.parse(localStorage.getItem(LOG_KEY) || 'null'); if (o && Array.isArray(o.items)) LOG = o; }catch(e){} }
-function saveLog(){ try{ localStorage.setItem(LOG_KEY, JSON.stringify(LOG)); }catch(e){ toast('この端末には保存できませんでした。メモ帳に書いてください'); } }
+function loadLog(){ let raw = null; try{ raw = localStorage.getItem(LOG_KEY); }catch(e){} LOG = C.parseLog(raw); }
+function saveLog(){ try{ localStorage.setItem(LOG_KEY, C.serializeLog(LOG)); }catch(e){ toast('この端末には保存できませんでした。メモ帳に書いてください'); } }
 const yen = n => Number(n).toLocaleString('ja-JP') + '円';
 const pad2 = n => String(n).padStart(2, '0');
 const today = () => { const d = new Date(); return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`; };
 // 全角数字・カンマ・「円」を許して数値にする
-const num = s => { const t = String(s).replace(/[０-９]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0)).replace(/[,，、円\s]/g, ''); return /^\d{1,9}$/.test(t) ? +t : NaN; };
+const num = C.parseAmount;
 // 表示する寄付の年：いちばん新しい記録の年（なければ今年）
-function logYear(){ return LOG.items.length ? Math.max(...LOG.items.map(i => +i.date.slice(0, 4))) : thisYear(); }
+function logYear(){ return C.logYear(LOG.items, thisYear()); }
 function logPanel(){
   const y = logYear();
   const items = LOG.items.filter(i => +i.date.slice(0, 4) === y).sort((a, b) => a.date < b.date ? -1 : 1);
@@ -545,7 +556,7 @@ function logPanel(){
       </div>
       ${items.length ? `<ul class="log-list">${items.map(i => `
         <li><span class="l-body"><span class="l-city">${esc(i.city)}</span><span class="l-meta">${i.date.replace(/-/g, '/')}　${yen(i.amount)}</span></span>
-          ${route() === 'one' ? `<label><input type="checkbox" data-logone="${i.id}" ${i.one ? 'checked' : ''}>申請済み</label>` : ''}
+          ${route() === 'one' ? `<label><input type="checkbox" data-logone="${i.id}" ${i.one ? 'checked' : ''}>申請済み<span class="sr">（${esc(i.city)}）</span></label>` : ''}
           <button class="log-del" type="button" data-logdel="${i.id}" aria-label="${esc(i.city)}の記録を消す">✕</button></li>`).join('')}</ul>`
         : '<p class="small">まだ記録はありません。寄付したら、下に入れてください。</p>'}
       <div class="log-form">
@@ -650,6 +661,11 @@ let installEvt = null;
 window.addEventListener('beforeinstallprompt', e => {
   e.preventDefault(); installEvt = e;
   document.querySelectorAll('[data-act="install"]').forEach(b => b.hidden = false);
+});
+const INSTALL_HELP = 'ブラウザのメニュー（︙ や …）から「ホーム画面に追加」を選んでください';
+window.addEventListener('appinstalled', () => {
+  installEvt = null;
+  document.querySelectorAll('[data-act="install"]').forEach(b => b.hidden = true);
 });
 const standalone = () => (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
 const isIOS = () => /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -780,9 +796,9 @@ const SCREENS = {
         <p class="ex-h">控除上限内で寄付した場合の例</p>
         <p class="small" style="margin:0">あなたの控除上限の範囲内で、年間合計60,000円を寄付し、必要な手続きをしたと仮定します。</p>
         <table class="calc">
-          <tr><td>年間合計の寄付額</td><td>60,000円</td></tr>
-          <tr><td>所得税・住民税の軽減額の目安</td><td>58,000円</td></tr>
-          <tr><td>自己負担の目安<br><span class="small">60,000円 − 58,000円</span></td><td>2,000円</td></tr>
+          <tr><td>年間合計の寄付額</td><td>${yen(EX_60K.donation)}</td></tr>
+          <tr><td>所得税・住民税の軽減額の目安</td><td>${yen(EX_60K.reduction)}</td></tr>
+          <tr><td>自己負担の目安<br><span class="small">${yen(EX_60K.donation)} − ${yen(EX_60K.reduction)}</span></td><td>${yen(EX_60K.selfPay)}</td></tr>
         </table>
         <p class="small" style="margin-top:8px">これは年収別の上限や個人の税額を示す例ではありません。上限や税目ごとの内訳は、寄付する年の所得・社会保険料・家族構成・他の控除・手続方法などで変わります。</p>
         ${ext(URL.nta, '国税庁で控除の計算方法・限度を確認する', '')}
@@ -797,13 +813,13 @@ const SCREENS = {
       <details class="more">
         <summary>年収1,000万円の場合は？</summary>
         <div class="more-body">
-          <p class="small" style="margin:0">例：年収1,000万円・独身の会社員。上限額の目安は 約17万円。そのうち <b class="nw">170,000円</b> を寄付した場合です。</p>
+          <p class="small" style="margin:0">例：年収1,000万円・独身の会社員。上限額の目安は 約${EX_10M_LIMIT / 10000}万円。そのうち <b class="nw">${yen(EX_10M.donation)}</b> を寄付した場合です。</p>
           <table class="calc">
-            <tr><td>寄付する</td><td>−170,000円</td></tr>
-            <tr><td>税金が安くなる</td><td>＋168,000円</td></tr>
-            <tr><td>返礼品<br><span class="small">最大で寄付額の3割</span></td><td>＋約51,000円分</td></tr>
+            <tr><td>寄付する</td><td>−${yen(EX_10M.donation)}</td></tr>
+            <tr><td>税金が安くなる</td><td>＋${yen(EX_10M.reduction)}</td></tr>
+            <tr><td>返礼品<br><span class="small">最大で寄付額の3割</span></td><td>＋約${yen(EX_10M.gift)}分</td></tr>
           </table>
-          <p class="calc-total"><span>差し引き</span><b class="nw">最大 約49,000円分お得</b></p>
+          <p class="calc-total"><span>差し引き</span><b class="nw">最大 約${yen(EX_10M.net)}分お得</b></p>
           <p class="small" style="margin:8px 0 0">自己負担は同じ2,000円でも、上限額が大きいぶん、受け取れる返礼品が増えます。社会保険料を年収の約15%として計算した目安です。</p>
         </div>
       </details>
@@ -1007,7 +1023,7 @@ const SCREENS = {
         ${others.map(k => `
           <div class="card site">
             <div class="s-body"><span class="s-name">${esc(SITES[k].name)}</span><span class="s-why">${esc(SITES[k].why)}</span></div>
-            <button class="mini-btn" type="button" data-site="${k}">こちらにする</button>
+            <button class="mini-btn" type="button" data-site="${k}">こちらにする<span class="sr">（${esc(SITES[k].name)}）</span></button>
           </div>`).join('')}`;
     }
   },
@@ -1349,9 +1365,16 @@ document.addEventListener('click', e => {
       if (confirm(`${y}年より前の記録を消しますか？`)){ LOG.items = LOG.items.filter(i => +i.date.slice(0, 4) >= y); saveLog(); refreshLog(); }
       return;
     }
-    case 'install':
-      if (installEvt){ installEvt.prompt(); installEvt.userChoice.finally(() => { installEvt = null; t.hidden = true; }); }
+    case 'install': {
+      // prompt() は1回しか使えない。失敗したとき（ブラウザが対応していない等）はメニューからの追加を案内する
+      const ev = installEvt; installEvt = null;
+      document.querySelectorAll('[data-act="install"]').forEach(b => b.hidden = true);
+      if (!ev){ toast(INSTALL_HELP); return; }
+      Promise.resolve().then(() => ev.prompt()).then(() => ev.userChoice)
+        .then(c => { if (!c || c.outcome !== 'accepted') toast(INSTALL_HELP); })
+        .catch(() => toast(INSTALL_HELP));
       return;
+    }
   }
   if (t.hasAttribute('data-ext')){ awayAt = Date.now(); return; }
 });
