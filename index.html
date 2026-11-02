@@ -453,7 +453,7 @@ function pref(k, v){
 
 // 姉妹アプリの計算結果は同じ端末の保存領域だけで受け取る。
 function sharedLimit(){
-  try{ return C.parseShared(localStorage.getItem('setsuzeiNavi.share.v1'), thisYear()); }catch(e){ return null; }
+  try{ return C.parseShared(localStorage.getItem('setsuzeiNavi.share.v1'), C.limitYears(thisYear(), LOG.items)); }catch(e){ return null; }
 }
 function renderSharedLimit(){
   const host=$('sharedLimit'); if(!host)return;
@@ -461,15 +461,15 @@ function renderSharedLimit(){
   const v=sharedLimit();
   if(v){
     const card=document.createElement('div'),p=document.createElement('p'),b=document.createElement('button');
-    card.className='box box-next';p.textContent=`節税・資産形成ナビの結果：上限の目安 ${v.donationLimit.toLocaleString('ja-JP')}円（iDeCo を反映）`;
+    card.className='box box-next';p.textContent=`節税・資産形成ナビの結果（${v.year}年分）：上限の目安 ${v.donationLimit.toLocaleString('ja-JP')}円（iDeCo を反映）`;
     const note=document.createElement('p');note.className='small';note.textContent='試算の前提や、未反映の控除は節税・資産形成ナビで確認してください。';
     b.className='btn';b.type='button';b.textContent='この金額を使う';
-    b.addEventListener('click',()=>{const latest=sharedLimit();if(!latest){renderSharedLimit();return;}S.donationLimit={year:latest.year,amount:latest.donationLimit};save();renderSharedLimit();refreshLog();});
+    b.addEventListener('click',()=>{const latest=sharedLimit();if(!latest){renderSharedLimit();return;}S.donationLimit={year:latest.year,amount:latest.donationLimit};save();LOG.limit=latest.donationLimit;saveLog();renderSharedLimit();refreshLog();});
     card.append(p,note,b);host.append(card);
   }
   const chosen=$('chosenLimit'),value=S.donationLimit;
-  chosen.hidden=!C.validLimit(value,thisYear());
-  chosen.textContent=chosen.hidden?'':`今年使う上限の目安：${value.amount.toLocaleString('ja-JP')}円（iDeCo を反映）`;
+  chosen.hidden=!C.validLimit(value,C.limitYears(thisYear(), LOG.items));
+  chosen.textContent=chosen.hidden?'':`${value.year}年分で使う上限の目安：${value.amount.toLocaleString('ja-JP')}円（iDeCo を反映）`;
 }
 
 /* ---------- 小物 ---------- */

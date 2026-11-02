@@ -91,8 +91,18 @@
     return { donation, reduction, selfPay: donation - reduction, gift, net: gift - (donation - reduction) };
   }
 
-  // 保存された上限の目安（{year, amount}）が今年の有効な値か
-  const validLimit = (v, year) => !!(v && typeof v === 'object' && v.year === year && Number.isSafeInteger(v.amount) && v.amount >= 0);
+  // year は1つの年、または受け付ける年の配列
+  const yearIn = (y, year) => Array.isArray(year) ? year.includes(y) : y === year;
+  // 保存された上限の目安（{year, amount}）が対象の年の有効な値か
+  const validLimit = (v, year) => !!(v && typeof v === 'object' && yearIn(v.year, year) && Number.isSafeInteger(v.amount) && v.amount >= 0);
+  /**
+   * 上限の目安を受け付ける年：今年と、寄付の記録で表示している年（いちばん新しい記録の年）。
+   * 年が明けた1〜3月に前年分の記録を確かめるとき、前年分の目安も使えるようにする。
+   */
+  function limitYears(year, items) {
+    const y = logYear(items, year);
+    return y === year ? [year] : [year, y];
+  }
   /**
    * 寄付の記録で比べる上限の目安。記録の欄に入れた額を優先し、空なら「この金額を使う」で選んだ額（その年の分だけ）を使う。
    * @param {number} manual 記録の欄に入れた上限（furusatoNavi.log の limit。0 は未入力）
@@ -101,14 +111,15 @@
    * @returns {{amount:number, from:'manual'|'chosen'}|null}
    */
   function logLimit(manual, chosen, year) {
-    if (Number.isSafeInteger(manual) && manual > 0) return { amount: manual, from: 'manual' };
+    // 「この金額を使う」は記録の欄にも同じ額を入れる。欄の額が選んだ額と同じなら選んだ目安として扱い、後から手で変えた額は手入力として扱う
+    if (Number.isSafeInteger(manual) && manual > 0) return { amount: manual, from: validLimit(chosen, year) && chosen.amount === manual ? 'chosen' : 'manual' };
     if (validLimit(chosen, year) && chosen.amount > 0) return { amount: chosen.amount, from: 'chosen' };
     return null;
   }
   // 節税・資産形成ナビの共有データ（setsuzeiNavi.share.v1）を読む
   function parseShared(raw, year) {
     const v = safeJson(raw);
-    return v && typeof v === 'object' && v.year === year && Number.isSafeInteger(v.donationLimit) && v.donationLimit >= 0 ? v : null;
+    return v && typeof v === 'object' && yearIn(v.year, year) && Number.isSafeInteger(v.donationLimit) && v.donationLimit >= 0 ? v : null;
   }
 
   /* ---------- 保存データ ---------- */
@@ -153,6 +164,12 @@
   const serializeState = S => JSON.stringify(S);
 
   const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+  // YYYY-MM-DD の形で、実在する日付か（2026-02-30 などは捨てる。節税・資産形成ナビの集計と同じ条件）
+  function realDate(s) {
+    if (typeof s !== 'string' || !DATE_RE.test(s)) return false;
+    const d = new Date(s + 'T00:00:00Z');
+    return Number.isFinite(d.getTime()) && d.toISOString().slice(0, 10) === s;
+  }
   /**
    * 寄付の記録（furusatoNavi.log）を読む。壊れた項目だけを捨て、残りは保つ。
    * @returns {{limit:number, items:Array<{id:string, city:string, amount:number, date:string, one:boolean}>}}
@@ -170,7 +187,7 @@
       const city = typeof i.city === 'string' ? i.city.trim().slice(0, 40) : '';
       const amount = Number(i.amount);
       if (!city || !Number.isSafeInteger(amount) || amount <= 0) return;
-      if (typeof i.date !== 'string' || !DATE_RE.test(i.date)) return;
+      if (!realDate(i.date)) return;
       let id = typeof i.id === 'string' && i.id ? i.id : 'r' + n;
       while (ids.has(id)) id += '_';
       ids.add(id);
@@ -193,7 +210,7 @@
   return {
     SELF_PAY, GIFT_RATE,
     salaryDeduction, incomeTaxBasic, residentBasic, incomeTaxRate,
-    estimateLimit, roundDownMan, donationExample, validLimit, logLimit, parseShared,
+    estimateLimit, roundDownMan, donationExample, validLimit, limitYears, logLimit, parseShared, realDate,
     safeJson, blankState, parseState, serializeState, parseLog, serializeLog, logYear, parseAmount
   };
 });
