@@ -177,3 +177,26 @@ test('parseAmount：全角数字・カンマ・円を許す', () => {
   assert.ok(Number.isNaN(C.parseAmount('')));
   assert.ok(Number.isNaN(C.parseAmount('1234567890')));
 });
+
+test('logLimit：記録の欄に入れた額を優先し、空なら選んだ節税・資産形成ナビの目安を使う', () => {
+  const chosen = { year: 2026, amount: 54653 };
+  assert.deepEqual(C.logLimit(60000, chosen, 2026), { amount: 60000, from: 'manual' });
+  assert.deepEqual(C.logLimit(0, chosen, 2026), { amount: 54653, from: 'chosen' });
+  // 選んだ年と記録の年が違えば使わない
+  assert.equal(C.logLimit(0, chosen, 2025), null);
+  // 未入力・不正な値
+  assert.equal(C.logLimit(0, undefined, 2026), null);
+  assert.equal(C.logLimit(0, { year: 2026, amount: 0 }, 2026), null);
+  assert.equal(C.logLimit(0, { year: 2026, amount: '54653' }, 2026), null);
+  assert.equal(C.logLimit(-1, null, 2026), null);
+  assert.equal(C.logLimit(NaN, chosen, 2026).from, 'chosen');
+});
+
+test('logLimit：保存データから読んだ値の組み合わせ（壊れた進み具合でも落ちない）', () => {
+  const log = C.parseLog('{"limit":0,"items":[{"id":"a","city":"A町","amount":20000,"date":"2026-03-01","one":false}]}');
+  const S = C.parseState('{"stack":["home"],"donationLimit":{"year":2026,"amount":54653}}');
+  const y = C.logYear(log.items, 2026);
+  assert.deepEqual(C.logLimit(log.limit, S.donationLimit, y), { amount: 54653, from: 'chosen' });
+  const broken = C.parseState('{broken');
+  assert.equal(C.logLimit(log.limit, broken.donationLimit, y), null);
+});
