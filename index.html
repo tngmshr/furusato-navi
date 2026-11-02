@@ -464,7 +464,7 @@ function renderSharedLimit(){
     card.className='box box-next';p.textContent=`節税・資産形成ナビの結果（${v.year}年分）：上限の目安 ${v.donationLimit.toLocaleString('ja-JP')}円（iDeCo を反映）`;
     const note=document.createElement('p');note.className='small';note.textContent='試算の前提や、未反映の控除は節税・資産形成ナビで確認してください。';
     b.className='btn';b.type='button';b.textContent='この金額を使う';
-    b.addEventListener('click',()=>{const latest=sharedLimit();if(!latest){renderSharedLimit();return;}S.donationLimit={year:latest.year,amount:latest.donationLimit};save();if(latest.year===logYear()){LOG.limit=latest.donationLimit;saveLog();}renderSharedLimit();refreshLog();});
+    b.addEventListener('click',()=>{const latest=sharedLimit();if(!latest){renderSharedLimit();return;}S.donationLimit={year:latest.year,amount:latest.donationLimit};save();LOG=C.setYearLimit(LOG,latest.year,latest.donationLimit);saveLog();renderSharedLimit();refreshLog();});
     card.append(p,note,b);host.append(card);
   }
   const chosen=$('chosenLimit'),value=S.donationLimit;
@@ -529,8 +529,8 @@ const T = (k, label) => `<button class="yogo" type="button" data-term="${k}">${l
 
 /* ---------- 寄付の記録（この端末の中だけに保存し、外には送らない） ---------- */
 const LOG_KEY = 'furusatoNavi.log';
-let LOG = { limit:0, items:[] };
-function loadLog(){ let raw = null; try{ raw = localStorage.getItem(LOG_KEY); }catch(e){} LOG = C.parseLog(raw); }
+let LOG = { limits:{}, items:[] };
+function loadLog(){ let raw = null; try{ raw = localStorage.getItem(LOG_KEY); }catch(e){} LOG = C.parseLog(raw, { year: thisYear() }); }
 function saveLog(){ try{ localStorage.setItem(LOG_KEY, C.serializeLog(LOG)); }catch(e){ toast('この端末には保存できませんでした。メモ帳に書いてください'); } }
 const yen = n => Number(n).toLocaleString('ja-JP') + '円';
 const pad2 = n => String(n).padStart(2, '0');
@@ -545,7 +545,7 @@ function logPanel(){
   const older = LOG.items.length - items.length;
   const total = items.reduce((s, i) => s + i.amount, 0);
   const cities = new Set(items.map(i => i.city.replace(/\s/g, ''))).size;
-  const limit = C.logLimit(LOG.limit, S.donationLimit, y);
+  const manual = C.yearLimit(LOG, y), limit = C.logLimit(manual, S.donationLimit, y);
   const lim = limit ? limit.amount : 0;
   const rest = lim - total;
   const from = limit && limit.from === 'chosen' ? '<br>（STEP 2 で選んだ節税・資産形成ナビの目安）' : '';
@@ -566,7 +566,7 @@ function logPanel(){
         <label>金額（円）<input class="field" id="logAmt" type="text" inputmode="numeric" autocomplete="off" placeholder="10000"></label>
         <label>寄付した日<input class="field" id="logDate" type="date" value="${today()}"></label>
         <button class="btn btn-add full" type="button" data-act="logadd">記録する</button>
-        <label class="full">上限額の目安（STEP 2で調べた額・入れなくても可）<input class="field" id="logLimit" type="text" inputmode="numeric" autocomplete="off" value="${LOG.limit || ''}" placeholder="60000"></label>
+        <label class="full">${y}年分の上限額の目安（STEP 2で調べた額・入れなくても可）<input class="field" id="logLimit" type="text" inputmode="numeric" autocomplete="off" value="${manual || ''}" placeholder="60000"></label>
       </div>
       <p class="small" style="margin:0">ブラウザのデータを消したときや、長いあいだ開かなかったときに消えることがあります。念のため、紙やメモアプリにも残してください。</p>
       ${older ? `<button class="mini-btn" type="button" data-act="logold" style="margin-top:8px">${y}年より前の記録（${older}件）を消す</button>` : ''}
@@ -1364,7 +1364,7 @@ document.addEventListener('click', e => {
     case 'logadd': addLog(); return;
     case 'logold': {
       const y = logYear();
-      if (confirm(`${y}年より前の記録を消しますか？`)){ LOG.items = LOG.items.filter(i => +i.date.slice(0, 4) >= y); saveLog(); refreshLog(); }
+      if (confirm(`${y}年より前の記録を消しますか？`)){ LOG.items = LOG.items.filter(i => +i.date.slice(0, 4) >= y); for (const k of Object.keys(LOG.limits)) if (+k < y) delete LOG.limits[k]; saveLog(); refreshLog(); }
       return;
     }
     case 'install': {
@@ -1385,7 +1385,7 @@ document.addEventListener('change', e => {
   if (c){ S.checks[c.dataset.check] = c.checked; save(); return; }
   const lo = e.target.closest('[data-logone]');
   if (lo){ const it = LOG.items.find(i => i.id === lo.dataset.logone); if (it){ it.one = lo.checked; saveLog(); } return; }
-  if (e.target.id === 'logLimit'){ const v = num(e.target.value); LOG.limit = v > 0 ? v : 0; saveLog(); refreshLog(); return; }
+  if (e.target.id === 'logLimit'){ LOG = C.setYearLimit(LOG, logYear(), num(e.target.value)); saveLog(); refreshLog(); return; }
   if (e.target.id === 'calYear'){ calYearSel = +e.target.value; const b = $('calBox'); if (b) b.outerHTML = calBox(); $('calYear').focus(); }
 });
 // 金額欄で Enter を押したら記録する

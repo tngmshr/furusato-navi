@@ -128,12 +128,12 @@ test('進み具合：__proto__ などのキーで汚染されない', () => {
 /* ---------- 寄付の記録（furusatoNavi.log） ---------- */
 test('寄付の記録：空・壊れた JSON は空の記録', () => {
   for (const raw of [null, '', '{', 'null', '[]', '{"items":null}', '{"items":"x"}']) {
-    assert.deepEqual(C.parseLog(raw), { limit: 0, items: [] }, `raw=${raw}`);
+    assert.deepEqual(C.parseLog(raw, { year: 2026 }), { limits: {}, items: [] }, `raw=${raw}`);
   }
 });
 
 test('寄付の記録：保存して読み直すと同じ', () => {
-  const L = { limit: 60000, items: [
+  const L = { limits: { 2025: 50000, 2026: 60000 }, items: [
     { id: 'a1', city: '〇〇県△△町', amount: 10000, date: '2026-05-01', one: true },
     { id: 'a2', city: '□□市', amount: 25000, date: '2026-11-02', one: false }
   ] };
@@ -154,7 +154,7 @@ test('寄付の記録：壊れた項目だけ捨て、古い形式の値は整�
     null, 'text', 42
   ] });
   const L = C.parseLog(raw);
-  assert.equal(L.limit, 60000);
+  assert.deepEqual(L.limits, { 2026: 60000 });   // 以前の limit はいちばん新しい記録の年（2026）の分として引き継ぐ
   assert.deepEqual(L.items.map(i => i.city), ['A町', 'B市', 'C村']);
   assert.equal(L.items[0].one, false);
   assert.equal(L.items[1].amount, 5000);
@@ -162,9 +162,29 @@ test('寄付の記録：壊れた項目だけ捨て、古い形式の値は整�
   assert.equal(new Set(L.items.map(i => i.id)).size, 3);
 });
 
-test('寄付の記録：上限の目安が不正なら 0', () => {
-  assert.equal(C.parseLog('{"limit":"abc","items":[]}').limit, 0);
-  assert.equal(C.parseLog('{"limit":-1,"items":[]}').limit, 0);
+test('寄付の記録：上限の目安が不正なら入れない', () => {
+  assert.deepEqual(C.parseLog('{"limit":"abc","items":[]}', { year: 2026 }).limits, {});
+  assert.deepEqual(C.parseLog('{"limit":-1,"items":[]}', { year: 2026 }).limits, {});
+  assert.deepEqual(C.parseLog('{"limits":{"2026":"x","26":1000,"__proto__":5,"abcd":1,"2025":-1,"2027":1.5},"items":[]}').limits, {});
+  assert.deepEqual(C.parseLog('{"limits":[1,2],"items":[]}').limits, {});
+});
+
+test('寄付の記録：上限の目安は年ごとに持つ', () => {
+  // 以前の形式（年の区別なし）：記録がなければ opt.year の分、year もなければ引き継がない
+  assert.deepEqual(C.parseLog('{"limit":60000,"items":[]}', { year: 2027 }).limits, { 2027: 60000 });
+  assert.deepEqual(C.parseLog('{"limit":60000,"items":[]}').limits, {});
+  // 新しい形式があれば、同じ年の以前の limit では上書きしない
+  assert.deepEqual(C.parseLog('{"limit":1,"limits":{"2026":54653},"items":[{"city":"A町","amount":1000,"date":"2026-01-01"}]}').limits, { 2026: 54653 });
+  let L = C.parseLog('{"limits":{"2026":54653},"items":[]}');
+  assert.equal(C.yearLimit(L, 2026), 54653);
+  assert.equal(C.yearLimit(L, 2027), 0);
+  L = C.setYearLimit(L, 2027, 70000);
+  assert.deepEqual(L.limits, { 2026: 54653, 2027: 70000 });
+  L = C.setYearLimit(L, 2026, NaN);                      // 欄を空にした
+  assert.deepEqual(L.limits, { 2027: 70000 });
+  assert.deepEqual(C.parseLog(C.serializeLog(L)).limits, { 2027: 70000 });
+  assert.equal(C.yearLimit(null, 2026), 0);
+  assert.equal(C.yearLimit({ limits: { 2026: '1' } }, 2026), 0);
 });
 
 test('logYear：いちばん新しい記録の年、なければ今年', () => {
@@ -198,12 +218,12 @@ test('logLimit：記録の欄に入れた額を優先し、空なら選んだ節
 });
 
 test('logLimit：保存データから読んだ値の組み合わせ（壊れた進み具合でも落ちない）', () => {
-  const log = C.parseLog('{"limit":0,"items":[{"id":"a","city":"A町","amount":20000,"date":"2026-03-01","one":false}]}');
+  const log = C.parseLog('{"limits":{},"items":[{"id":"a","city":"A町","amount":20000,"date":"2026-03-01","one":false}]}');
   const S = C.parseState('{"stack":["home"],"donationLimit":{"year":2026,"amount":54653}}');
   const y = C.logYear(log.items, 2026);
-  assert.deepEqual(C.logLimit(log.limit, S.donationLimit, y), { amount: 54653, from: 'chosen' });
+  assert.deepEqual(C.logLimit(C.yearLimit(log, y), S.donationLimit, y), { amount: 54653, from: 'chosen' });
   const broken = C.parseState('{broken');
-  assert.equal(C.logLimit(log.limit, broken.donationLimit, y), null);
+  assert.equal(C.logLimit(C.yearLimit(log, y), broken.donationLimit, y), null);
 });
 
 test('limitYears：今年と、記録で表示している年の目安を受け付ける', () => {

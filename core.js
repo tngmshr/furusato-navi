@@ -105,7 +105,7 @@
   }
   /**
    * 寄付の記録で比べる上限の目安。記録の欄に入れた額を優先し、空なら「この金額を使う」で選んだ額（その年の分だけ）を使う。
-   * @param {number} manual 記録の欄に入れた上限（furusatoNavi.log の limit。0 は未入力）
+   * @param {number} manual その年の記録の欄に入れた上限（furusatoNavi.log の limits[year]。0 は未入力）
    * @param {{year:number, amount:number}|undefined} chosen 選んだ上限（furusatoNavi.v3 の donationLimit）
    * @param {number} year 記録を表示している年
    * @returns {{amount:number, from:'manual'|'chosen'}|null}
@@ -165,6 +165,15 @@
 
   const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
   const DROPPED_MAX = 50;
+  const YEAR_RE = /^\d{4}$/;
+  // その年の上限の目安（記録の欄に入れた額）。なければ 0
+  const yearLimit = (log, year) => (log && isObj(log.limits) && Number.isSafeInteger(log.limits[year]) ? log.limits[year] : 0);
+  // その年の上限の目安を入れる（0 以下なら消す）。新しい記録を返す
+  function setYearLimit(log, year, amount) {
+    const limits = Object.assign({}, log.limits);
+    if (Number.isSafeInteger(amount) && amount > 0) limits[year] = amount; else delete limits[year];
+    return Object.assign({}, log, { limits });
+  }
   // YYYY-MM-DD の形で、実在する日付か（2026-02-30 などは捨てる。節税・資産形成ナビの集計と同じ条件）
   function realDate(s) {
     if (typeof s !== 'string' || !DATE_RE.test(s)) return false;
@@ -174,17 +183,19 @@
   /**
    * 寄付の記録（furusatoNavi.log）を読む。壊れた項目は表示・集計から外し、残りは保つ。
    * 外した項目は dropped に入れて次の保存でも書き戻す（手で直せば読み込めるよう、保存データからは消さない。最大 DROPPED_MAX 件）。
-   * @returns {{limit:number, items:Array<{id:string, city:string, amount:number, date:string, one:boolean}>, dropped?:object[]}}
+   * 上限の目安は年ごとに limits: {"2026": 54653} で持つ。以前の limit（年の区別なし）は、記録で表示している年
+   * （いちばん新しい記録の年、記録がなければ opt.year）の分として引き継ぐ。
+   * @param {string|null} raw localStorage の値
+   * @param {object} [opt] year: 記録がないときに以前の limit を引き継ぐ年（今年）
+   * @returns {{limits:Object<string,number>, items:Array<{id:string, city:string, amount:number, date:string, one:boolean}>, dropped?:object[]}}
    */
-  function parseLog(raw) {
+  function parseLog(raw, opt) {
+    opt = opt || {};
     const o = safeJson(raw);
-    const log = { limit: 0, items: [] };
+    const log = { limits: {}, items: [] };
     if (!isObj(o)) return log;
-    const lim = Number(o.limit);
-    if (Number.isSafeInteger(lim) && lim > 0) log.limit = lim;
-    if (!Array.isArray(o.items)) return log;
     const ids = new Set(), dropped = Array.isArray(o.dropped) ? o.dropped.filter(isObj) : [];
-    o.items.forEach((i, n) => {
+    (Array.isArray(o.items) ? o.items : []).forEach((i, n) => {
       if (!isObj(i)) return;
       const city = typeof i.city === 'string' ? i.city.trim().slice(0, 40) : '';
       const amount = Number(i.amount);
@@ -195,6 +206,12 @@
       log.items.push({ id, city, amount, date: i.date, one: i.one === true });
     });
     if (dropped.length) log.dropped = dropped.slice(-DROPPED_MAX);
+    if (isObj(o.limits)) for (const k of Object.keys(o.limits)) {
+      const v = Number(o.limits[k]);
+      if (YEAR_RE.test(k) && Number.isSafeInteger(v) && v > 0) log.limits[k] = v;
+    }
+    const lim = Number(o.limit), y = logYear(log.items, opt.year);
+    if (Number.isSafeInteger(lim) && lim > 0 && Number.isInteger(y) && !(y in log.limits)) log.limits[y] = lim;
     return log;
   }
   const serializeLog = L => JSON.stringify(L);
@@ -213,6 +230,6 @@
     SELF_PAY, GIFT_RATE,
     salaryDeduction, incomeTaxBasic, residentBasic, incomeTaxRate,
     estimateLimit, roundDownMan, donationExample, validLimit, limitYears, logLimit, parseShared, realDate,
-    safeJson, blankState, parseState, serializeState, parseLog, serializeLog, logYear, parseAmount
+    safeJson, blankState, parseState, serializeState, parseLog, serializeLog, yearLimit, setYearLimit, logYear, parseAmount
   };
 });
