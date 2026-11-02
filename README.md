@@ -8,7 +8,7 @@
 
 ## 姉妹アプリからの共有
 
-同じオリジンの節税・資産形成ナビが保存した `setsuzeiNavi.share.v1` を読み、今年の `year` と有効な `donationLimit` があるときだけ STEP 2 にカードを表示します。「この金額を使う」で `furusatoNavi.v3` の `donationLimit: {year, amount}` に保存します。入力や金額を URL・外部へ送りません。
+同じオリジンの節税・資産形成ナビが保存した `setsuzeiNavi.share.v1` を読み、今年の `year` と有効な `donationLimit` があるときだけ STEP 2 にカードを表示します。「この金額を使う」で `furusatoNavi.v3` の `donationLimit: {year, amount}` に保存します。寄付の記録（`furusatoNavi.log`）の「上限の目安まで あと○円」は、記録の欄に入れた上限を優先し、空のときは記録の年と同じ年に選んだこの値を使います（`core.js` の `logLimit`）。入力や金額を URL・外部へ送りません。
 
 ## テスト
 

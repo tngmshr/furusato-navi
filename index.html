@@ -464,7 +464,7 @@ function renderSharedLimit(){
     card.className='box box-next';p.textContent=`節税・資産形成ナビの結果：上限の目安 ${v.donationLimit.toLocaleString('ja-JP')}円（iDeCo を反映）`;
     const note=document.createElement('p');note.className='small';note.textContent='試算の前提や、未反映の控除は節税・資産形成ナビで確認してください。';
     b.className='btn';b.type='button';b.textContent='この金額を使う';
-    b.addEventListener('click',()=>{const latest=sharedLimit();if(!latest){renderSharedLimit();return;}S.donationLimit={year:latest.year,amount:latest.donationLimit};save();renderSharedLimit();});
+    b.addEventListener('click',()=>{const latest=sharedLimit();if(!latest){renderSharedLimit();return;}S.donationLimit={year:latest.year,amount:latest.donationLimit};save();renderSharedLimit();refreshLog();});
     card.append(p,note,b);host.append(card);
   }
   const chosen=$('chosenLimit'),value=S.donationLimit;
@@ -545,13 +545,15 @@ function logPanel(){
   const older = LOG.items.length - items.length;
   const total = items.reduce((s, i) => s + i.amount, 0);
   const cities = new Set(items.map(i => i.city.replace(/\s/g, ''))).size;
-  const lim = +LOG.limit || 0;
+  const limit = C.logLimit(LOG.limit, S.donationLimit, y);
+  const lim = limit ? limit.amount : 0;
   const rest = lim - total;
+  const from = limit && limit.from === 'chosen' ? '<br>（STEP 2 で選んだ節税・資産形成ナビの目安）' : '';
   return `<div class="card" id="logPanel">
       <h3>寄付の記録（${y}年分）</h3>
       <p class="small" style="margin:0">この端末の中だけに保存し、外には送りません。</p>
       <div class="log-sum">
-        <div><span class="small">寄付の合計</span><b>${yen(total)}</b>${lim ? `<span class="small">${rest >= 0 ? `上限の目安まで あと${yen(rest)}` : `<span class="warn-txt">上限の目安を${yen(-rest)}超えています</span>`}</span>` : ''}</div>
+        <div><span class="small">寄付の合計</span><b>${yen(total)}</b>${lim ? `<span class="small">${rest >= 0 ? `上限の目安まで あと${yen(rest)}` : `<span class="warn-txt">上限の目安を${yen(-rest)}超えています</span>`}${from}</span>` : ''}</div>
         <div><span class="small">寄付先の自治体</span><b>${cities}つ</b><span class="small">${cities > 5 ? '<span class="warn-txt">ワンストップ特例は使えません（確定申告へ）</span>' : 'ワンストップ特例は5つまで'}</span></div>
       </div>
       ${items.length ? `<ul class="log-list">${items.map(i => `
@@ -564,7 +566,7 @@ function logPanel(){
         <label>金額（円）<input class="field" id="logAmt" type="text" inputmode="numeric" autocomplete="off" placeholder="10000"></label>
         <label>寄付した日<input class="field" id="logDate" type="date" value="${today()}"></label>
         <button class="btn btn-add full" type="button" data-act="logadd">記録する</button>
-        <label class="full">上限額の目安（STEP 2で調べた額・入れなくても可）<input class="field" id="logLimit" type="text" inputmode="numeric" autocomplete="off" value="${lim || ''}" placeholder="60000"></label>
+        <label class="full">上限額の目安（STEP 2で調べた額・入れなくても可）<input class="field" id="logLimit" type="text" inputmode="numeric" autocomplete="off" value="${LOG.limit || ''}" placeholder="60000"></label>
       </div>
       <p class="small" style="margin:0">ブラウザのデータを消したときや、長いあいだ開かなかったときに消えることがあります。念のため、紙やメモアプリにも残してください。</p>
       ${older ? `<button class="mini-btn" type="button" data-act="logold" style="margin-top:8px">${y}年より前の記録（${older}件）を消す</button>` : ''}

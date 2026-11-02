@@ -93,6 +93,18 @@
 
   // 保存された上限の目安（{year, amount}）が今年の有効な値か
   const validLimit = (v, year) => !!(v && typeof v === 'object' && v.year === year && Number.isSafeInteger(v.amount) && v.amount >= 0);
+  /**
+   * 寄付の記録で比べる上限の目安。記録の欄に入れた額を優先し、空なら「この金額を使う」で選んだ額（その年の分だけ）を使う。
+   * @param {number} manual 記録の欄に入れた上限（furusatoNavi.log の limit。0 は未入力）
+   * @param {{year:number, amount:number}|undefined} chosen 選んだ上限（furusatoNavi.v3 の donationLimit）
+   * @param {number} year 記録を表示している年
+   * @returns {{amount:number, from:'manual'|'chosen'}|null}
+   */
+  function logLimit(manual, chosen, year) {
+    if (Number.isSafeInteger(manual) && manual > 0) return { amount: manual, from: 'manual' };
+    if (validLimit(chosen, year) && chosen.amount > 0) return { amount: chosen.amount, from: 'chosen' };
+    return null;
+  }
   // 節税・資産形成ナビの共有データ（setsuzeiNavi.share.v1）を読む
   function parseShared(raw, year) {
     const v = safeJson(raw);
@@ -181,7 +193,7 @@
   return {
     SELF_PAY, GIFT_RATE,
     salaryDeduction, incomeTaxBasic, residentBasic, incomeTaxRate,
-    estimateLimit, roundDownMan, donationExample, validLimit, parseShared,
+    estimateLimit, roundDownMan, donationExample, validLimit, logLimit, parseShared,
     safeJson, blankState, parseState, serializeState, parseLog, serializeLog, logYear, parseAmount
   };
 });
