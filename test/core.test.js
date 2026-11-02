@@ -149,6 +149,8 @@ test('寄付の記録：壊れた項目だけ捨て、古い形式の値は整�
     { id: 'x2', city: 'D町', amount: -5, date: '2026-01-01' },
     { id: 'x3', city: 'E町', amount: 1000, date: 20260101 },
     { id: 'x4', city: 'F町', amount: 1000 },
+    { id: 'x5', city: 'G町', amount: 1000, date: '2026-02-30' },          // 実在しない日付
+    { id: 'x6', city: 'H町', amount: 1000, date: '2026-13-01' },
     null, 'text', 42
   ] });
   const L = C.parseLog(raw);
@@ -181,6 +183,9 @@ test('parseAmount：全角数字・カンマ・円を許す', () => {
 test('logLimit：記録の欄に入れた額を優先し、空なら選んだ節税・資産形成ナビの目安を使う', () => {
   const chosen = { year: 2026, amount: 54653 };
   assert.deepEqual(C.logLimit(60000, chosen, 2026), { amount: 60000, from: 'manual' });
+  // 「この金額を使う」で欄にも同じ額が入った状態は、選んだ目安として扱う
+  assert.deepEqual(C.logLimit(54653, chosen, 2026), { amount: 54653, from: 'chosen' });
+  assert.deepEqual(C.logLimit(54653, chosen, 2025), { amount: 54653, from: 'manual' });
   assert.deepEqual(C.logLimit(0, chosen, 2026), { amount: 54653, from: 'chosen' });
   // 選んだ年と記録の年が違えば使わない
   assert.equal(C.logLimit(0, chosen, 2025), null);
@@ -199,4 +204,34 @@ test('logLimit：保存データから読んだ値の組み合わせ（壊れた
   assert.deepEqual(C.logLimit(log.limit, S.donationLimit, y), { amount: 54653, from: 'chosen' });
   const broken = C.parseState('{broken');
   assert.equal(C.logLimit(log.limit, broken.donationLimit, y), null);
+});
+
+test('limitYears：今年と、記録で表示している年の目安を受け付ける', () => {
+  const items = [{ date: '2026-12-20' }];
+  assert.deepEqual(C.limitYears(2026, items), [2026]);
+  assert.deepEqual(C.limitYears(2027, items), [2027, 2026]);   // 年明けに前年分の記録を確かめる
+  assert.deepEqual(C.limitYears(2027, []), [2027]);
+  const shared = '{"year":2026,"donationLimit":54653}';
+  assert.deepEqual(C.parseShared(shared, C.limitYears(2027, items)), { year: 2026, donationLimit: 54653 });
+  assert.equal(C.parseShared(shared, C.limitYears(2027, [])), null);
+  assert.equal(C.validLimit({ year: 2026, amount: 54653 }, [2027, 2026]), true);
+  assert.equal(C.validLimit({ year: 2025, amount: 54653 }, [2027, 2026]), false);
+});
+
+test('realDate：実在する YYYY-MM-DD だけ', () => {
+  for (const d of ['2026-01-01', '2024-02-29', '2026-12-31']) assert.equal(C.realDate(d), true, d);
+  for (const d of ['2026-02-29', '2026-02-30', '2026-13-01', '2026-1-01', '', null, 20260101]) assert.equal(C.realDate(d), false, String(d));
+});
+
+test('寄付の記録：外した項目は dropped に残し、保存し直しても消えない', () => {
+  const bad = { id: 'x5', city: 'G町', amount: 1000, date: '2026-02-30' };
+  const L = C.parseLog(JSON.stringify({ limit: 0, items: [{ id: 'a', city: 'A町', amount: 10000, date: '2026-01-02' }, bad, 'text', null] }));
+  assert.deepEqual(L.items.map(i => i.id), ['a']);
+  assert.deepEqual(L.dropped, [bad]);
+  const again = C.parseLog(C.serializeLog(L));
+  assert.deepEqual(again.items.map(i => i.id), ['a']);
+  assert.deepEqual(again.dropped, [bad]);                 // 二重にならない
+  assert.equal(C.parseLog('{"limit":0,"items":[],"dropped":"x"}').dropped, undefined);
+  const many = Array.from({ length: 80 }, (_, n) => ({ id: 'b' + n, city: '', amount: 1, date: '2026-01-01' }));
+  assert.equal(C.parseLog(JSON.stringify({ items: many })).dropped.length, 50);
 });
