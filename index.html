@@ -44,9 +44,9 @@
 :root{
   --fs:17px;
   --bg:#f3f6fa; --card:#ffffff; --ink:#1b2733; --sub:#52616f; --line:#dde5ee;
-  --blue:#1f6fd1; --blue-ink:#ffffff; --blue-soft:#e9f1fc; --blue-line:#b9d3f5;
-  --green:#1d9a60; --green-soft:#e7f6ee;
-  --gray:#c9d2dc; --gray-ink:#7a8794;
+  --blue:#1b66c4; --blue-ink:#ffffff; --blue-soft:#e9f1fc; --blue-line:#b9d3f5;
+  --green:#157a4b; --green-soft:#e7f6ee; --green-ink:#ffffff;
+  --gray:#c9d2dc; --gray-ink:#5f6c79;
   --warn:#a45f00; --warn-soft:#fff4e2; --warn-line:#f2d19c;
   --shadow:0 1px 2px rgba(20,40,70,.06),0 4px 14px rgba(20,40,70,.06);
   --bar-bg:rgba(255,255,255,.94);
@@ -55,7 +55,7 @@
   :root:not([data-theme="light"]){
     --bg:#0f151c; --card:#18212b; --ink:#e8eef4; --sub:#a9b6c3; --line:#2a3642;
     --blue:#4b93ec; --blue-ink:#08111c; --blue-soft:#15273d; --blue-line:#2d4f78;
-    --green:#3cc486; --green-soft:#12291f;
+    --green:#3cc486; --green-soft:#12291f; --green-ink:#08111c;
     --gray:#3a4653; --gray-ink:#8795a3;
     --warn:#f0b35a; --warn-soft:#2b2211; --warn-line:#5a4520;
     --shadow:none; --bar-bg:rgba(20,28,37,.94);
@@ -64,7 +64,7 @@
 :root[data-theme="dark"]{
   --bg:#0f151c; --card:#18212b; --ink:#e8eef4; --sub:#a9b6c3; --line:#2a3642;
   --blue:#4b93ec; --blue-ink:#08111c; --blue-soft:#15273d; --blue-line:#2d4f78;
-  --green:#3cc486; --green-soft:#12291f;
+  --green:#3cc486; --green-soft:#12291f; --green-ink:#08111c;
   --gray:#3a4653; --gray-ink:#8795a3;
   --warn:#f0b35a; --warn-soft:#2b2211; --warn-line:#5a4520;
   --shadow:none; --bar-bg:rgba(20,28,37,.94);
@@ -121,7 +121,7 @@ p{margin:0 0 12px}
 .lead{color:var(--sub);margin-bottom:18px}
 .small{font-size:.88rem;color:var(--sub)}
 .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px;box-shadow:var(--shadow);margin:0 0 12px}
-.card h3{margin:0 0 4px;font-size:1.05rem}
+.card h2,.card h3{margin:0 0 4px;font-size:1.05rem}
 .card p:last-child{margin-bottom:0}
 .term{display:block;font-size:.88rem;color:var(--sub);margin-top:4px}
 .num-list{list-style:none;padding:0;margin:0 0 12px;counter-reset:n}
@@ -224,7 +224,7 @@ p{margin:0 0 12px}
   background:var(--card);border:2px solid var(--gray);color:var(--gray-ink)}
 .flow .bar{flex:1;width:2px;background:var(--gray);min-height:10px}
 .flow li:last-child .bar{display:none}
-.flow .done .dot{background:var(--green);border-color:var(--green);color:#fff}
+.flow .done .dot{background:var(--green);border-color:var(--green);color:var(--green-ink)}
 .flow .done .bar{background:var(--green)}
 .flow .now .dot{background:var(--blue);border-color:var(--blue);color:var(--blue-ink)}
 .flow .txt{padding:4px 0 14px;flex:1;min-width:0}
@@ -372,7 +372,7 @@ details.more>.more-body{padding:0 16px 14px}
       <button class="mini-btn" id="optReset" type="button">最初からやり直す</button>
     </div>
     <p class="small">青い文字のステップは、タップするとその画面へ戻れます。</p>
-    <p class="small">版：2026-10-31（制度説明の見直し・節税ナビとの連携）</p>
+    <p class="small">版：2026-11-03（節税ナビとの連携の読み取り・見出し・文字色・キーボード操作・ホーム画面への追加の案内の見直し）</p>
   </div>
 </div>
 
@@ -463,9 +463,16 @@ function renderSharedLimit(){
     const card=document.createElement('div'),p=document.createElement('p'),b=document.createElement('button');
     card.className='box box-next';p.textContent=`節税・資産形成ナビの結果（${v.year}年分）：上限の目安 ${v.donationLimit.toLocaleString('ja-JP')}円（iDeCo を反映）`;
     const note=document.createElement('p');note.className='small';note.textContent='試算の前提や、未反映の控除は節税・資産形成ナビで確認してください。';
+    // 目安が 0 円のときは「使う」ボタンを出さず、入力した前提を節税・資産形成ナビで確かめてもらう
+    if(v.donationLimit===0){
+      p.textContent=`節税・資産形成ナビの結果（${v.year}年分）：上限の目安が出ませんでした（0円）`;
+      note.textContent='入力した年収や控除などの前提を、節税・資産形成ナビで確かめてください。下の計算ページでも確認できます。';
+      card.append(p,note);host.append(card);
+    } else {
     b.className='btn';b.type='button';b.textContent='この金額を使う';
     b.addEventListener('click',()=>{const latest=sharedLimit();if(!latest){renderSharedLimit();return;}S.donationLimit={year:latest.year,amount:latest.donationLimit};save();LOG=C.setYearLimit(LOG,latest.year,latest.donationLimit);saveLog();renderSharedLimit();refreshLog();});
     card.append(p,note,b);host.append(card);
+    }
   }
   const chosen=$('chosenLimit'),value=S.donationLimit;
   chosen.hidden=!C.validLimit(value,C.limitYears(thisYear(), LOG.items));
@@ -550,7 +557,7 @@ function logPanel(){
   const rest = lim - total;
   const from = limit && limit.from === 'chosen' ? '<br>（STEP 2 で選んだ節税・資産形成ナビの目安）' : '';
   return `<div class="card" id="logPanel">
-      <h3>寄付の記録（${y}年分）</h3>
+      <h2>寄付の記録（${y}年分）</h2>
       <p class="small" style="margin:0">この端末の中だけに保存し、外には送りません。</p>
       <div class="log-sum">
         <div><span class="small">寄付の合計</span><b>${yen(total)}</b>${lim ? `<span class="small">${rest >= 0 ? `上限の目安まで あと${yen(rest)}` : `<span class="warn-txt">上限の目安を${yen(-rest)}超えています</span>`}${from}</span>` : ''}</div>
@@ -646,7 +653,7 @@ function calBox(){
   const y = donationYear(), evs = calEvents(y);
   const years = [...new Set([thisYear() - 1, thisYear(), y])].sort();
   return `<div class="card" id="calBox">
-      <h3>忘れないように、カレンダーに登録</h3>
+      <h2>忘れないように、カレンダーに登録</h2>
       <ul class="small" style="margin:0;padding-left:1.2em">${evs.map(e => `<li>${jdate(e.d)}：${e.short}</li>`).join('')}</ul>
       <label class="small" style="display:block;margin-top:8px">寄付した年
         <select class="field" id="calYear">${years.map(v => `<option value="${v}" ${v === y ? 'selected' : ''}>${v}年</option>`).join('')}</select></label>
@@ -664,7 +671,10 @@ window.addEventListener('beforeinstallprompt', e => {
   e.preventDefault(); installEvt = e;
   document.querySelectorAll('[data-act="install"]').forEach(b => b.hidden = false);
 });
-const INSTALL_HELP = 'ブラウザのメニュー（︙ や …）から「ホーム画面に追加」を選んでください';
+// Brave は Chrome と追加の方式が違い、ボタンからの追加が「成功」と返っても何も追加されないことがある
+const isBrave = () => !!(navigator.brave && typeof navigator.brave.isBrave === 'function');
+const BRAVE_TIP = 'メニュー（︙ や …）から「ホーム画面に追加」を選んでください。追加されないときは、アドレスバーのライオンのアイコン（Brave Shields）をこのサイトだけオフにしてから、もう一度試してください';
+const INSTALL_HELP = isBrave() ? 'Brave では、' + BRAVE_TIP : 'ブラウザのメニュー（︙ や …）から「ホーム画面に追加」を選んでください';
 window.addEventListener('appinstalled', () => {
   installEvt = null;
   document.querySelectorAll('[data-act="install"]').forEach(b => b.hidden = true);
@@ -682,7 +692,8 @@ function installBox(){
           <li>共有ボタン（四角から上向きの矢印）を押します。見当たらないときは「…」を押すと出てきます</li>
           <li>「ホーム画面に追加」を選びます</li>
           <li>右上の「追加」を押します</li></ol>`
-        : `<p class="small" style="margin:8px 0 0">ボタンが出ないときは、ブラウザのメニュー（︙）から「ホーム画面に追加」または「アプリをインストール」を選びます。</p>`}
+        : `<p class="small" style="margin:8px 0 0">ボタンが出ないときは、ブラウザのメニュー（︙）から「ホーム画面に追加」または「アプリをインストール」を選びます。</p>
+          ${isBrave() ? `<p class="small" style="margin:8px 0 0">Brave で追加されないときは、アドレスバーのライオンのアイコン（Brave Shields）をこのサイトだけオフにしてから、メニュー（︙）の「ホーム画面に追加」を試してください。</p>` : ''}`}
       </div>
     </details>`;
 }
@@ -806,7 +817,7 @@ const SCREENS = {
         ${ext(URL.nta, '国税庁で控除の計算方法・限度を確認する', '')}
       </div>
       <div class="card">
-        <h3>返礼品について</h3>
+        <h2>返礼品について</h2>
         <p>自治体や寄付の内容によっては、返礼品を受け取れます。内容や対象条件は寄付先で確認してください。</p>
         <p class="small">返礼品の調達費用に関する基準は、店頭価格や受取人にとっての価値を保証するものではありません。</p>
         <p class="small">返礼品は一時所得に当たり、ほかの一時所得も合わせた状況によっては課税されることがあります。</p>
@@ -826,7 +837,7 @@ const SCREENS = {
         </div>
       </details>
       <div class="card">
-        <h3>税金はいつ安くなるの？</h3>
+        <h2>税金はいつ安くなるの？</h2>
         <p class="small" style="margin:0">${thisYear()}年に寄付した場合の流れ（年の表示は自動で変わります。制度は自動更新されません）</p>
         <ol class="tl">
           <li><b>${thisYear()}年：寄付する</b><span>寄付金はいったん先に支払います。寄付金控除は通常の年末調整では処理しません。</span></li>
@@ -921,7 +932,7 @@ const SCREENS = {
         <p class="kicker">手続方法のチェック　結果</p>
         <div class="result">
           <p class="label">あなたは</p>
-          <p class="answer" tabindex="-1" id="focusMe">ワンストップ特例で<br>進められそうです</p>
+          <h1 class="answer" tabindex="-1" id="focusMe">ワンストップ特例で<br>進められそうです</h1>
           <p>所得税・個人住民税ともに申告の必要も予定もなく、年間の寄付先が5団体以内の場合の案内です。<b>各寄付先への申請</b>が必要です。</p>
         </div>
         <div class="box box-next">
@@ -941,7 +952,7 @@ const SCREENS = {
         <p class="kicker">手続方法のチェック　結果</p>
         <div class="result">
           <p class="label">あなたは</p>
-          <p class="answer" tabindex="-1" id="focusMe">確定申告で<br>手続きします</p>
+          <h1 class="answer" tabindex="-1" id="focusMe">確定申告で<br>手続きします</h1>
           <p>確定申告のときに、ふるさと納税の分も一緒に届け出ます。<b>ワンストップ特例の申請は不要</b>です（しても使えません）。</p>
         </div>
         <div class="box box-next">
@@ -958,7 +969,7 @@ const SCREENS = {
         <p class="kicker">手続方法のチェック　結果</p>
         <div class="result gray">
           <p class="label">いまは</p>
-          <p class="answer" tabindex="-1" id="focusMe">まだ決めなくて<br>大丈夫です</p>
+          <h1 class="answer" tabindex="-1" id="focusMe">まだ決めなくて<br>大丈夫です</h1>
           <p>手続方法は、<b>寄付のあと（STEP 6）</b>で決められます。先に進んでください。</p>
         </div>
         <div class="box box-next">
@@ -1016,8 +1027,8 @@ const SCREENS = {
         <p class="kicker">サイト選び　結果</p>
         <div class="result">
           ${S.site === S.rec
-            ? `<p class="label">あなたには</p><p class="answer" tabindex="-1" id="focusMe">${esc(s.name)}が<br>使いやすそうです</p>`
-            : `<p class="label">あなたが選んだサイト</p><p class="answer" tabindex="-1" id="focusMe">${esc(s.name)}</p>`}
+            ? `<p class="label">あなたには</p><h1 class="answer" tabindex="-1" id="focusMe">${esc(s.name)}が<br>使いやすそうです</h1>`
+            : `<p class="label">あなたが選んだサイト</p><h1 class="answer" tabindex="-1" id="focusMe">${esc(s.name)}</h1>`}
           <p style="margin:0">${esc(s.why)}</p>
         </div>
         <p class="small">「絶対にここが一番」というわけではありません。気になる場合は、ほかのサイトを選んでもかまいません。</p>
@@ -1154,13 +1165,13 @@ const SCREENS = {
       const r = route();
       const resident = `
         <div class="card">
-          <h3>住民税の通知で確認する</h3>
+          <h2>住民税の通知で確認する</h2>
           <p>対象年の寄付が控除に反映されているか確認します。通知の時期・欄名・記載方法は、お住まいの市区町村の案内で確認してください。</p>
           <p class="small">金額があることや、前年より住民税が減ったことだけでは、全寄付が正しく反映されたとは判断できません。所得や他の控除でも税額は変わります。</p>
         </div>`;
       const tax = `
         <div class="card">
-          <h3>所得税の精算結果を確認する</h3>
+          <h2>所得税の精算結果を確認する</h2>
           <p>確定申告の内容や、還付がある場合は還付金を確認します。還付になるか納付額が減るかは、すでに納めた税額などによって変わります。</p>
         </div>${resident}`;
       return `
@@ -1186,7 +1197,7 @@ const SCREENS = {
       <div class="result" style="border-color:var(--green);text-align:center">
         <img class="done-pic" src="img/done.webp" width="480" height="480" alt="" decoding="async">
         <p class="label">7つのステップ</p>
-        <p class="answer" style="color:var(--green)" tabindex="-1" id="focusMe">すべて完了しました</p>
+        <h1 class="answer" style="color:var(--green)" tabindex="-1" id="focusMe">すべて完了しました</h1>
         <p style="margin:0">おつかれさまでした。</p>
       </div>
       <div class="card">
@@ -1198,7 +1209,7 @@ const SCREENS = {
       <ol class="flow">${flowItems(false)}</ol>
       ${installBox()}
       <div class="card">
-        <h3>役に立ったら</h3>
+        <h2>役に立ったら</h2>
         <p class="small">はじめての家族や友だちにも教えてあげてください。</p>
         <button class="mini-btn" type="button" data-act="share" style="width:100%">友だちに教える</button>
       </div>
@@ -1373,7 +1384,10 @@ document.addEventListener('click', e => {
       document.querySelectorAll('[data-act="install"]').forEach(b => b.hidden = true);
       if (!ev){ toast(INSTALL_HELP); return; }
       Promise.resolve().then(() => ev.prompt()).then(() => ev.userChoice)
-        .then(c => { if (!c || c.outcome !== 'accepted') toast(INSTALL_HELP); })
+        .then(c => {
+          if (!c || c.outcome !== 'accepted') toast(INSTALL_HELP);
+          else if (isBrave()) toast('ホーム画面に表示されないときは、' + BRAVE_TIP);
+        })
         .catch(() => toast(INSTALL_HELP));
       return;
     }
@@ -1419,12 +1433,30 @@ function toast(msg){
 }
 
 /* ---------- 全体シート ---------- */
+let sheetFrom = null;
 function openSheet(){
+  sheetFrom = document.activeElement;
   $('sheetFlow').innerHTML = flowItems(true);
   $('sheet').classList.add('open'); $('sheetBg').classList.add('open');
   $('sheetClose').focus();
 }
-function closeSheet(){ $('sheet').classList.remove('open'); $('sheetBg').classList.remove('open'); }
+function closeSheet(){
+  const was = $('sheet').classList.contains('open');
+  $('sheet').classList.remove('open'); $('sheetBg').classList.remove('open');
+  // 開いたボタンへフォーカスを戻す（画面を切り替えるときは render() が見出しへ移す）
+  if (was && sheetFrom && sheetFrom.isConnected && sheetFrom.focus) try{ sheetFrom.focus({preventScroll:true}); }catch(e){}
+}
+// 開いているシートの中だけを Tab で回る（aria-modal のため、後ろの画面へフォーカスを出さない）
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Tab') return;
+  const sh = document.querySelector('.sheet.open'); if (!sh) return;
+  const f = [...sh.querySelectorAll('button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])')].filter(el => !el.hidden && el.getClientRects().length);
+  if (!f.length) return;
+  const a = document.activeElement, first = f[0], last = f[f.length - 1];
+  if (!sh.contains(a)){ e.preventDefault(); first.focus(); }
+  else if (e.shiftKey && a === first){ e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && a === last){ e.preventDefault(); first.focus(); }
+});
 
 /* ことばの説明（1語、または一覧） */
 let glossFrom = null;
