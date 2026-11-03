@@ -14,6 +14,8 @@
 
 同じオリジンの節税・資産形成ナビが保存した `setsuzeiNavi.share.v1` を読み、`year` が今年か寄付の記録で表示している年（`core.js` の `limitYears`）で、有効な `donationLimit` があるときだけ STEP 2 にカード（何年分かを明記）を表示します。年が明けた1〜3月に前年分の記録を確かめる場合も、前年分の目安を使えます。「この金額を使う」で `furusatoNavi.v3` の `donationLimit: {year, amount}` に保存し、その年の記録の上限の欄（`furusatoNavi.log` の `limits`）にも同じ額を入れます。上限の欄は年ごとに `limits: {"2026": 54653}` の形で持ち、記録で表示している年の分を表示・編集します（以前の年の区別のない `limit` は、読み込み時にいちばん新しい記録の年の分として引き継ぎます）。「前の年の記録を消す」では、その年より前の上限も消します。記録の「上限の目安まで あと○円」は欄の額を使い、後から手で変えればその額、もう一度「この金額を使う」を押せば選んだ額になります（`core.js` の `logLimit`）。寄付の記録は実在する日付（`YYYY-MM-DD`）の項目だけを表示・集計します（節税・資産形成ナビの集計と同じ条件）。外した項目は `dropped` に入れて保存し直しても残します（最大50件）。入力や金額を URL・外部へ送りません。
 
+読み取りは寛容にしています：`setsuzeiNavi.share.v1` の `year`・`donationLimit` が `"2026"` のような整数だけの文字列でも数として受け付け、`furusatoNavi.log` が項目の配列だけ（`[{city, amount, date}, …]`、以前の節税・資産形成ナビが想定していた形）でも読みます。保存し直すときはいつも `{limits, items, dropped?}` の形で書きます。
+
 ## テスト
 
 計算と保存データの読み書きは `core.js`（DOM に依存しない関数）にまとめています。依存パッケージなしで次のコマンドで確かめられます（Node.js 18 以上）。
@@ -28,5 +30,17 @@ node --test
 python3 -m http.server 8765 &
 node tools/e2e-check.cjs http://localhost:8765/
 ```
+
+画面の操作だけで「はじめ → STEP 1〜7 → 完了」まで進み「戻る」で最初まで戻る通し点検（幅 375px・1280px、ライト・ダーク。コンソールのエラー・警告、はみ出し、下のバーの位置、見出しの順序、文字色のコントラスト、Tab での操作、シートのフォーカス）と、PWA の点検（マニフェストの解析・インストール可否・アイコンの実寸・Service Worker）もあります。
+
+```bash
+node tools/flow-check.cjs http://localhost:8765/
+```
+
+```bash
+node tools/pwa-check.cjs http://localhost:8765/
+```
+
+Playwright のスクリプトは `node --test` が `test/` 配下の `.js`/`.cjs` をすべて実行するため、`tools/` に置いています。
 
 `core.js` や `index.html` を変えたら、`sw.js` の `CACHE` 名を上げてください。

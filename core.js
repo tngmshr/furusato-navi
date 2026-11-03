@@ -116,10 +116,18 @@
     if (validLimit(chosen, year) && chosen.amount > 0) return { amount: chosen.amount, from: 'chosen' };
     return null;
   }
-  // 節税・資産形成ナビの共有データ（setsuzeiNavi.share.v1）を読む
+  // 整数、または整数だけの文字列（"2026"）を数にする。それ以外は NaN
+  const intOf = v => (typeof v === 'number' ? v : typeof v === 'string' && /^\d{1,9}$/.test(v.trim()) ? +v.trim() : NaN);
+  /**
+   * 節税・資産形成ナビの共有データ（setsuzeiNavi.share.v1）を読む。
+   * 相手側（setsuzei-navi の link.js shareRecord）の形は {year, donationLimit, donationLimitNoIdeco, updatedAt}。
+   * 使うのは year と donationLimit だけ。手で書き換えたなどで数が文字列（"2026"）になっていても受け付け、数に直して返す。
+   */
   function parseShared(raw, year) {
     const v = safeJson(raw);
-    return v && typeof v === 'object' && yearIn(v.year, year) && Number.isSafeInteger(v.donationLimit) && v.donationLimit >= 0 ? v : null;
+    if (!isObj(v)) return null;
+    const y = intOf(v.year), d = intOf(v.donationLimit);
+    return yearIn(y, year) && Number.isSafeInteger(d) && d >= 0 ? Object.assign({}, v, { year: y, donationLimit: d }) : null;
   }
 
   /* ---------- 保存データ ---------- */
@@ -191,8 +199,10 @@
    */
   function parseLog(raw, opt) {
     opt = opt || {};
-    const o = safeJson(raw);
+    let o = safeJson(raw);
     const log = { limits: {}, items: [] };
+    // 項目の配列だけの形（以前の節税・資産形成ナビが想定していた形）も受け付ける
+    if (Array.isArray(o)) o = { items: o };
     if (!isObj(o)) return log;
     const ids = new Set(), dropped = Array.isArray(o.dropped) ? o.dropped.filter(isObj) : [];
     (Array.isArray(o.items) ? o.items : []).forEach((i, n) => {

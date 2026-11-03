@@ -79,6 +79,18 @@ test('validLimit / parseShared', () => {
   assert.equal(C.parseShared('"text"', 2026), null);
 });
 
+// 節税・資産形成ナビ（tngmshr/setsuzei-navi の link.js shareRecord）が書く形
+test('parseShared：節税・資産形成ナビが書く形と、数が文字列になった値', () => {
+  const rec = { year: 2026, donationLimit: 54000, donationLimitNoIdeco: 61000, updatedAt: '2026-11-01T00:00:00.000Z' };
+  assert.deepEqual(C.parseShared(JSON.stringify(rec), [2026, 2025]), rec);
+  assert.deepEqual(C.parseShared('{"year":"2026","donationLimit":"54000"}', 2026), { year: 2026, donationLimit: 54000 });
+  assert.equal(C.parseShared('{"year":"2026","donationLimit":"abc"}', 2026), null);
+  assert.equal(C.parseShared('{"year":2026,"donationLimit":"-1"}', 2026), null);
+  assert.equal(C.parseShared('{"year":2026,"donationLimit":""}', 2026), null);
+  assert.equal(C.parseShared('{"year":2026,"donationLimit":null}', 2026), null);
+  assert.equal(C.parseShared('[2026,54000]', 2026), null);
+});
+
 /* ---------- 進み具合（furusatoNavi.v3） ---------- */
 const opt = { routeRule: ROUTE_RULE, screens: SCREENS };
 
@@ -130,6 +142,27 @@ test('寄付の記録：空・壊れた JSON は空の記録', () => {
   for (const raw of [null, '', '{', 'null', '[]', '{"items":null}', '{"items":"x"}']) {
     assert.deepEqual(C.parseLog(raw, { year: 2026 }), { limits: {}, items: [] }, `raw=${raw}`);
   }
+});
+
+test('寄付の記録：項目の配列だけの形も読む', () => {
+  const L = C.parseLog('[{"id":"a","city":"A町","amount":10000,"date":"2026-05-01"},{"city":"","amount":1}]', { year: 2026 });
+  assert.deepEqual(L.items, [{ id: 'a', city: 'A町', amount: 10000, date: '2026-05-01', one: false }]);
+  assert.deepEqual(L.limits, {});
+  assert.equal(L.dropped.length, 1);
+});
+
+// 節税・資産形成ナビ（link.js normalizeLog・calc.js furusatoProgress）が読める形で書くこと
+test('寄付の記録：保存する形は節税・資産形成ナビの読み取り条件を満たす', () => {
+  const L = C.parseLog('{"limit":50000,"items":[{"city":"A町","amount":"12000","date":"2026-05-01","one":true}]}', { year: 2026 });
+  const o = JSON.parse(C.serializeLog(L));
+  assert.ok(Array.isArray(o.items));
+  for (const r of o.items) {
+    assert.equal(typeof r.date, 'string'); assert.match(r.date, /^\d{4}-\d{2}-\d{2}$/);
+    assert.ok(Number.isSafeInteger(r.amount) && r.amount > 0);
+  }
+  for (const [k, v] of Object.entries(o.limits)) { assert.match(k, /^\d{4}$/); assert.ok(Number.isSafeInteger(v) && v > 0); }
+  assert.deepEqual(o.limits, { 2026: 50000 });
+  assert.equal('limit' in o, false);
 });
 
 test('寄付の記録：保存して読み直すと同じ', () => {
