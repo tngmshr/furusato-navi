@@ -372,7 +372,7 @@ details.more>.more-body{padding:0 16px 14px}
       <button class="mini-btn" id="optReset" type="button">最初からやり直す</button>
     </div>
     <p class="small">青い文字のステップは、タップするとその画面へ戻れます。</p>
-    <p class="small">版：2026-11-03（節税ナビとの連携の読み取り・見出し・文字色・キーボード操作の見直し）</p>
+    <p class="small">版：2026-11-03（節税ナビとの連携の読み取り・見出し・文字色・キーボード操作・ホーム画面への追加の案内の見直し）</p>
   </div>
 </div>
 
@@ -463,9 +463,16 @@ function renderSharedLimit(){
     const card=document.createElement('div'),p=document.createElement('p'),b=document.createElement('button');
     card.className='box box-next';p.textContent=`節税・資産形成ナビの結果（${v.year}年分）：上限の目安 ${v.donationLimit.toLocaleString('ja-JP')}円（iDeCo を反映）`;
     const note=document.createElement('p');note.className='small';note.textContent='試算の前提や、未反映の控除は節税・資産形成ナビで確認してください。';
+    // 目安が 0 円のときは「使う」ボタンを出さず、入力した前提を節税・資産形成ナビで確かめてもらう
+    if(v.donationLimit===0){
+      p.textContent=`節税・資産形成ナビの結果（${v.year}年分）：上限の目安が出ませんでした（0円）`;
+      note.textContent='入力した年収や控除などの前提を、節税・資産形成ナビで確かめてください。下の計算ページでも確認できます。';
+      card.append(p,note);host.append(card);
+    } else {
     b.className='btn';b.type='button';b.textContent='この金額を使う';
     b.addEventListener('click',()=>{const latest=sharedLimit();if(!latest){renderSharedLimit();return;}S.donationLimit={year:latest.year,amount:latest.donationLimit};save();LOG=C.setYearLimit(LOG,latest.year,latest.donationLimit);saveLog();renderSharedLimit();refreshLog();});
     card.append(p,note,b);host.append(card);
+    }
   }
   const chosen=$('chosenLimit'),value=S.donationLimit;
   chosen.hidden=!C.validLimit(value,C.limitYears(thisYear(), LOG.items));
@@ -664,7 +671,10 @@ window.addEventListener('beforeinstallprompt', e => {
   e.preventDefault(); installEvt = e;
   document.querySelectorAll('[data-act="install"]').forEach(b => b.hidden = false);
 });
-const INSTALL_HELP = 'ブラウザのメニュー（︙ や …）から「ホーム画面に追加」を選んでください';
+// Brave は Chrome と追加の方式が違い、ボタンからの追加が「成功」と返っても何も追加されないことがある
+const isBrave = () => !!(navigator.brave && typeof navigator.brave.isBrave === 'function');
+const BRAVE_TIP = 'メニュー（︙ や …）から「ホーム画面に追加」を選んでください。追加されないときは、アドレスバーのライオンのアイコン（Brave Shields）をこのサイトだけオフにしてから、もう一度試してください';
+const INSTALL_HELP = isBrave() ? 'Brave では、' + BRAVE_TIP : 'ブラウザのメニュー（︙ や …）から「ホーム画面に追加」を選んでください';
 window.addEventListener('appinstalled', () => {
   installEvt = null;
   document.querySelectorAll('[data-act="install"]').forEach(b => b.hidden = true);
@@ -682,7 +692,8 @@ function installBox(){
           <li>共有ボタン（四角から上向きの矢印）を押します。見当たらないときは「…」を押すと出てきます</li>
           <li>「ホーム画面に追加」を選びます</li>
           <li>右上の「追加」を押します</li></ol>`
-        : `<p class="small" style="margin:8px 0 0">ボタンが出ないときは、ブラウザのメニュー（︙）から「ホーム画面に追加」または「アプリをインストール」を選びます。</p>`}
+        : `<p class="small" style="margin:8px 0 0">ボタンが出ないときは、ブラウザのメニュー（︙）から「ホーム画面に追加」または「アプリをインストール」を選びます。</p>
+          ${isBrave() ? `<p class="small" style="margin:8px 0 0">Brave で追加されないときは、アドレスバーのライオンのアイコン（Brave Shields）をこのサイトだけオフにしてから、メニュー（︙）の「ホーム画面に追加」を試してください。</p>` : ''}`}
       </div>
     </details>`;
 }
@@ -1373,7 +1384,10 @@ document.addEventListener('click', e => {
       document.querySelectorAll('[data-act="install"]').forEach(b => b.hidden = true);
       if (!ev){ toast(INSTALL_HELP); return; }
       Promise.resolve().then(() => ev.prompt()).then(() => ev.userChoice)
-        .then(c => { if (!c || c.outcome !== 'accepted') toast(INSTALL_HELP); })
+        .then(c => {
+          if (!c || c.outcome !== 'accepted') toast(INSTALL_HELP);
+          else if (isBrave()) toast('ホーム画面に表示されないときは、' + BRAVE_TIP);
+        })
         .catch(() => toast(INSTALL_HELP));
       return;
     }

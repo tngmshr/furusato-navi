@@ -41,6 +41,12 @@ node tools/flow-check.cjs http://localhost:8765/
 node tools/pwa-check.cjs http://localhost:8765/
 ```
 
+節税・資産形成ナビの目安が 0 円のとき（「この金額を使う」を出さない）と、Brave のとき（ホーム画面に追加の案内）の表示は次で確かめます。
+
+```bash
+node tools/variants-check.cjs http://localhost:8765/
+```
+
 Playwright のスクリプトは `node --test` が `test/` 配下の `.js`/`.cjs` をすべて実行するため、`tools/` に置いています。
 
 `core.js` や `index.html` を変えたら、`sw.js` の `CACHE` 名を上げてください。
